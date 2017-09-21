@@ -11,16 +11,16 @@
 
 #define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
 
-typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
-    TYAsyncGCDTransactionOperationStateWaiting,
-    TYAsyncGCDTransactionOperationStateCommitted,   // commit doing
-    TYAsyncGCDTransactionOperationStateCompleted,
-    TYAsyncGCDTransactionOperationStateCanceled,
+typedef NS_ENUM(NSUInteger, TYGCDAsyncTransactionOperationState) {
+    TYGCDAsyncTransactionOperationStateWaiting,
+    TYGCDAsyncTransactionOperationStateCommitted,   // commit doing
+    TYGCDAsyncTransactionOperationStateCompleted,
+    TYGCDAsyncTransactionOperationStateCanceled,
 };
 
-@interface TYAsyncGCDTransactionOperation : NSObject
+@interface TYGCDAsyncTransactionOperation : NSObject
 
-@property (atomic ,assign) TYAsyncGCDTransactionOperationState state;
+@property (atomic ,assign) TYGCDAsyncTransactionOperationState state;
 
 @property (nonatomic ,strong) dispatch_queue_t queue;
 
@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
 
 @end
 
-@interface TYAsyncGroupTransaction ()
+@interface TYGroupAsyncTransaction ()
 
 @property (nonatomic ,strong) dispatch_group_t group;
 
@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
 
 @end
 
-@implementation TYAsyncGroupTransaction
+@implementation TYGroupAsyncTransaction
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -52,12 +52,12 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
     return self;
 }
 
-+ (TYAsyncGroupTransaction *)transaction {
++ (TYGroupAsyncTransaction *)transaction {
     return [[self alloc]init];
 }
 
-+ (TYAsyncGroupTransaction *)transactionWithQueue:(dispatch_queue_t)queue {
-    TYAsyncGroupTransaction *transaction = [[self alloc]init];
++ (TYGroupAsyncTransaction *)transactionWithQueue:(dispatch_queue_t)queue {
+    TYGroupAsyncTransaction *transaction = [[self alloc]init];
     transaction.queue = queue;
     return transaction;
 }
@@ -68,7 +68,7 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
 
 - (void)addOperationBlock:(void (^)(void))operationBlock toQueue:(dispatch_queue_t)queue {
     TYAssertMainThread();
-    TYAsyncGCDTransactionOperation *operation = [[TYAsyncGCDTransactionOperation alloc]init];
+    TYGCDAsyncTransactionOperation *operation = [[TYGCDAsyncTransactionOperation alloc]init];
     operation.operationBlock = operationBlock;
     operation.queue = queue ? queue : _queue;
     [_operations addObject:operation];
@@ -84,15 +84,15 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
     dispatch_queue_t mainQueue = dispatch_get_main_queue();
     NSArray *operations = _operations;
     _operations = [NSMutableArray array];
-    for (TYAsyncGCDTransactionOperation *operation in operations) {
-        operation.state = TYAsyncGCDTransactionOperationStateCommitted;
+    for (TYGCDAsyncTransactionOperation *operation in operations) {
+        operation.state = TYGCDAsyncTransactionOperationStateCommitted;
         dispatch_queue_t queue = operation.queue ? operation.queue : _queue;
         dispatch_group_async(_group, queue ? queue : mainQueue, ^{
             if (operation.state == TYAsyncTransactionStateCanceled) {
                 return ;
             }
             operation.operationBlock();
-            operation.state = TYAsyncGCDTransactionOperationStateCompleted;
+            operation.state = TYGCDAsyncTransactionOperationStateCompleted;
         });
     }
     dispatch_group_notify(_group, mainQueue, ^{
@@ -108,13 +108,13 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
 
 - (void)cancel {
     TYAssertMainThread();
-    if (_state == TYAsyncGCDTransactionOperationStateCompleted) {
+    if (_state == TYGCDAsyncTransactionOperationStateCompleted) {
         return;
     }
     _state = TYAsyncTransactionStateCanceled;
-    for (TYAsyncGCDTransactionOperation *operation in _operations) {
-        if (operation.state != TYAsyncGCDTransactionOperationStateCompleted) {
-            operation.state = TYAsyncGCDTransactionOperationStateCanceled;
+    for (TYGCDAsyncTransactionOperation *operation in _operations) {
+        if (operation.state != TYGCDAsyncTransactionOperationStateCompleted) {
+            operation.state = TYGCDAsyncTransactionOperationStateCanceled;
         }
     }
 }
@@ -132,12 +132,12 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
 
 @end
 
-@implementation TYAsyncGCDTransactionOperation
+@implementation TYGCDAsyncTransactionOperation
 
 @end
 
 
-@interface TYAsyncQueueTransaction ()
+@interface TYQueueAsyncTransaction ()
 
 @property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic, assign) TYAsyncQueueType queueType;
@@ -149,7 +149,7 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
 @property (nonatomic ,copy) void (^completionBlock)(void);
 @end
 
-@implementation TYAsyncQueueTransaction
+@implementation TYQueueAsyncTransaction
 
 - (instancetype)init {
     if (self = [self initWithQueueType:TYAsyncQueueMain]) {
@@ -170,11 +170,11 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
     return self;
 }
 
-+ (TYAsyncQueueTransaction *)transaction {
++ (TYQueueAsyncTransaction *)transaction {
     return [[self alloc]initWithQueueType:TYAsyncQueueMain];
 }
 
-+ (TYAsyncGroupTransaction *)transactionWithQueueType:(TYAsyncQueueType)queueType {
++ (TYGroupAsyncTransaction *)transactionWithQueueType:(TYAsyncQueueType)queueType {
    return [[self alloc]initWithQueueType:queueType];
 }
 
@@ -221,7 +221,7 @@ typedef NS_ENUM(NSUInteger, TYAsyncGCDTransactionOperationState) {
 
 - (void)cancel {
     TYAssertMainThread();
-    if (_state == TYAsyncGCDTransactionOperationStateCompleted) {
+    if (_state == TYGCDAsyncTransactionOperationStateCompleted) {
         return;
     }
     _state = TYAsyncTransactionStateCanceled;

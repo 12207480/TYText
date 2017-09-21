@@ -55,6 +55,122 @@
 - (NSParagraphStyle *)ty_paragraphStyleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
     return [self attribute:NSParagraphStyleAttributeName atIndex:index effectiveRange:range];
 }
+- (NSParagraphStyle *)ty_paragraphStyleDefaultAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self attribute:NSParagraphStyleAttributeName atIndex:index effectiveRange:range];
+    return style ? style : [NSParagraphStyle defaultParagraphStyle];
+}
+
+- (CGFloat)ty_lineSpacing {
+    return [self ty_lineSpacingAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_lineSpacingAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.lineSpacing;
+}
+
+- (CGFloat)ty_paragraphSpacing {
+    return [self ty_paragraphSpacingAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_paragraphSpacingAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.paragraphSpacing;
+}
+
+- (CGFloat)ty_paragraphSpacingBefore {
+    return [self ty_paragraphSpacingBeforeAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_paragraphSpacingBeforeAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.paragraphSpacingBefore;
+}
+
+- (NSTextAlignment)ty_alignment {
+    return [self ty_alignmentAtIndex:0 effectiveRange:NULL];
+}
+- (NSTextAlignment)ty_alignmentAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.alignment;
+}
+
+- (CGFloat)ty_firstLineHeadIndent {
+    return [self ty_firstLineHeadIndentAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_firstLineHeadIndentAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.firstLineHeadIndent;
+}
+
+- (CGFloat)ty_headIndent {
+    return [self ty_headIndentAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_headIndentAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.headIndent;
+}
+
+- (CGFloat)ty_tailIndent {
+    return [self ty_tailIndentAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_tailIndentAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.tailIndent;
+}
+
+- (NSLineBreakMode)ty_lineBreakMode {
+    return [self ty_lineBreakModeAtIndex:0 effectiveRange:NULL];
+}
+- (NSLineBreakMode)ty_lineBreakModeAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.lineBreakMode;
+}
+
+- (CGFloat)ty_minimumLineHeight {
+    return [self ty_minimumLineHeightAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_minimumLineHeightAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.minimumLineHeight;
+}
+
+- (CGFloat)ty_maximumLineHeight {
+    return [self ty_maximumLineHeightAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_maximumLineHeightAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.maximumLineHeight;
+}
+
+- (NSWritingDirection)ty_baseWritingDirection {
+    return [self ty_baseWritingDirectionAtIndex:0 effectiveRange:NULL];
+}
+- (NSWritingDirection)ty_baseWritingDirectionAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.baseWritingDirection;
+}
+
+- (CGFloat)ty_lineHeightMultiple {
+    return [self ty_lineHeightMultipleAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_lineHeightMultipleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.lineHeightMultiple;
+}
+
+- (float)ty_hyphenationFactor {
+    return [self ty_hyphenationFactorAtIndex:0 effectiveRange:NULL];
+}
+- (float)ty_hyphenationFactorAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.hyphenationFactor;
+}
+
+- (CGFloat)ty_defaultTabInterval {
+    return [self ty_defaultTabIntervalAtIndex:0 effectiveRange:NULL];
+}
+- (CGFloat)ty_defaultTabIntervalAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)range {
+    NSParagraphStyle *style = [self ty_paragraphStyleDefaultAtIndex:index effectiveRange:range];
+    return style.defaultTabInterval;
+}
 
 - (CGFloat)ty_characterSpacing {
     return [self ty_characterSpacingAtIndex:0 effectiveRange:NULL];
@@ -160,11 +276,28 @@
 
 @implementation NSMutableAttributedString (TYTextKit)
 
+#define ty_setParagraphStyleProperty(_property_,_range_) \
+[self enumerateAttribute:NSParagraphStyleAttributeName inRange:_range_ options:kNilOptions usingBlock:^(NSParagraphStyle *value, NSRange subRange, BOOL *stop) {\
+    NSMutableParagraphStyle *style = nil;\
+    if (!value) {\
+        style = [[NSMutableParagraphStyle alloc]init];\
+    }\
+    if (value._property_ == _property_) {\
+        return ;\
+    }\
+    if ([value isKindOfClass:[NSMutableParagraphStyle class]]) {\
+        style = (NSMutableParagraphStyle *)value;\
+    }else {\
+        style = [value mutableCopy];\
+    }\
+    style._property_ = _property_;\
+    [self ty_addParagraphStyle:style range:subRange];\
+}];\
+
 - (void)ty_addAttribute:(NSString *)attrName value:(id)value range:(NSRange)range {
     if (!attrName || [NSNull isEqual:attrName]) {
         return;
     }
-    
     if (!value || [NSNull isEqual:value]) {
 #ifdef DEBUG
         NSLog(@"%s: addAttribute %@'s value is nil or null!",__FUNCTION__,attrName);
@@ -210,6 +343,104 @@
 }
 - (void)ty_addParagraphStyle:(NSParagraphStyle *)paragraphStyle range:(NSRange)range {
     [self ty_addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+}
+
+- (void)setTy_lineSpacing:(CGFloat)lineSpacing {
+    [self ty_addLineSpacing:lineSpacing range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addLineSpacing:(CGFloat)lineSpacing range:(NSRange)range {
+    ty_setParagraphStyleProperty(lineSpacing,range);
+}
+
+- (void)setTy_paragraphSpacing:(CGFloat)paragraphSpacing {
+    [self ty_addParagraphSpacing:paragraphSpacing range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addParagraphSpacing:(CGFloat)paragraphSpacing range:(NSRange)range {
+    ty_setParagraphStyleProperty(paragraphSpacing,range);
+}
+
+- (void)setTy_paragraphSpacingBefore:(CGFloat)paragraphSpacingBefore {
+    [self ty_addParagraphSpacing:paragraphSpacingBefore range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addParagraphSpacingBefore:(CGFloat)paragraphSpacingBefore range:(NSRange)range {
+    ty_setParagraphStyleProperty(paragraphSpacingBefore,range);
+}
+
+- (void)setTy_alignment:(NSTextAlignment)alignment {
+    [self ty_addAlignment:alignment range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addAlignment:(NSTextAlignment)alignment range:(NSRange)range {
+    ty_setParagraphStyleProperty(alignment,range);
+}
+
+- (void)setTy_firstLineHeadIndent:(CGFloat)firstLineHeadIndent {
+    [self ty_addFirstLineHeadIndent:firstLineHeadIndent range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addFirstLineHeadIndent:(CGFloat)firstLineHeadIndent range:(NSRange)range {
+    ty_setParagraphStyleProperty(firstLineHeadIndent,range);
+}
+
+- (void)setTy_headIndent:(CGFloat)headIndent {
+    [self ty_addHeadIndent:headIndent range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addHeadIndent:(CGFloat)headIndent range:(NSRange)range {
+    ty_setParagraphStyleProperty(headIndent,range);
+}
+
+- (void)setTy_tailIndent:(CGFloat)tailIndent {
+    [self ty_addTailIndent:tailIndent range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addTailIndent:(CGFloat)tailIndent range:(NSRange)range {
+    ty_setParagraphStyleProperty(tailIndent,range);
+}
+
+- (void)setTy_lineBreakMode:(NSLineBreakMode)lineBreakMode {
+    [self ty_addLineBreakMode:lineBreakMode range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addLineBreakMode:(NSLineBreakMode)lineBreakMode range:(NSRange)range {
+    ty_setParagraphStyleProperty(lineBreakMode,range);
+}
+
+- (void)setTy_minimumLineHeight:(CGFloat)minimumLineHeight {
+    [self ty_addMinimumLineHeight:minimumLineHeight range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addMinimumLineHeight:(CGFloat)minimumLineHeight range:(NSRange)range {
+    ty_setParagraphStyleProperty(minimumLineHeight,range);
+}
+
+- (void)setTy_maximumLineHeight:(CGFloat)maximumLineHeight {
+    [self ty_addMinimumLineHeight:maximumLineHeight range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addMaximumLineHeight:(CGFloat)maximumLineHeight range:(NSRange)range {
+    ty_setParagraphStyleProperty(maximumLineHeight,range);
+}
+
+- (void)setTy_baseWritingDirection:(NSWritingDirection)baseWritingDirection {
+    [self ty_addBaseWritingDirection:baseWritingDirection range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addBaseWritingDirection:(NSWritingDirection)baseWritingDirection range:(NSRange)range {
+    ty_setParagraphStyleProperty(baseWritingDirection,range);
+}
+
+- (void)setTy_lineHeightMultiple:(CGFloat)lineHeightMultiple {
+    [self ty_addLineHeightMultiple:lineHeightMultiple range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addLineHeightMultiple:(CGFloat)lineHeightMultiple range:(NSRange)range {
+    ty_setParagraphStyleProperty(lineHeightMultiple,range);
+}
+
+- (void)setTy_hyphenationFactor:(float)hyphenationFactor {
+    [self ty_addHyphenationFactor:hyphenationFactor range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addHyphenationFactor:(float)hyphenationFactor range:(NSRange)range {
+    ty_setParagraphStyleProperty(hyphenationFactor,range);
+}
+
+- (void)setTy_defaultTabInterval:(CGFloat)defaultTabInterval {
+    [self ty_addDefaultTabInterval:defaultTabInterval range:NSMakeRange(0, self.length)];
+}
+- (void)ty_addDefaultTabInterval:(CGFloat)defaultTabInterval range:(NSRange)range {
+    ty_setParagraphStyleProperty(defaultTabInterval,range);
 }
 
 - (void)setTy_characterSpacing:(CGFloat)characterSpacing {

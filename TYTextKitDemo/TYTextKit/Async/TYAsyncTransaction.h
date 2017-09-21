@@ -15,7 +15,7 @@ typedef NS_ENUM(NSUInteger, TYAsyncTransactionState) {
     TYAsyncTransactionStateCanceled,
 };
 
-@interface TYAsyncGroupTransaction : NSObject<TYTransaction>
+@interface TYGroupAsyncTransaction : NSObject<TYTransaction>
 
 /**
  if identifierHash is equal, will return equal hash in set(collection).default nil
@@ -34,9 +34,9 @@ typedef NS_ENUM(NSUInteger, TYAsyncTransactionState) {
 @property (nonatomic, assign, readonly) TYAsyncTransactionState state;
 
 // default main queue
-+ (TYAsyncGroupTransaction *)transaction;
++ (TYGroupAsyncTransaction *)transaction;
 
-+ (TYAsyncGroupTransaction *)transactionWithQueue:(dispatch_queue_t)queue;
++ (TYGroupAsyncTransaction *)transactionWithQueue:(dispatch_queue_t)queue;
 
 /**
  add transaction operation block
@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, TYAsyncQueueType) {
     TYAsyncQueuePrivate,
 };
 
-@interface TYAsyncQueueTransaction : NSObject<TYTransaction>
+@interface TYQueueAsyncTransaction : NSObject<TYTransaction>
 
 /**
  if identifierHash is equal, will return equal hash in set(collection).default nil
@@ -73,9 +73,9 @@ typedef NS_ENUM(NSUInteger, TYAsyncQueueType) {
 @property (nonatomic, assign, readonly) TYAsyncTransactionState state;
 
 // default main queue
-+ (TYAsyncQueueTransaction *)transaction;
++ (TYQueueAsyncTransaction *)transaction;
 
-+ (TYAsyncGroupTransaction *)transactionWithQueueType:(TYAsyncQueueType)queueType;
++ (TYGroupAsyncTransaction *)transactionWithQueueType:(TYAsyncQueueType)queueType;
 
 /**
  add transaction operation

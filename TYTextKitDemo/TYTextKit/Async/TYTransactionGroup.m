@@ -42,8 +42,8 @@
     [[self mainGroup] addTransaction:transaction];
 }
 
-+ (void)cancelAllTransactions {
-    [[self mainGroup] cancelAllTransactions];
++ (void)cancel {
+    [[self mainGroup] cancel];
 }
 
 + (void)commit {
@@ -77,7 +77,7 @@ static void TYRunloopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopAc
     [_orderSet addObject:transaction];
 }
 
-- (void)cancelAllTransactions {
+- (void)cancel {
     TYAssertMainThread();
     [_orderSet removeAllObjects];
 }

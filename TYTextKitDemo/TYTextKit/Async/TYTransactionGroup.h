@@ -17,12 +17,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)addTransaction:(id<TYTransaction>)transaction;
 
-+ (void)cancelAllTransactions;
-
 /**
  when next runloop tick ,will call this commit
  */
 + (void)commit;
+
++ (void)cancel;
 
 @end
 

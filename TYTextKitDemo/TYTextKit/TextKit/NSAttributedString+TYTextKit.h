@@ -14,11 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Get Attribute
 
-- (nullable id)ty_attribute:(NSString *)attrName atIndex:(NSUInteger)index;
-
 /**
   an attribute with a given name of the character at a given index
  */
+- (nullable id)ty_attribute:(NSString *)attrName atIndex:(NSUInteger)index;
 - (nullable id)ty_attribute:(NSString *)attrName atIndex:(NSUInteger)index effectiveRange:(nullable NSRangePointer)range;
 
 // attribute property getter
@@ -26,8 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) UIFont *ty_font;          // 字体
 @property (nonatomic, strong, readonly, nullable) UIColor *ty_color;        // 颜色
 @property (nonatomic, strong, readonly, nullable) UIColor *ty_backgroundColor; // 背景颜色
-// paragraphStyle 段落样式
-@property (nonatomic, strong, readonly, nullable) NSParagraphStyle *ty_paragraphStyle;
+// paragraphStyle
+@property (nonatomic, strong, readonly, nullable) NSParagraphStyle *ty_paragraphStyle;//  段落样式
 @property (nonatomic, assign, readonly) CGFloat ty_lineSpacing;             // 行高
 @property (nonatomic, assign, readonly) CGFloat ty_paragraphSpacing;        // 段落底部高度
 @property (nonatomic, assign, readonly) CGFloat ty_paragraphSpacingBefore;  // 段落顶部高度

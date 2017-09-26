@@ -94,11 +94,12 @@
 #pragma mark - TYAsyncLayerDelegate
 
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
-    TYTextRender *textRender = self.textRender;
+    __block TYTextRender *textRender = _textRender;
     NSAttributedString *att = _attributedText;
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     task.displaying = ^(CGContextRef  _Nonnull context, CGSize size, BOOL isAsynchronously, BOOL (^ _Nonnull isCancelled)(void)) {
-        if (!textRender.textStorage) {
+        if (!textRender) {
+            textRender = [[TYTextRender alloc]init];
             textRender.textStorage = [[NSTextStorage alloc]initWithAttributedString:att];
         }
         textRender.size = size;

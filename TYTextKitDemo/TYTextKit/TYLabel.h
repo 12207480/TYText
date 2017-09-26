@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "TYTextRender.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface TYLabel : UIView
 
 @property (nonatomic, assign) BOOL displaysAsynchronously;
-@property (nonatomic, assign) BOOL clearContentsBeforeAsynchronouslyDisplay;
+@property (nonatomic, assign) BOOL clearContentBeforeAsyncDisplay;
 
-@property (nonatomic, strong) NSString *text;
-@property (nonatomic, strong) NSAttributedString *attributedText;
-@property (nonatomic, strong) TYTextRender *textRender;
+@property (nonatomic, strong, nullable) NSString *text;
+@property (nonatomic, strong, nullable) NSAttributedString *attributedText;
+@property (nonatomic, strong, nullable) TYTextRender *textRender;
 
 @end
+NS_ASSUME_NONNULL_END

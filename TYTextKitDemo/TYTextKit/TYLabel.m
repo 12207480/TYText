@@ -34,7 +34,7 @@
 }
 
 - (void)configureLabel {
-    _clearContentsBeforeAsynchronouslyDisplay = YES;
+    _clearContentBeforeAsyncDisplay = YES;
     self.layer.contentsScale = [UIScreen mainScreen].scale;
     ((TYAsyncLayer *)self.layer).asyncDelegate = self;
 }
@@ -48,6 +48,7 @@
 }
 
 - (void)setLayoutNeedUpdate {
+    [self clearTextRender];
     [self clearLayerContent];
     [self setDisplayNeedRedraw];
 }
@@ -57,7 +58,7 @@
 }
 
 - (void)clearLayerContent {
-    if (_clearContentsBeforeAsynchronouslyDisplay && self.displaysAsynchronously) {
+    if (_clearContentBeforeAsyncDisplay && self.displaysAsynchronously) {
         self.layer.contents = nil;
     }
 }
@@ -80,20 +81,12 @@
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
     _attributedText = attributedText;
-    NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];
-    [self setTextStorage:textStorage];
-}
-
-- (void)setTextStorage:(NSTextStorage *)textStorage {
-    [self clearTextRender];
-    self.textRender.textStorage = textStorage;
     [self setLayoutNeedUpdate];
 }
 
 - (TYTextRender *)textRender {
     if (!_textRender) {
         _textRender = [[TYTextRender alloc]init];
-        _textRender.size = self.bounds.size;
     }
     return _textRender;
 }
@@ -101,17 +94,17 @@
 #pragma mark - TYAsyncLayerDelegate
 
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
+    TYTextRender *textRender = self.textRender;
+    NSAttributedString *att = _attributedText;
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
-    TYTextRender *textRender = _textRender;
     task.displaying = ^(CGContextRef  _Nonnull context, CGSize size, BOOL isAsynchronously, BOOL (^ _Nonnull isCancelled)(void)) {
+        if (!textRender.textStorage) {
+            textRender.textStorage = [[NSTextStorage alloc]initWithAttributedString:att];
+        }
+        textRender.size = size;
         [textRender drawTextInRect:CGRectMake(0, 0, size.width, size.height)];
     };
     return task;
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    _textRender.size = self.bounds.size;
 }
 
 @end

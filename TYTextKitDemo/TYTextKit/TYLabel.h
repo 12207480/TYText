@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TYTextRender.h"
 
 @interface TYLabel : UIView
+
+@property (nonatomic, assign) BOOL displaysAsynchronously;
+@property (nonatomic, assign) BOOL clearContentsBeforeAsynchronouslyDisplay;
+
+@property (nonatomic, strong) NSString *text;
+@property (nonatomic, strong) NSAttributedString *attributedText;
+@property (nonatomic, strong) TYTextRender *textRender;
 
 @end

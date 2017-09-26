@@ -125,7 +125,7 @@ static CGFloat screenScale() {
     if (asynchronously) {
         atomic_uint displayFlag = _displayFlag;
         BOOL (^isCancelled)(void) = ^BOOL(void){
-            return displayFlag == _displayFlag;
+            return displayFlag != _displayFlag;
         };
         dispatch_async(asyncDisplayQueue(), ^{
             if (isCancelled()) {
@@ -190,4 +190,7 @@ static CGFloat screenScale() {
     atomic_fetch_add(&_displayFlag,1);
 }
 
+@end
+
+@implementation TYAsyncLayerDisplayTask
 @end

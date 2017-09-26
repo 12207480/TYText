@@ -281,14 +281,18 @@
     NSMutableParagraphStyle *style = nil;\
     if (!value) {\
         style = [[NSMutableParagraphStyle alloc]init];\
-    }\
-    if (value._property_ == _property_) {\
+        if (style._property_ == _property_) {\
+            return ;\
+        }\
+    } else {\
+        if (value._property_ == _property_) {\
         return ;\
-    }\
-    if ([value isKindOfClass:[NSMutableParagraphStyle class]]) {\
-        style = (NSMutableParagraphStyle *)value;\
-    }else {\
-        style = [value mutableCopy];\
+        }\
+        if ([value isKindOfClass:[NSMutableParagraphStyle class]]) {\
+            style = (NSMutableParagraphStyle *)value;\
+        }else {\
+            style = [value mutableCopy];\
+        }\
     }\
     style._property_ = _property_;\
     [self ty_addParagraphStyle:style range:subRange];\

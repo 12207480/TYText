@@ -11,6 +11,14 @@
 		2B2177091F669683005E07E0 /* TYTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2177061F669683005E07E0 /* TYTransaction.m */; };
 		2B2A483B1F67C65500D7E613 /* TYTransactionGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A483A1F67C65500D7E613 /* TYTransactionGroup.m */; };
 		2B2A483E1F67CF8E00D7E613 /* TYAsyncTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A483D1F67CF8E00D7E613 /* TYAsyncTransaction.m */; };
+		2B426F461F78F062009E70D9 /* TextDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F451F78F062009E70D9 /* TextDemoViewController.m */; };
+		2B426F491F78F076009E70D9 /* AttributedDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F481F78F076009E70D9 /* AttributedDemoViewController.m */; };
+		2B426F4C1F78F6ED009E70D9 /* TextListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F4B1F78F6ED009E70D9 /* TextListViewController.m */; };
+		2B426F4F1F78F7AE009E70D9 /* TextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F4E1F78F7AE009E70D9 /* TextViewCell.m */; };
+		2B426F551F790A3C009E70D9 /* TYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F511F7909DA009E70D9 /* TYFPSLabel.m */; };
+		2B426F561F790A3E009E70D9 /* TYFPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F541F7909DB009E70D9 /* TYFPSMonitor.m */; };
+		2B426F591F790A8C009E70D9 /* TYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F571F790A8C009E70D9 /* TYWeakProxy.m */; };
+		2B426F5C1F79E7DD009E70D9 /* TYTextRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */; };
 		2B8C4EBF1F628C8F00539B07 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EBE1F628C8F00539B07 /* main.m */; };
 		2B8C4EC21F628C8F00539B07 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EC11F628C8F00539B07 /* AppDelegate.m */; };
 		2B8C4EC51F628C8F00539B07 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EC41F628C8F00539B07 /* ViewController.m */; };
@@ -30,6 +38,22 @@
 		2B2A483A1F67C65500D7E613 /* TYTransactionGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTransactionGroup.m; sourceTree = "<group>"; };
 		2B2A483C1F67CF8E00D7E613 /* TYAsyncTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYAsyncTransaction.h; sourceTree = "<group>"; };
 		2B2A483D1F67CF8E00D7E613 /* TYAsyncTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYAsyncTransaction.m; sourceTree = "<group>"; };
+		2B426F441F78F062009E70D9 /* TextDemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextDemoViewController.h; sourceTree = "<group>"; };
+		2B426F451F78F062009E70D9 /* TextDemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextDemoViewController.m; sourceTree = "<group>"; };
+		2B426F471F78F076009E70D9 /* AttributedDemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributedDemoViewController.h; sourceTree = "<group>"; };
+		2B426F481F78F076009E70D9 /* AttributedDemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributedDemoViewController.m; sourceTree = "<group>"; };
+		2B426F4A1F78F6ED009E70D9 /* TextListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextListViewController.h; sourceTree = "<group>"; };
+		2B426F4B1F78F6ED009E70D9 /* TextListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextListViewController.m; sourceTree = "<group>"; };
+		2B426F4D1F78F7AE009E70D9 /* TextViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextViewCell.h; sourceTree = "<group>"; };
+		2B426F4E1F78F7AE009E70D9 /* TextViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextViewCell.m; sourceTree = "<group>"; };
+		2B426F511F7909DA009E70D9 /* TYFPSLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYFPSLabel.m; sourceTree = "<group>"; };
+		2B426F521F7909DA009E70D9 /* TYFPSMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYFPSMonitor.h; sourceTree = "<group>"; };
+		2B426F531F7909DA009E70D9 /* TYFPSLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYFPSLabel.h; sourceTree = "<group>"; };
+		2B426F541F7909DB009E70D9 /* TYFPSMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYFPSMonitor.m; sourceTree = "<group>"; };
+		2B426F571F790A8C009E70D9 /* TYWeakProxy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYWeakProxy.m; sourceTree = "<group>"; };
+		2B426F581F790A8C009E70D9 /* TYWeakProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYWeakProxy.h; sourceTree = "<group>"; };
+		2B426F5A1F79E7DD009E70D9 /* TYTextRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextRender.h; sourceTree = "<group>"; };
+		2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextRender.m; sourceTree = "<group>"; };
 		2B8C4EBA1F628C8F00539B07 /* TYTextKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TYTextKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B8C4EBE1F628C8F00539B07 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2B8C4EC01F628C8F00539B07 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -58,6 +82,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2B426F501F7909D4009E70D9 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				2B426F581F790A8C009E70D9 /* TYWeakProxy.h */,
+				2B426F571F790A8C009E70D9 /* TYWeakProxy.m */,
+				2B426F531F7909DA009E70D9 /* TYFPSLabel.h */,
+				2B426F511F7909DA009E70D9 /* TYFPSLabel.m */,
+				2B426F521F7909DA009E70D9 /* TYFPSMonitor.h */,
+				2B426F541F7909DB009E70D9 /* TYFPSMonitor.m */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
 		2B8C4EB11F628C8F00539B07 = {
 			isa = PBXGroup;
 			children = (
@@ -82,6 +119,15 @@
 				2B8C4EC11F628C8F00539B07 /* AppDelegate.m */,
 				2B8C4EC31F628C8F00539B07 /* ViewController.h */,
 				2B8C4EC41F628C8F00539B07 /* ViewController.m */,
+				2B426F441F78F062009E70D9 /* TextDemoViewController.h */,
+				2B426F451F78F062009E70D9 /* TextDemoViewController.m */,
+				2B426F471F78F076009E70D9 /* AttributedDemoViewController.h */,
+				2B426F481F78F076009E70D9 /* AttributedDemoViewController.m */,
+				2B426F4A1F78F6ED009E70D9 /* TextListViewController.h */,
+				2B426F4B1F78F6ED009E70D9 /* TextListViewController.m */,
+				2B426F4D1F78F7AE009E70D9 /* TextViewCell.h */,
+				2B426F4E1F78F7AE009E70D9 /* TextViewCell.m */,
+				2B426F501F7909D4009E70D9 /* Vendor */,
 				2B8C4EC61F628C8F00539B07 /* Main.storyboard */,
 				2B8C4EC91F628C8F00539B07 /* Assets.xcassets */,
 				2B8C4ECB1F628C8F00539B07 /* LaunchScreen.storyboard */,
@@ -129,6 +175,8 @@
 		2B8C4ED81F628E6800539B07 /* TextKit */ = {
 			isa = PBXGroup;
 			children = (
+				2B426F5A1F79E7DD009E70D9 /* TYTextRender.h */,
+				2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */,
 				2B1F83221F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.h */,
 				2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */,
 			);
@@ -161,11 +209,12 @@
 		2B8C4EB21F628C8F00539B07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = tany;
 				TargetAttributes = {
 					2B8C4EB91F628C8F00539B07 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = ZW52Q3KXX4;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -207,14 +256,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B2A483E1F67CF8E00D7E613 /* TYAsyncTransaction.m in Sources */,
+				2B426F5C1F79E7DD009E70D9 /* TYTextRender.m in Sources */,
 				2B8C4EC51F628C8F00539B07 /* ViewController.m in Sources */,
+				2B426F461F78F062009E70D9 /* TextDemoViewController.m in Sources */,
+				2B426F4C1F78F6ED009E70D9 /* TextListViewController.m in Sources */,
+				2B426F561F790A3E009E70D9 /* TYFPSMonitor.m in Sources */,
 				2B8C4EDE1F62907900539B07 /* TYLabel.m in Sources */,
 				2B8C4EC21F628C8F00539B07 /* AppDelegate.m in Sources */,
 				2B8C4EBF1F628C8F00539B07 /* main.m in Sources */,
 				2B8C4EE71F66323F00539B07 /* TYAsyncLayer.m in Sources */,
 				2B2177091F669683005E07E0 /* TYTransaction.m in Sources */,
+				2B426F491F78F076009E70D9 /* AttributedDemoViewController.m in Sources */,
 				2B1F83241F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m in Sources */,
 				2B2A483B1F67C65500D7E613 /* TYTransactionGroup.m in Sources */,
+				2B426F4F1F78F7AE009E70D9 /* TextViewCell.m in Sources */,
+				2B426F551F790A3C009E70D9 /* TYFPSLabel.m in Sources */,
+				2B426F591F790A8C009E70D9 /* TYWeakProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,7 +307,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -258,7 +317,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -281,7 +344,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -299,7 +362,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -307,7 +372,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -324,7 +393,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -336,8 +405,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = ZW52Q3KXX4;
 				INFOPLIST_FILE = TYTextKitDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -348,8 +418,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = ZW52Q3KXX4;
 				INFOPLIST_FILE = TYTextKitDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

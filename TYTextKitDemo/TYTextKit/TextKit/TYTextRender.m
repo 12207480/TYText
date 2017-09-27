@@ -17,31 +17,43 @@
 
 @implementation TYTextRender
 
+- (instancetype)init {
+    if (self = [super init]) {
+        [self addTextContainer];
+        [self addLayoutManager];
+    }
+    return self;
+}
+
+- (instancetype)initWithTextContainer:(NSTextContainer *)textContainer {
+    if (self = [super init]) {
+        NSParameterAssert(textContainer.layoutManager);
+        _textContainer = textContainer;
+        _layoutManager = textContainer.layoutManager;
+    }
+    return self;
+}
+
+- (void)addTextContainer {
+    NSTextContainer *textContainer = [[NSTextContainer alloc]init];
+    textContainer.lineFragmentPadding = 0;
+    _textContainer = textContainer;
+}
+
+- (void)addLayoutManager {
+    NSLayoutManager *layoutManager = [[NSLayoutManager alloc]init];
+    [layoutManager addTextContainer:_textContainer];
+    _layoutManager = layoutManager;
+}
+
 #pragma mark - getter setter
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
-    if (_textStorage && _layoutManager) {
+    if (_textStorage) {
         [_textStorage removeLayoutManager:_layoutManager];
     }
     _textStorage = textStorage;
-    [_textStorage addLayoutManager:self.layoutManager];
-}
-
-- (NSLayoutManager *)layoutManager {
-    if (!_layoutManager) {
-        _layoutManager = [[NSLayoutManager alloc]init];
-        [_layoutManager addTextContainer:self.textContainer];
-    }
-    return _layoutManager;
-}
-
-- (NSTextContainer *)textContainer {
-    if (!_textContainer) {
-        _textContainer = [[NSTextContainer alloc]init];
-        _textContainer.lineFragmentPadding = 0;
-        _textContainer.size = _size;
-    }
-    return _textContainer;
+    [_textStorage addLayoutManager:_layoutManager];
 }
 
 - (void)setSize:(CGSize)size {
@@ -56,8 +68,8 @@
 - (CGPoint)textOffsetForGlyphRange:(NSRange)glyphRange inRect:(CGRect)rect
 {
     CGPoint textOffset = CGPointZero;
-    CGRect textBounds = [self.layoutManager boundingRectForGlyphRange:glyphRange
-                                                      inTextContainer:self.textContainer];
+    CGRect textBounds = [_layoutManager boundingRectForGlyphRange:glyphRange
+                                                      inTextContainer:_textContainer];
     CGFloat paddingHeight = (rect.size.height - ceil(textBounds.size.height)) / 2.0f;
     textOffset.y = paddingHeight;
     return textOffset;
@@ -66,12 +78,12 @@
 - (void)drawTextInRect:(CGRect)rect
 {
     // Calculate the offset of the text in the view
-    NSRange glyphRange = [self.layoutManager glyphRangeForTextContainer:self.textContainer];
+    NSRange glyphRange = [_layoutManager glyphRangeForTextContainer:_textContainer];
     CGPoint textOffset = [self textOffsetForGlyphRange:glyphRange inRect:rect];
     
     // Drawing code
-    [self.layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textOffset];
-    [self.layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textOffset];
+    [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textOffset];
+    [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textOffset];
 }
 
 @end

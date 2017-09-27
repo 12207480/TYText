@@ -76,7 +76,7 @@
 
 - (void)setText:(NSString *)text {
     _text = text;
-    self.textStorage = [[NSTextStorage alloc]initWithString:text];;
+    self.attributedText = [[NSAttributedString alloc]initWithString:text];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
@@ -100,7 +100,6 @@
         if (!textStorage) {
             textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];
         }
-        if (isCancelled()) return ;
         if (!textRender) {
             textRender = [[TYTextRender alloc]init];
             textRender.textStorage = textStorage;

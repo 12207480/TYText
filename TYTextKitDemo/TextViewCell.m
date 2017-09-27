@@ -35,6 +35,7 @@
 
 - (void)addLabel {
     TYLabel *label = [[TYLabel alloc]init];
+    label.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:label];
     _label = label;
 }

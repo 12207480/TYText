@@ -10,14 +10,18 @@
 #import "NSAttributedString+TYTextKit.h"
 #import "TYTextStorage.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface TYTextRender : NSObject
 
-@property (nonatomic, strong) NSTextStorage *textStorage;
+@property (nonatomic, strong, nullable) NSTextStorage *textStorage;
 @property (nonatomic, strong, readonly) NSLayoutManager *layoutManager;
 @property (nonatomic, strong, readonly) NSTextContainer *textContainer;
 
 @property (nonatomic, assign) CGSize size;
 
+- (instancetype)initWithTextContainer:(NSTextContainer *)textContainer;
+
 - (void)drawTextInRect:(CGRect)rect;
 
 @end
+NS_ASSUME_NONNULL_END

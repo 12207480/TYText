@@ -95,7 +95,7 @@
     if (_async) {
         cell.label.hidden = NO;
         cell.uilabel.hidden = YES;
-        cell.label.attributedText = _itemArray[indexPath.row];
+        cell.label.textStorage = _textArray[indexPath.row];
     }else {
         cell.label.hidden = YES;
         cell.uilabel.hidden = NO;

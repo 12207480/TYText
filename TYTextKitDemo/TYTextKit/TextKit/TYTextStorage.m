@@ -26,7 +26,7 @@
 - (instancetype)initWithMutableAttributedString:(NSMutableAttributedString *)attrStr {
     if (self = [self init]) {
         _imp = attrStr;
-        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.string.length) changeInLength:0];
+        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.length) changeInLength:0];
     }
     return self;
 }
@@ -34,7 +34,7 @@
 - (instancetype)initWithAttributedString:(NSAttributedString *)attrStr {
     if (self = [self init]) {
         _imp = [attrStr mutableCopy];
-        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.string.length) changeInLength:0];
+        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.length) changeInLength:0];
     }
     return self;
 }
@@ -42,7 +42,7 @@
 - (instancetype)initWithString:(NSString *)str {
     if (self = [super init]) {
         _imp = [[NSMutableAttributedString alloc]initWithString:str];
-        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.string.length) changeInLength:0];
+        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.length) changeInLength:0];
     }
     return self;
 }

@@ -19,6 +19,9 @@
 		2B426F561F790A3E009E70D9 /* TYFPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F541F7909DB009E70D9 /* TYFPSMonitor.m */; };
 		2B426F591F790A8C009E70D9 /* TYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F571F790A8C009E70D9 /* TYWeakProxy.m */; };
 		2B426F5C1F79E7DD009E70D9 /* TYTextRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */; };
+		2B426F5F1F7A4311009E70D9 /* TYTextParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F5E1F7A4311009E70D9 /* TYTextParse.m */; };
+		2B426F621F7A44C8009E70D9 /* TYTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F611F7A44C8009E70D9 /* TYTextStorage.m */; };
+		2B426F651F7A491A009E70D9 /* TYTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F641F7A491A009E70D9 /* TYTextAttachment.m */; };
 		2B8C4EBF1F628C8F00539B07 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EBE1F628C8F00539B07 /* main.m */; };
 		2B8C4EC21F628C8F00539B07 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EC11F628C8F00539B07 /* AppDelegate.m */; };
 		2B8C4EC51F628C8F00539B07 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EC41F628C8F00539B07 /* ViewController.m */; };
@@ -54,6 +57,12 @@
 		2B426F581F790A8C009E70D9 /* TYWeakProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYWeakProxy.h; sourceTree = "<group>"; };
 		2B426F5A1F79E7DD009E70D9 /* TYTextRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextRender.h; sourceTree = "<group>"; };
 		2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextRender.m; sourceTree = "<group>"; };
+		2B426F5D1F7A4311009E70D9 /* TYTextParse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextParse.h; sourceTree = "<group>"; };
+		2B426F5E1F7A4311009E70D9 /* TYTextParse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextParse.m; sourceTree = "<group>"; };
+		2B426F601F7A44C8009E70D9 /* TYTextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextStorage.h; sourceTree = "<group>"; };
+		2B426F611F7A44C8009E70D9 /* TYTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextStorage.m; sourceTree = "<group>"; };
+		2B426F631F7A491A009E70D9 /* TYTextAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextAttachment.h; sourceTree = "<group>"; };
+		2B426F641F7A491A009E70D9 /* TYTextAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextAttachment.m; sourceTree = "<group>"; };
 		2B8C4EBA1F628C8F00539B07 /* TYTextKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TYTextKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B8C4EBE1F628C8F00539B07 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2B8C4EC01F628C8F00539B07 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -177,6 +186,12 @@
 			children = (
 				2B426F5A1F79E7DD009E70D9 /* TYTextRender.h */,
 				2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */,
+				2B426F601F7A44C8009E70D9 /* TYTextStorage.h */,
+				2B426F611F7A44C8009E70D9 /* TYTextStorage.m */,
+				2B426F631F7A491A009E70D9 /* TYTextAttachment.h */,
+				2B426F641F7A491A009E70D9 /* TYTextAttachment.m */,
+				2B426F5D1F7A4311009E70D9 /* TYTextParse.h */,
+				2B426F5E1F7A4311009E70D9 /* TYTextParse.m */,
 				2B1F83221F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.h */,
 				2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */,
 			);
@@ -264,13 +279,16 @@
 				2B8C4EDE1F62907900539B07 /* TYLabel.m in Sources */,
 				2B8C4EC21F628C8F00539B07 /* AppDelegate.m in Sources */,
 				2B8C4EBF1F628C8F00539B07 /* main.m in Sources */,
+				2B426F5F1F7A4311009E70D9 /* TYTextParse.m in Sources */,
 				2B8C4EE71F66323F00539B07 /* TYAsyncLayer.m in Sources */,
 				2B2177091F669683005E07E0 /* TYTransaction.m in Sources */,
+				2B426F651F7A491A009E70D9 /* TYTextAttachment.m in Sources */,
 				2B426F491F78F076009E70D9 /* AttributedDemoViewController.m in Sources */,
 				2B1F83241F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m in Sources */,
 				2B2A483B1F67C65500D7E613 /* TYTransactionGroup.m in Sources */,
 				2B426F4F1F78F7AE009E70D9 /* TextViewCell.m in Sources */,
 				2B426F551F790A3C009E70D9 /* TYFPSLabel.m in Sources */,
+				2B426F621F7A44C8009E70D9 /* TYTextStorage.m in Sources */,
 				2B426F591F790A8C009E70D9 /* TYWeakProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -409,7 +427,7 @@
 				INFOPLIST_FILE = TYTextKitDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -422,7 +440,7 @@
 				INFOPLIST_FILE = TYTextKitDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

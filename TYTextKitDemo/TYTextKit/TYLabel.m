@@ -76,7 +76,7 @@
 
 - (void)setText:(NSString *)text {
     _text = text;
-    self.attributedText = [[NSAttributedString alloc]initWithString:text];
+    self.textStorage = [[NSTextStorage alloc]initWithString:text];;
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
@@ -84,28 +84,37 @@
     [self setLayoutNeedUpdate];
 }
 
-- (TYTextRender *)textRender {
-    if (!_textRender) {
-        _textRender = [[TYTextRender alloc]init];
-    }
-    return _textRender;
+- (void)setTextStorage:(NSTextStorage *)textStorage {
+    _textStorage = textStorage;
+    [self setLayoutNeedUpdate];
 }
 
 #pragma mark - TYAsyncLayerDelegate
 
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
     __block TYTextRender *textRender = _textRender;
-    NSAttributedString *att = _attributedText;
+    __block NSTextStorage *textStorage = _textStorage;
+    NSAttributedString *attributedText = _attributedText;
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     task.displaying = ^(CGContextRef  _Nonnull context, CGSize size, BOOL isAsynchronously, BOOL (^ _Nonnull isCancelled)(void)) {
+        if (!textStorage) {
+            textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];
+        }
+        if (isCancelled()) return ;
         if (!textRender) {
             textRender = [[TYTextRender alloc]init];
-            textRender.textStorage = [[NSTextStorage alloc]initWithAttributedString:att];
+            textRender.textStorage = textStorage;
         }
+        if (isCancelled()) return ;
         textRender.size = size;
         [textRender drawTextInRect:CGRectMake(0, 0, size.width, size.height)];
+        if (isCancelled()) return ;
     };
     return task;
+}
+
+- (void)dealloc {
+    _textRender = nil;
 }
 
 @end

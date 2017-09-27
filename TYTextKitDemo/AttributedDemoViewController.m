@@ -7,8 +7,11 @@
 //
 
 #import "AttributedDemoViewController.h"
+#import "TYLabel.h"
 
 @interface AttributedDemoViewController ()
+
+@property (nonatomic, strong) TYLabel *label;
 
 @end
 

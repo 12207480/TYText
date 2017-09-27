@@ -24,7 +24,7 @@
         [_textStorage removeLayoutManager:_layoutManager];
     }
     _textStorage = textStorage;
-    [textStorage addLayoutManager:self.layoutManager];
+    [_textStorage addLayoutManager:self.layoutManager];
 }
 
 - (NSLayoutManager *)layoutManager {
@@ -58,7 +58,7 @@
     CGPoint textOffset = CGPointZero;
     CGRect textBounds = [self.layoutManager boundingRectForGlyphRange:glyphRange
                                                       inTextContainer:self.textContainer];
-    CGFloat paddingHeight = (rect.size.height - textBounds.size.height) / 2.0f;
+    CGFloat paddingHeight = (rect.size.height - ceil(textBounds.size.height)) / 2.0f;
     textOffset.y = paddingHeight;
     return textOffset;
 }

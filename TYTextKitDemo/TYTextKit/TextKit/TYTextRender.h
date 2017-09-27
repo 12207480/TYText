@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "NSAttributedString+TYTextKit.h"
+#import "TYTextStorage.h"
 
 @interface TYTextRender : NSObject
 

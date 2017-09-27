@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) NSString *text;
 @property (nonatomic, strong, nullable) NSAttributedString *attributedText;
+@property (nonatomic, strong, nullable) NSTextStorage *textStorage;
 @property (nonatomic, strong, nullable) TYTextRender *textRender;
 
 @end

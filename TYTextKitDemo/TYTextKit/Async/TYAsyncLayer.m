@@ -133,6 +133,10 @@ static CGFloat screenScale() {
             }
             UIGraphicsBeginImageContextWithOptions(size, opaque, scale);
             CGContextRef context = UIGraphicsGetCurrentContext();
+            if (!context) {
+                UIGraphicsEndImageContext();
+                return;
+            }
             if (opaque) {
                 CGContextSaveGState(context);
                 CGContextSetFillColorWithColor(context,backgroundColor.CGColor);

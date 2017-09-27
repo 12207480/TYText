@@ -45,7 +45,7 @@
     NSMutableArray *itemArray = [NSMutableArray array];
     NSMutableArray *textArray = [NSMutableArray array];
     for (int i = 0; i < 200; ++i) {
-        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i];
+        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i];
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
         text.ty_font = [UIFont systemFontOfSize:10];
@@ -56,12 +56,17 @@
         text.ty_maximumLineHeight = 12;
         text.ty_minimumLineHeight = 12;
         
+        NSTextAttachment *attachment = [[NSTextAttachment alloc]init];
+        attachment.image = [UIImage imageNamed:@"avatar"];
+        attachment.bounds = CGRectMake(0, -25, 60, 60);
+        //[text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+        
         NSShadow *shadow = [NSShadow new];
         shadow.shadowBlurRadius = 1;
         shadow.shadowColor = [UIColor redColor];
         shadow.shadowOffset = CGSizeMake(0, 1);
         //text.ty_shadow = shadow;
-        NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:text];
+        TYTextStorage *textStorage = [[TYTextStorage alloc]initWithMutableAttributedString:text];
         [textArray addObject:textStorage];
         [itemArray addObject:text];
     }
@@ -100,7 +105,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 34;
+    return 70;
 }
 
 - (void)changeAsyncAction:(UIBarButtonItem *)item {

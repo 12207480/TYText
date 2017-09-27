@@ -30,6 +30,9 @@
         NSParameterAssert(textContainer.layoutManager);
         _textContainer = textContainer;
         _layoutManager = textContainer.layoutManager;
+        if (_layoutManager.textStorage) {
+            _textStorage = _layoutManager.textStorage;
+        }
     }
     return self;
 }

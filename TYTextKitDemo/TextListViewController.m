@@ -13,6 +13,7 @@
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NSArray *itemArray;
 @property (nonatomic, strong) NSArray *textArray;
+@property (nonatomic, strong) NSArray *renderArray;
 @property (nonatomic, assign) BOOL async;
 
 @end
@@ -42,10 +43,12 @@
 }
 
 - (void)loadData {
+    CFAbsoluteTime begin = CFAbsoluteTimeGetCurrent();
     NSMutableArray *itemArray = [NSMutableArray array];
     NSMutableArray *textArray = [NSMutableArray array];
+    NSMutableArray *renderArray = [NSMutableArray array];
     for (int i = 0; i < 200; ++i) {
-        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i];
+        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i];
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
         text.ty_font = [UIFont systemFontOfSize:10];
@@ -67,11 +70,17 @@
         shadow.shadowOffset = CGSizeMake(0, 1);
         //text.ty_shadow = shadow;
         TYTextStorage *textStorage = [[TYTextStorage alloc]initWithMutableAttributedString:text];
+        TYTextRender *render = [[TYTextRender alloc]init];
+        render.textStorage = textStorage;
         [textArray addObject:textStorage];
         [itemArray addObject:text];
+        [renderArray addObject:render];
     }
     _itemArray = [itemArray copy];
     _textArray = [textArray copy];
+    _renderArray = [renderArray copy];
+     CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+    NSLog(@"useed time %.2f",end - begin);
     [self.tableView reloadData];
 }
 
@@ -95,7 +104,7 @@
     if (_async) {
         cell.label.hidden = NO;
         cell.uilabel.hidden = YES;
-        cell.label.textStorage = _textArray[indexPath.row];
+        cell.label.textRender = _renderArray[indexPath.row];
     }else {
         cell.label.hidden = YES;
         cell.uilabel.hidden = NO;
@@ -105,7 +114,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 35;
+    return 70;
 }
 
 - (void)changeAsyncAction:(UIBarButtonItem *)item {

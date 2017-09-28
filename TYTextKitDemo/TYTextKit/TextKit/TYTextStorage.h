@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) id<TYTextParse> textParse;
 
-// will mutableCopy attrStr
+// initialized with  mutableCopy attrStr
 - (instancetype)initWithAttributedString:(NSAttributedString *)attrStr;
-// not mutableCopy,will assign attrStr
+// initialized with strong attrStr,not mutableCopy
 - (instancetype)initWithMutableAttributedString:(NSMutableAttributedString *)attrStr;
 
 @end

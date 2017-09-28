@@ -80,11 +80,11 @@
 
 - (void)drawTextInRect:(CGRect)rect
 {
-    // Calculate the offset of the text in the view
+    // calculate the offset of the text in the view
     NSRange glyphRange = [_layoutManager glyphRangeForTextContainer:_textContainer];
     CGPoint textOffset = [self textOffsetForGlyphRange:glyphRange inRect:rect];
     
-    // Drawing code
+    // drawing code
     [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textOffset];
     [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textOffset];
 }

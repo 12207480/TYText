@@ -9,5 +9,7 @@
 #import "TYTextAttachment.h"
 
 @implementation TYTextAttachment
+@dynamic image;
+
 
 @end

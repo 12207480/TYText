@@ -48,7 +48,7 @@
     NSMutableArray *textArray = [NSMutableArray array];
     NSMutableArray *renderArray = [NSMutableArray array];
     for (int i = 0; i < 200; ++i) {
-        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i];
+        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i];
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
         text.ty_font = [UIFont systemFontOfSize:10];
@@ -59,7 +59,7 @@
         text.ty_maximumLineHeight = 12;
         text.ty_minimumLineHeight = 12;
         
-        NSTextAttachment *attachment = [[NSTextAttachment alloc]init];
+        TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
         attachment.image = [UIImage imageNamed:@"avatar"];
         attachment.bounds = CGRectMake(0, -25, 60, 60);
         //[text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
@@ -104,7 +104,7 @@
     if (_async) {
         cell.label.hidden = NO;
         cell.uilabel.hidden = YES;
-        cell.label.textRender = _renderArray[indexPath.row];
+        cell.label.textStorage = _textArray[indexPath.row];
     }else {
         cell.label.hidden = YES;
         cell.uilabel.hidden = NO;
@@ -114,7 +114,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 70;
+    return 35;
 }
 
 - (void)changeAsyncAction:(UIBarButtonItem *)item {

@@ -11,6 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+CGFloat ty_text_screen_scale(void);
+
 @class TYAsyncLayerDisplayTask;
 @protocol TYAsyncLayerDelegate <NSObject>
 @required

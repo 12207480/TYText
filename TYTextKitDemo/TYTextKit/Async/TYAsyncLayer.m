@@ -24,8 +24,8 @@ static dispatch_queue_t asyncDisplayQueue() {
     return displayQueue;
 }
 
-static CGFloat screenScale() {
-    static CGFloat scale; //global
+CGFloat ty_text_screen_scale(void) {
+    static CGFloat scale;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         scale = [UIScreen mainScreen].scale;
@@ -81,7 +81,7 @@ static CGFloat screenScale() {
 - (void)configureLayer {
     _sentinel = [[_TYSentinel alloc]init];
     _displaysAsynchronously = YES;
-    self.contentsScale = screenScale();
+    self.contentsScale = ty_text_screen_scale();
     self.opaque = YES;
 }
 

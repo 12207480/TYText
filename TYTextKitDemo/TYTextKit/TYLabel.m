@@ -35,7 +35,7 @@
 
 - (void)configureLabel {
     _clearContentBeforeAsyncDisplay = YES;
-    self.layer.contentsScale = [UIScreen mainScreen].scale;
+    self.layer.contentsScale = ty_text_screen_scale();
     ((TYAsyncLayer *)self.layer).asyncDelegate = self;
 }
 

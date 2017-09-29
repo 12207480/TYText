@@ -94,20 +94,19 @@
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
     __block TYTextRender *textRender = _textRender;
     __block NSTextStorage *textStorage = _textStorage;
-    NSAttributedString *attributedText = _attributedText;
+    __strong NSAttributedString *attributedText = _attributedText;
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     task.displaying = ^(CGContextRef  _Nonnull context, CGSize size, BOOL isAsynchronously, BOOL (^ _Nonnull isCancelled)(void)) {
-        if (!textStorage) {
+        if (!textRender && !textStorage) {
             textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];
         }
+        if (isCancelled()) return ;
         if (!textRender) {
-            textRender = [[TYTextRender alloc]init];
-            textRender.textStorage = textStorage;
+            textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
         }
-        if (isCancelled()) return ;
         textRender.size = size;
-        [textRender drawTextInRect:CGRectMake(0, 0, size.width, size.height)];
         if (isCancelled()) return ;
+        [textRender drawTextInRect:CGRectMake(0, 0, size.width, size.height)];
     };
     return task;
 }

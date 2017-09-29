@@ -33,8 +33,27 @@ static CGFloat screenScale() {
     return scale;
 }
 
+@interface _TYSentinel : NSObject
+
+- (unsigned int)value;
+
+- (void)increase;
+
+@end
+
+@implementation _TYSentinel {
+    atomic_uint _value;
+}
+- (unsigned int)value {
+    return atomic_load(&_value);
+}
+- (void)increase {
+    atomic_fetch_add(&_value,1);
+}
+@end
+
 @implementation TYAsyncLayer {
-    atomic_uint _displayFlag;
+    _TYSentinel *_sentinel;
 }
 
 + (id)defaultValueForKey:(NSString *)key {
@@ -60,7 +79,7 @@ static CGFloat screenScale() {
 }
 
 - (void)configureLayer {
-    _displayFlag = 0;
+    _sentinel = [[_TYSentinel alloc]init];
     _displaysAsynchronously = YES;
     self.contentsScale = screenScale();
     self.opaque = YES;
@@ -69,7 +88,7 @@ static CGFloat screenScale() {
 #pragma mark - public
 
 - (void)setNeedsDisplay {
-    [self increaseDisplayFlag];
+    [_sentinel increase];
     [super setNeedsDisplay];
 }
 
@@ -83,7 +102,7 @@ static CGFloat screenScale() {
 }
 
 - (void)displayImmediately {
-    [self increaseDisplayFlag];
+    [_sentinel increase];;
     if ([NSThread isMainThread]) {
         [self displayAsync:NO];
     }else {
@@ -94,11 +113,11 @@ static CGFloat screenScale() {
 }
 
 - (void)cancelAsyncDisplay {
-    [self increaseDisplayFlag];
+    [_sentinel increase];;
 }
 
 - (void)dealloc {
-    [self increaseDisplayFlag];
+    [_sentinel increase];
     _asyncDelegate = nil;
 }
 
@@ -123,9 +142,10 @@ static CGFloat screenScale() {
     CGFloat scale = self.contentsScale;
     UIColor *backgroundColor = (opaque && self.backgroundColor) ? [UIColor colorWithCGColor:self.backgroundColor] : [UIColor whiteColor];
     if (asynchronously) {
-        atomic_uint displayFlag = _displayFlag;
+        _TYSentinel *sentinel = _sentinel;
+        unsigned int value = [_sentinel value];
         BOOL (^isCancelled)(void) = ^BOOL(void){
-            return displayFlag != _displayFlag;
+            return value != [sentinel value];
         };
         dispatch_async(asyncDisplayQueue(), ^{
             if (isCancelled()) {
@@ -170,7 +190,7 @@ static CGFloat screenScale() {
             });
         });
     } else {
-        [self increaseDisplayFlag];
+        [_sentinel increase];
         UIGraphicsBeginImageContextWithOptions(size, opaque, scale);
         CGContextRef context = UIGraphicsGetCurrentContext();
         if (opaque) {
@@ -188,10 +208,6 @@ static CGFloat screenScale() {
             task.didDisplay(self, YES);
         };
     }
-}
-
-- (void)increaseDisplayFlag {
-    atomic_fetch_add(&_displayFlag,1);
 }
 
 @end

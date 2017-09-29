@@ -37,6 +37,14 @@
     return self;
 }
 
+- (instancetype)initWithTextStorage:(NSTextStorage *)textStorage {
+    if (self = [self init]) {
+        [textStorage addLayoutManager:_layoutManager];
+        _textStorage = textStorage;
+    }
+    return self;
+}
+
 - (void)addTextContainer {
     NSTextContainer *textContainer = [[NSTextContainer alloc]init];
     textContainer.lineFragmentPadding = 0;
@@ -55,8 +63,8 @@
     if (_textStorage) {
         [_textStorage removeLayoutManager:_layoutManager];
     }
+    [textStorage addLayoutManager:_layoutManager];
     _textStorage = textStorage;
-    [_textStorage addLayoutManager:_layoutManager];
 }
 
 - (void)setSize:(CGSize)size {

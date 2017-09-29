@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) NSTextStorage *textStorage;
 
 /**
- textkit render class
+ textkit render engine
  @discussion suggest use it,will improve performance
  */
 @property (nonatomic, strong, nullable) TYTextRender *textRender;

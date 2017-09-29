@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) CGSize size;
 
+- (instancetype)initWithTextStorage:(NSTextStorage *)textStorage;
+
 - (instancetype)initWithTextContainer:(NSTextContainer *)textContainer;
 
 /**

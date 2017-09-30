@@ -12,14 +12,13 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface TYLabel : UIView
 
-
 /**
-  asynchronous display of the view's layer.
+asynchronous display of the view's layer. default YES
  */
 @property (nonatomic, assign) BOOL displaysAsynchronously;
 
 /**
- clear layer'content,before asynchronously display
+ clear layer'content,before asynchronously display. default YES
  */
 @property (nonatomic, assign) BOOL clearContentBeforeAsyncDisplay;
 
@@ -33,6 +32,17 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion suggest use it,will improve performance
  */
 @property (nonatomic, strong, nullable) TYTextRender *textRender;
+
+
+/**
+ clear textRender, update layout and redraw
+ */
+- (void)setLayoutNeedUpdate;
+
+/**
+ only layer redraw
+ */
+- (void)setDisplayNeedRedraw;
 
 @end
 NS_ASSUME_NONNULL_END

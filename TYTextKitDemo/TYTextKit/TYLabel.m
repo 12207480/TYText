@@ -9,6 +9,10 @@
 #import "TYLabel.h"
 #import "TYAsyncLayer.h"
 
+#import <pthread.h>
+
+#define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
+
 @interface TYLabel () <TYAsyncLayerDelegate>
 
 @property (nonatomic, strong) NSArray *attachViews;
@@ -51,6 +55,7 @@
 }
 
 - (void)setLayoutNeedUpdate {
+    TYAssertMainThread();
     [self clearTextRender];
     [self clearLayerContent];
     [self setDisplayNeedRedraw];
@@ -70,11 +75,6 @@
     _textRender = nil;
 }
 
-- (void)setNeedsDisplay {
-    [super setNeedsDisplay];
-    [self setDisplayNeedRedraw];
-}
-
 #pragma mark - Getter && Setter
 
 - (void)setText:(NSString *)text {
@@ -83,13 +83,40 @@
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
+    TYAssertMainThread();
     _attributedText = attributedText;
     [self setLayoutNeedUpdate];
 }
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
+    TYAssertMainThread();
     _textStorage = textStorage;
     [self setLayoutNeedUpdate];
+}
+
+- (void)setTextRender:(TYTextRender *)textRender {
+    TYAssertMainThread();
+    _textRender = textRender;
+    [self clearLayerContent];
+    [self setDisplayNeedRedraw];
+}
+
+- (void)setFrame:(CGRect)frame {
+    CGSize oldSize = self.frame.size;
+    [super setFrame:frame];
+    if (!CGSizeEqualToSize(self.frame.size, oldSize)) {
+        [self clearLayerContent];
+        [self setDisplayNeedRedraw];
+    }
+}
+
+- (void)setBounds:(CGRect)bounds {
+    CGSize oldSize = self.bounds.size;
+    [super setBounds:bounds];
+    if (!CGSizeEqualToSize(self.bounds.size, oldSize)) {
+        [self clearLayerContent];
+        [self setDisplayNeedRedraw];
+    }
 }
 
 #pragma mark - TYAsyncLayerDelegate

@@ -8,9 +8,9 @@
 
 #import "TYTextStorage.h"
 
-@interface TYTextStorage () {
-    NSMutableAttributedString *_imp;
-}
+@interface TYTextStorage ()
+
+@property (nonatomic, strong) NSMutableAttributedString *imp;
 
 @end
 
@@ -53,6 +53,13 @@
         [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.string.length) changeInLength:0];
     }
     return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    TYTextStorage *copy = [[[self class]allocWithZone:zone]init];
+    copy.imp = [_imp mutableCopy];
+    copy.textParse = _textParse;
+    return copy;
 }
 
 #pragma mark - override

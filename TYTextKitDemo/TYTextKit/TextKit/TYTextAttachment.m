@@ -68,7 +68,11 @@
         return self.bounds;
     }
     CGFloat offset = 0;
+    // TO DO:now not thread safe
     UIFont *font = [textContainer.layoutManager.textStorage ty_fontAtIndex:charIndex effectiveRange:nil];
+    if (!font) {
+        return self.bounds;
+    }
     switch (_verticalAlignment) {
         case TYAttachmentAlignmentCenter:
             offset = (_size.height-font.capHeight)/2;

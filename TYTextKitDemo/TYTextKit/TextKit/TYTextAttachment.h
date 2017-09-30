@@ -29,7 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // range in attributed
 @property (nonatomic, assign, readonly) NSRange range;
-@property (nonatomic, assign, readonly) CGPoint position;
+// attach render positon
+@property (atomic, assign, readonly) CGPoint position;
 
 /**
  text attachment baseline offset

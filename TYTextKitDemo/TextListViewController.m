@@ -51,7 +51,7 @@
         NSString *str = [NSString stringWithFormat:@"%d Async Display Test Display ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐🚋🎊😡🚖🚌💖💗💛💙🏨✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊😡🚖🚌💖💗💛💙🏨",i%3 ? i:i*100];
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
-        text.ty_lineSpacing = 0;
+        text.ty_lineSpacing = 2;
         text.ty_strokeWidth = -3;
         text.ty_strokeColor = [UIColor redColor];
         text.ty_lineHeightMultiple = 1;
@@ -127,7 +127,7 @@
     if (_async) {
         cell.label.hidden = NO;
         cell.uilabel.hidden = YES;
-        cell.label.textStorage = _textArray[indexPath.row];
+        cell.label.attributedText = _itemArray[indexPath.row];
     }else {
         cell.label.hidden = YES;
         cell.uilabel.hidden = NO;

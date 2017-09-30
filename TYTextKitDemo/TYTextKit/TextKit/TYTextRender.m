@@ -7,6 +7,9 @@
 //
 
 #import "TYTextRender.h"
+#import <pthread.h>
+
+#define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
 
 @interface TYTextRender ()
 
@@ -74,27 +77,57 @@
     }
 }
 
+- (NSRange)glyphRange {
+    return [_layoutManager glyphRangeForTextContainer:_textContainer];
+}
+
+- (NSRange)visibleCharacterRange {
+    return [_layoutManager characterRangeForGlyphRange:[self glyphRange] actualGlyphRange:nil];
+}
+
+#pragma mark - public
+
+- (CGRect)boundingRectForCharacterRange:(NSRange)characterRange {
+    NSRange glyphRange = [_layoutManager glyphRangeForCharacterRange:characterRange actualCharacterRange:nil];
+    return [_layoutManager boundingRectForGlyphRange:glyphRange
+                                     inTextContainer:_textContainer];
+}
+
+- (CGPoint)locationForCharacterAtIndex:(NSUInteger)characterIndex {
+    NSUInteger glyph = [_layoutManager glyphIndexForCharacterAtIndex:characterIndex];
+    return [_layoutManager locationForGlyphAtIndex:glyph];
+}
+
 #pragma mark - draw text
 
-- (CGPoint)textOffsetForGlyphRange:(NSRange)glyphRange inRect:(CGRect)rect
+- (CGPoint)textOffsetForGlyphRange:(NSRange)glyphRange atPiont:(CGPoint)point
 {
-    CGPoint textOffset = CGPointZero;
+    if (point.y > 0) {
+        return point;
+    }
+    CGPoint textOffset = point;
     CGRect textBounds = [_layoutManager boundingRectForGlyphRange:glyphRange
-                                                      inTextContainer:_textContainer];
-    CGFloat paddingHeight = (rect.size.height - ceil(textBounds.size.height)) / 2.0f;
+                                                  inTextContainer:_textContainer];
+    CGFloat paddingHeight = (_textContainer.size.height - ceil(textBounds.size.height)) / 2.0f;
     textOffset.y = paddingHeight;
     return textOffset;
 }
 
-- (void)drawTextInRect:(CGRect)rect
+- (void)drawTextAtPoint:(CGPoint)point {
+    [self drawTextAtPoint:point isCanceled:nil];
+}
+- (void)drawTextAtPoint:(CGPoint)point isCanceled:(BOOL (^)(void))isCanceled
 {
     // calculate the offset of the text in the view
-    NSRange glyphRange = [_layoutManager glyphRangeForTextContainer:_textContainer];
-    CGPoint textOffset = [self textOffsetForGlyphRange:glyphRange inRect:rect];
-    
-    // drawing code
-    [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textOffset];
-    [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textOffset];
+    NSRange glyphRange = [self glyphRange];
+    CGPoint textOffset = [self textOffsetForGlyphRange:glyphRange atPiont:point];
+    // drawing text
+    [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
+        [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textOffset];
+        if (isCanceled && isCanceled()) *stop = YES;
+        [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textOffset];
+        if (isCanceled && isCanceled()) *stop = YES;
+    }];
 }
 
 @end

@@ -48,27 +48,50 @@
     NSMutableArray *textArray = [NSMutableArray array];
     NSMutableArray *renderArray = [NSMutableArray array];
     for (int i = 0; i < 200; ++i) {
-        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i];
+        NSString *str = [NSString stringWithFormat:@"%d Async Display Test Display ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐🚋🎊😡🚖🚌💖💗💛💙🏨✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊😡🚖🚌💖💗💛💙🏨",i%3 ? i:i*100];
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
-        text.ty_font = [UIFont systemFontOfSize:10];
         text.ty_lineSpacing = 0;
         text.ty_strokeWidth = -3;
         text.ty_strokeColor = [UIColor redColor];
         text.ty_lineHeightMultiple = 1;
-        text.ty_maximumLineHeight = 12;
-        text.ty_minimumLineHeight = 12;
+//        text.ty_maximumLineHeight = 12;
+//        text.ty_minimumLineHeight = 12;
         
         TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
         attachment.image = [UIImage imageNamed:@"avatar"];
-        attachment.bounds = CGRectMake(0, -25, 60, 60);
-        //[text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
-        
+        attachment.size = CGSizeMake(60, 60);
+//        if (i%2) {
+//            [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+//        }
+        attachment = [[TYTextAttachment alloc]init];
+        attachment.image = [UIImage imageNamed:@"avatar"];
+        attachment.size = CGSizeMake(20, 20);
+        attachment.verticalAlignment = TYAttachmentAlignmentCenter;
+        [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+        TYTextAttachment *attachmentView = [[TYTextAttachment alloc]init];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button setTitle:@"button" forState:UIControlStateNormal];
+        attachmentView.view = button;
+        attachmentView.view.backgroundColor = [UIColor redColor];
+        attachmentView.size = CGSizeMake(60, 10);
+        attachmentView.verticalAlignment = TYAttachmentAlignmentCenter;
+        [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
+        attachmentView = [[TYTextAttachment alloc]init];
+        button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button setTitle:@"button" forState:UIControlStateNormal];
+        attachmentView.view = button;
+        attachmentView.view.backgroundColor = [UIColor redColor];
+        attachmentView.size = CGSizeMake(60, 20);
+        //attachmentView.verticalAlignment = TYAttachmentAlignmentBottom;
+        [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
+        text.ty_font = [UIFont systemFontOfSize:10];
         NSShadow *shadow = [NSShadow new];
         shadow.shadowBlurRadius = 1;
         shadow.shadowColor = [UIColor redColor];
         shadow.shadowOffset = CGSizeMake(0, 1);
         //text.ty_shadow = shadow;
+        text.ty_characterSpacing = 2;
         TYTextStorage *textStorage = [[TYTextStorage alloc]initWithMutableAttributedString:text];
         TYTextRender *render = [[TYTextRender alloc]init];
         render.textStorage = textStorage;
@@ -104,7 +127,7 @@
     if (_async) {
         cell.label.hidden = NO;
         cell.uilabel.hidden = YES;
-        cell.label.textRender = _renderArray[indexPath.row];
+        cell.label.textStorage = _textArray[indexPath.row];
     }else {
         cell.label.hidden = YES;
         cell.uilabel.hidden = NO;
@@ -114,7 +137,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 35;
+    return 70;
 }
 
 - (void)changeAsyncAction:(UIBarButtonItem *)item {

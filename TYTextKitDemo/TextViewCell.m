@@ -27,6 +27,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self addLabel];
         [self addUILabel];
     }
@@ -35,7 +36,6 @@
 
 - (void)addLabel {
     TYLabel *label = [[TYLabel alloc]init];
-    label.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:label];
     _label = label;
 }

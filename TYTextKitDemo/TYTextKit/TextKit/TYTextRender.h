@@ -25,13 +25,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGSize size;
 
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage;
-
 - (instancetype)initWithTextContainer:(NSTextContainer *)textContainer;
 
+- (CGRect)boundingRectForCharacterRange:(NSRange)characterRange;
+
+- (NSRange)visibleCharacterRange;
+
 /**
- draw text in rect
+ draw text at point
  */
-- (void)drawTextInRect:(CGRect)rect;
+- (void)drawTextAtPoint:(CGPoint)point;
+- (void)drawTextAtPoint:(CGPoint)point isCanceled:(BOOL (^__nullable)(void))isCanceled;
 
 @end
 NS_ASSUME_NONNULL_END

@@ -10,7 +10,6 @@
 
 typedef NS_ENUM(NSUInteger, TYAttachmentAlignment) {
     TYAttachmentAlignmentBaseline,
-    TYAttachmentAlignmentTop,
     TYAttachmentAlignmentCenter,
     TYAttachmentAlignmentBottom
 };
@@ -18,12 +17,19 @@ typedef NS_ENUM(NSUInteger, TYAttachmentAlignment) {
 NS_ASSUME_NONNULL_BEGIN
 @interface TYTextAttachment : NSTextAttachment
 
-
-@property (nonatomic, strong, nullable) NSString *imageName;
 @property (nonatomic, strong, nullable) UIImage *image;
-
 @property (nonatomic, strong, nullable) UIView *view;
 @property (nonatomic, strong, nullable) CALayer *layer;
+
+/**
+ attachment'size
+ @discussion must set attach's size or bounds
+ */
+@property (nonatomic,assign) CGSize size;
+
+// range in attributed
+@property (nonatomic, assign, readonly) NSRange range;
+@property (nonatomic, assign, readonly) CGPoint point;
 
 /**
  text attachment baseline offset
@@ -32,13 +38,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  attachment vertical alignment
+ @discussion must ensure the font == the line text's font
  */
 @property (nonatomic,assign) TYAttachmentAlignment verticalAlignment;
 
+
 /**
- attachment'size
+ if have view or layer, set the frame
  */
-@property (nonatomic,assign) CGSize size;
+- (void)setFrame:(CGRect)frame;
+- (void)addToSuperView:(UIView *)superView;
+- (void)removeFromSuperView;
 
 @end
+
+@interface NSAttributedString (TYTextAttachment)
+
+- (NSArray *__nullable)attachViews;
+
+@end
+
 NS_ASSUME_NONNULL_END

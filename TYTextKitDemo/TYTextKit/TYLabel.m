@@ -11,6 +11,8 @@
 
 @interface TYLabel () <TYAsyncLayerDelegate>
 
+@property (nonatomic, strong) NSArray *attachViews;
+
 @end
 
 @implementation TYLabel
@@ -35,6 +37,7 @@
 
 - (void)configureLabel {
     _clearContentBeforeAsyncDisplay = YES;
+    self.clipsToBounds = YES;
     self.layer.contentsScale = ty_text_screen_scale();
     ((TYAsyncLayer *)self.layer).asyncDelegate = self;
 }
@@ -95,7 +98,13 @@
     __block TYTextRender *textRender = _textRender;
     __block NSTextStorage *textStorage = _textStorage;
     __strong NSAttributedString *attributedText = _attributedText;
+    __strong NSArray *attachViews = _attachViews;
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
+    // will display
+    task.willDisplay = ^(CALayer * _Nonnull layer) {
+        [self clearAttachViews:attachViews];
+    };
+    
     task.displaying = ^(CGContextRef  _Nonnull context, CGSize size, BOOL isAsynchronously, BOOL (^ _Nonnull isCancelled)(void)) {
         if (!textRender && !textStorage) {
             textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];
@@ -106,9 +115,39 @@
         }
         textRender.size = size;
         if (isCancelled()) return ;
-        [textRender drawTextInRect:CGRectMake(0, 0, size.width, size.height)];
+        [textRender drawTextAtPoint:CGPointZero isCanceled:isCancelled];
+    };
+    
+    task.didDisplay = ^(CALayer * _Nonnull layer, BOOL finished) {
+        NSArray *attachViews = textRender.textStorage.attachViews;
+        if (!finished || !attachViews) {
+            [self clearAttachViews:attachViews];
+            _attachViews = attachViews;
+            return ;
+        }
+        NSRange visibleRange = [textRender visibleCharacterRange];
+        for (TYTextAttachment *attachment in attachViews) {
+            if (!NSLocationInRange(attachment.range.location, visibleRange)) {
+                [attachment.view removeFromSuperview];
+                [attachment.layer removeFromSuperlayer];
+                continue;
+            }
+            CGRect rect = {attachment.point,attachment.size};
+            [attachment addToSuperView:self];
+            attachment.frame = rect;
+        }
+        _attachViews = attachViews;
     };
     return task;
+}
+
+- (void)clearAttachViews:(NSArray *)attachViews {
+    if (!attachViews) {
+        return;
+    }
+    for (TYTextAttachment *attachment in attachViews) {
+        [attachment removeFromSuperView];
+    }
 }
 
 - (void)dealloc {

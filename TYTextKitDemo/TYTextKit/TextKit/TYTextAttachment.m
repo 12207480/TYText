@@ -59,7 +59,7 @@
 #pragma mark - NSTextAttachmentContainer
 
 - (nullable UIImage *)imageForBounds:(CGRect)imageBounds textContainer:(nullable NSTextContainer *)textContainer characterIndex:(NSUInteger)charIndex {
-    _point = CGPointMake(imageBounds.origin.x, imageBounds.origin.y - _size.height);
+    _position = CGPointMake(imageBounds.origin.x, imageBounds.origin.y - _size.height);
     return self.image;
 }
 

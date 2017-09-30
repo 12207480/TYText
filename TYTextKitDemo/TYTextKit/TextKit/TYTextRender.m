@@ -77,15 +77,19 @@
     }
 }
 
-- (NSRange)glyphRange {
+#pragma mark - public
+
+- (NSArray *)attachViews {
+    return _textStorage.attachViews;
+}
+
+- (NSRange)visibleGlyphRange {
     return [_layoutManager glyphRangeForTextContainer:_textContainer];
 }
 
 - (NSRange)visibleCharacterRange {
-    return [_layoutManager characterRangeForGlyphRange:[self glyphRange] actualGlyphRange:nil];
+    return [_layoutManager characterRangeForGlyphRange:[self visibleGlyphRange] actualGlyphRange:nil];
 }
-
-#pragma mark - public
 
 - (CGRect)boundingRectForCharacterRange:(NSRange)characterRange {
     NSRange glyphRange = [_layoutManager glyphRangeForCharacterRange:characterRange actualCharacterRange:nil];
@@ -93,9 +97,9 @@
                                      inTextContainer:_textContainer];
 }
 
-- (CGPoint)locationForCharacterAtIndex:(NSUInteger)characterIndex {
-    NSUInteger glyph = [_layoutManager glyphIndexForCharacterAtIndex:characterIndex];
-    return [_layoutManager locationForGlyphAtIndex:glyph];
+- (CGRect)usedBoundingRect {
+    return [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
+                                     inTextContainer:_textContainer];
 }
 
 #pragma mark - draw text
@@ -119,7 +123,7 @@
 - (void)drawTextAtPoint:(CGPoint)point isCanceled:(BOOL (^)(void))isCanceled
 {
     // calculate the offset of the text in the view
-    NSRange glyphRange = [self glyphRange];
+    NSRange glyphRange = [self visibleGlyphRange];
     CGPoint textOffset = [self textOffsetForGlyphRange:glyphRange atPiont:point];
     // drawing text
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {

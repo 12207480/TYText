@@ -146,7 +146,7 @@
     };
     
     task.didDisplay = ^(CALayer * _Nonnull layer, BOOL finished) {
-        NSArray *attachViews = textRender.textStorage.attachViews;
+        NSArray *attachViews = textRender.attachViews;
         if (!finished || !attachViews) {
             [self clearAttachViews:attachViews];
             _attachViews = attachViews;
@@ -159,7 +159,7 @@
                 [attachment.layer removeFromSuperlayer];
                 continue;
             }
-            CGRect rect = {attachment.point,attachment.size};
+            CGRect rect = {attachment.position,attachment.size};
             [attachment addToSuperView:self];
             attachment.frame = rect;
         }

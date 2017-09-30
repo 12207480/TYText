@@ -19,17 +19,31 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSLayoutManager *layoutManager;
 @property (nonatomic, strong, readonly) NSTextContainer *textContainer;
 
+
 /**
- text render size
+ text attributed contain attach views or layers
+ */
+@property (nonatomic, strong, readonly) NSArray *attachViews;
+/**
+ render size
  */
 @property (nonatomic, assign) CGSize size;
+
+/**
+ visible text actually bound
+ @discussion if size is zero, it return zero
+ */
+@property (nonatomic, assign) CGRect usedBoundingRect;
 
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage;
 - (instancetype)initWithTextContainer:(NSTextContainer *)textContainer;
 
-- (CGRect)boundingRectForCharacterRange:(NSRange)characterRange;
 
+/**
+ visible text range
+ */
 - (NSRange)visibleCharacterRange;
+- (CGRect)boundingRectForCharacterRange:(NSRange)characterRange;
 
 /**
  draw text at point

@@ -125,7 +125,7 @@
     __block TYTextRender *textRender = _textRender;
     __block NSTextStorage *textStorage = _textStorage;
     __strong NSAttributedString *attributedText = _attributedText;
-    __strong NSArray *attachViews = _attachViews;
+    NSArray *attachViews = _attachViews;
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     // will display
     task.willDisplay = ^(CALayer * _Nonnull layer) {

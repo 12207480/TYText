@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // initialized with  mutableCopy attrStr
 - (instancetype)initWithAttributedString:(NSAttributedString *)attrStr;
-// initialized with strong attrStr,not mutableCopy
+// initialized with strong attrStr,not mutableCopy,you ensure not use it in other place
 - (instancetype)initWithMutableAttributedString:(NSMutableAttributedString *)attrStr;
 
 @end

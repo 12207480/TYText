@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2B1F83241F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */; };
 		2B2177091F669683005E07E0 /* TYTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2177061F669683005E07E0 /* TYTransaction.m */; };
+		2B2A175B1F7F8199000F6F4B /* TYTextAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A175A1F7F8199000F6F4B /* TYTextAttribute.m */; };
+		2B2A177A1F7FA0A2000F6F4B /* TYTextGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A17791F7FA0A1000F6F4B /* TYTextGenerator.m */; };
 		2B2A483B1F67C65500D7E613 /* TYTransactionGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A483A1F67C65500D7E613 /* TYTransactionGroup.m */; };
 		2B2A483E1F67CF8E00D7E613 /* TYAsyncTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A483D1F67CF8E00D7E613 /* TYAsyncTransaction.m */; };
 		2B426F461F78F062009E70D9 /* TextDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F451F78F062009E70D9 /* TextDemoViewController.m */; };
@@ -37,6 +39,10 @@
 		2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+TYTextKit.m"; sourceTree = "<group>"; };
 		2B2177051F669683005E07E0 /* TYTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTransaction.h; sourceTree = "<group>"; };
 		2B2177061F669683005E07E0 /* TYTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTransaction.m; sourceTree = "<group>"; };
+		2B2A17591F7F8199000F6F4B /* TYTextAttribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextAttribute.h; sourceTree = "<group>"; };
+		2B2A175A1F7F8199000F6F4B /* TYTextAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextAttribute.m; sourceTree = "<group>"; };
+		2B2A17781F7FA0A1000F6F4B /* TYTextGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextGenerator.h; sourceTree = "<group>"; };
+		2B2A17791F7FA0A1000F6F4B /* TYTextGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextGenerator.m; sourceTree = "<group>"; };
 		2B2A48391F67C65500D7E613 /* TYTransactionGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTransactionGroup.h; sourceTree = "<group>"; };
 		2B2A483A1F67C65500D7E613 /* TYTransactionGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTransactionGroup.m; sourceTree = "<group>"; };
 		2B2A483C1F67CF8E00D7E613 /* TYAsyncTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYAsyncTransaction.h; sourceTree = "<group>"; };
@@ -188,8 +194,12 @@
 				2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */,
 				2B426F601F7A44C8009E70D9 /* TYTextStorage.h */,
 				2B426F611F7A44C8009E70D9 /* TYTextStorage.m */,
+				2B2A17591F7F8199000F6F4B /* TYTextAttribute.h */,
+				2B2A175A1F7F8199000F6F4B /* TYTextAttribute.m */,
 				2B426F631F7A491A009E70D9 /* TYTextAttachment.h */,
 				2B426F641F7A491A009E70D9 /* TYTextAttachment.m */,
+				2B2A17781F7FA0A1000F6F4B /* TYTextGenerator.h */,
+				2B2A17791F7FA0A1000F6F4B /* TYTextGenerator.m */,
 				2B426F5D1F7A4311009E70D9 /* TYTextParse.h */,
 				2B426F5E1F7A4311009E70D9 /* TYTextParse.m */,
 				2B1F83221F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.h */,
@@ -271,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B2A483E1F67CF8E00D7E613 /* TYAsyncTransaction.m in Sources */,
+				2B2A175B1F7F8199000F6F4B /* TYTextAttribute.m in Sources */,
 				2B426F5C1F79E7DD009E70D9 /* TYTextRender.m in Sources */,
 				2B8C4EC51F628C8F00539B07 /* ViewController.m in Sources */,
 				2B426F461F78F062009E70D9 /* TextDemoViewController.m in Sources */,
@@ -282,6 +293,7 @@
 				2B426F5F1F7A4311009E70D9 /* TYTextParse.m in Sources */,
 				2B8C4EE71F66323F00539B07 /* TYAsyncLayer.m in Sources */,
 				2B2177091F669683005E07E0 /* TYTransaction.m in Sources */,
+				2B2A177A1F7FA0A2000F6F4B /* TYTextGenerator.m in Sources */,
 				2B426F651F7A491A009E70D9 /* TYTextAttachment.m in Sources */,
 				2B426F491F78F076009E70D9 /* AttributedDemoViewController.m in Sources */,
 				2B1F83241F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m in Sources */,

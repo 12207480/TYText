@@ -68,7 +68,7 @@
         return self.bounds;
     }
     CGFloat offset = 0;
-    // TO DO:now not thread safe
+    // TO DO: textStorage not thread safe
     UIFont *font = [textContainer.layoutManager.textStorage ty_fontAtIndex:charIndex effectiveRange:nil];
     if (!font) {
         return self.bounds;

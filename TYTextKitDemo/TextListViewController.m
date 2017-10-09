@@ -57,7 +57,7 @@
         text.ty_lineHeightMultiple = 1;
 //        text.ty_maximumLineHeight = 12;
 //        text.ty_minimumLineHeight = 12;
-        
+        [text ty_addLink:@"" range:NSMakeRange(0, 8)];
         TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
         attachment.image = [UIImage imageNamed:@"avatar"];
         attachment.size = CGSizeMake(60, 60);

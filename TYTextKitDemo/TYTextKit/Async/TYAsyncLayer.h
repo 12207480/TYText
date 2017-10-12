@@ -21,8 +21,8 @@ CGFloat ty_text_screen_scale(void);
 
 @end
 
-@interface TYAsyncLayer : CALayer
 
+@interface TYAsyncLayer : CALayer
 
 /**
  delegate for asynchronous display of the layer.

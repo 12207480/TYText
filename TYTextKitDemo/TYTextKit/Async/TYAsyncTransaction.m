@@ -134,7 +134,6 @@ typedef NS_ENUM(NSUInteger, TYGCDAsyncTransactionOperationState) {
 @interface TYQueueAsyncTransaction ()
 
 @property (nonatomic, strong) NSOperationQueue *queue;
-@property (nonatomic, assign) TYAsyncQueueType queueType;
 
 @property (nonatomic, assign) TYAsyncTransactionState state;
 
@@ -146,30 +145,25 @@ typedef NS_ENUM(NSUInteger, TYGCDAsyncTransactionOperationState) {
 @implementation TYQueueAsyncTransaction
 
 - (instancetype)init {
-    if (self = [self initWithQueueType:TYAsyncQueuePrivate]) {
+    if (self = [self initWithQueue:[[NSOperationQueue alloc]init]]) {
     }
     return self;
 }
 
-- (instancetype)initWithQueueType:(TYAsyncQueueType)queueType {
+- (instancetype)initWithQueue:(NSOperationQueue *)queue {
     if (self = [super init]) {
-        _queueType = queueType;
         _operations = [NSMutableArray array];
-        if (queueType == TYAsyncQueueMain) {
-            _queue = [NSOperationQueue mainQueue];
-        }else {
-            _queue = [[NSOperationQueue alloc]init];
-        }
+        _queue = queue;
     }
     return self;
 }
 
 + (TYQueueAsyncTransaction *)transaction {
-    return [[self alloc]initWithQueueType:TYAsyncQueueMain];
+    return [[self alloc]init];
 }
 
-+ (TYGroupAsyncTransaction *)transactionWithQueueType:(TYAsyncQueueType)queueType {
-   return [[self alloc]initWithQueueType:queueType];
++ (TYGroupAsyncTransaction *)transactionWithQueue:(NSOperationQueue *)queue {
+   return [[self alloc]initWithQueue:queue];
 }
 
 - (void)addOperation:(NSOperation *)operation {

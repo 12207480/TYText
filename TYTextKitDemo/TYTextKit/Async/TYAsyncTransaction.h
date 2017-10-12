@@ -57,7 +57,7 @@ typedef NS_ENUM(NSUInteger, TYAsyncTransactionState) {
  */
 @property (nonatomic ,strong, readonly) dispatch_queue_t queue;
 
-// async queue
+// async transaction
 + (TYGroupAsyncTransaction *)transaction;
 
 + (TYGroupAsyncTransaction *)transactionWithQueue:(dispatch_queue_t)queue;
@@ -69,11 +69,6 @@ typedef NS_ENUM(NSUInteger, TYAsyncTransactionState) {
 
 @end
 
-typedef NS_ENUM(NSUInteger, TYAsyncQueueType) {
-    TYAsyncQueueMain,
-    TYAsyncQueuePrivate,
-};
-
 @interface TYQueueAsyncTransaction : NSObject<TYAsyncTransaction>
 
 /**
@@ -84,12 +79,10 @@ typedef NS_ENUM(NSUInteger, TYAsyncQueueType) {
 
 @property (nonatomic, strong, readonly) NSOperationQueue *queue;
 
-@property (nonatomic, assign, readonly) TYAsyncQueueType queueType;
-
-// async queue
+// async transaction
 + (TYQueueAsyncTransaction *)transaction;
 
-+ (TYQueueAsyncTransaction *)transactionWithQueueType:(TYAsyncQueueType)queueType;
++ (TYGroupAsyncTransaction *)transactionWithQueue:(NSOperationQueue *)queue;
 
 /**
  add transaction operation

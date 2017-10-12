@@ -33,7 +33,7 @@ CGFloat ty_text_screen_scale(void) {
     return scale;
 }
 
-@interface _TYSentinel : NSObject
+@interface TYSentinel : NSObject
 
 - (unsigned int)value;
 
@@ -41,7 +41,7 @@ CGFloat ty_text_screen_scale(void) {
 
 @end
 
-@implementation _TYSentinel {
+@implementation TYSentinel {
     atomic_uint _value;
 }
 - (unsigned int)value {
@@ -53,7 +53,7 @@ CGFloat ty_text_screen_scale(void) {
 @end
 
 @implementation TYAsyncLayer {
-    _TYSentinel *_sentinel;
+    TYSentinel *_sentinel;
 }
 
 + (id)defaultValueForKey:(NSString *)key {
@@ -79,7 +79,7 @@ CGFloat ty_text_screen_scale(void) {
 }
 
 - (void)configureLayer {
-    _sentinel = [[_TYSentinel alloc]init];
+    _sentinel = [[TYSentinel alloc]init];
     _displaysAsynchronously = YES;
     self.contentsScale = ty_text_screen_scale();
     self.opaque = YES;
@@ -142,7 +142,7 @@ CGFloat ty_text_screen_scale(void) {
     CGFloat scale = self.contentsScale;
     UIColor *backgroundColor = (opaque && self.backgroundColor) ? [UIColor colorWithCGColor:self.backgroundColor] : [UIColor whiteColor];
     if (asynchronously) {
-        _TYSentinel *sentinel = _sentinel;
+        TYSentinel *sentinel = _sentinel;
         unsigned int value = [_sentinel value];
         BOOL (^isCancelled)(void) = ^BOOL(void){
             return value != [sentinel value];

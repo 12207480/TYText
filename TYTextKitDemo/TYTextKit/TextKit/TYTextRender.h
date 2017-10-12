@@ -38,7 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage;
 - (instancetype)initWithTextContainer:(NSTextContainer *)textContainer;
 
-
 /**
  visible text range
  */

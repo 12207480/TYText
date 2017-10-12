@@ -19,13 +19,12 @@ typedef NS_ENUM(NSUInteger, TYGCDAsyncTransactionOperationState) {
 };
 
 @interface TYGCDAsyncTransactionOperation : NSObject
-
 @property (atomic ,assign) TYGCDAsyncTransactionOperationState state;
-
 @property (nonatomic ,strong) dispatch_queue_t queue;
-
 @property (nonatomic ,copy) void (^operationBlock)(void);
+@end
 
+@implementation TYGCDAsyncTransactionOperation
 @end
 
 @interface TYGroupAsyncTransaction ()
@@ -53,7 +52,7 @@ typedef NS_ENUM(NSUInteger, TYGCDAsyncTransactionOperationState) {
 }
 
 + (TYGroupAsyncTransaction *)transaction {
-    return [[self alloc]init];
+    return [self transactionWithQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
 }
 
 + (TYGroupAsyncTransaction *)transactionWithQueue:(dispatch_queue_t)queue {
@@ -132,11 +131,6 @@ typedef NS_ENUM(NSUInteger, TYGCDAsyncTransactionOperationState) {
 
 @end
 
-@implementation TYGCDAsyncTransactionOperation
-
-@end
-
-
 @interface TYQueueAsyncTransaction ()
 
 @property (nonatomic, strong) NSOperationQueue *queue;
@@ -152,7 +146,7 @@ typedef NS_ENUM(NSUInteger, TYGCDAsyncTransactionOperationState) {
 @implementation TYQueueAsyncTransaction
 
 - (instancetype)init {
-    if (self = [self initWithQueueType:TYAsyncQueueMain]) {
+    if (self = [self initWithQueueType:TYAsyncQueuePrivate]) {
     }
     return self;
 }

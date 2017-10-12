@@ -15,10 +15,36 @@ typedef NS_ENUM(NSUInteger, TYAsyncTransactionState) {
     TYAsyncTransactionStateCanceled,
 };
 
-@interface TYGroupAsyncTransaction : NSObject<TYTransaction>
+@protocol TYAsyncTransaction <TYTransaction>
+
+@property (nonatomic, assign, readonly) TYAsyncTransactionState state;
 
 /**
- if identifierHash is equal, will return equal hash in set(collection).default nil
+ async transaction
+ */
++ (id<TYAsyncTransaction> *)transaction;
+
+/**
+ add transaction operation block
+ */
+- (void)addOperationBlock:(void (^)(void))operationBlock;
+
+/**
+ completion block on main thread
+ @discussion when all operationBlock completed,will executed the completion block
+ */
+- (void)setCompletionBlock:(void (^)(void))completionBlock;
+
+@end
+
+/**
+ a async transaction with operation and completion block
+ */
+@interface TYGroupAsyncTransaction : NSObject<TYAsyncTransaction>
+
+/**
+ object hash identifier
+ @discussion if identifierHash is equal, will return equal hash in set(collection).default nil
  */
 @property (nonatomic, strong) NSString *identifierHash;
 
@@ -31,26 +57,15 @@ typedef NS_ENUM(NSUInteger, TYAsyncTransactionState) {
  */
 @property (nonatomic ,strong, readonly) dispatch_queue_t queue;
 
-@property (nonatomic, assign, readonly) TYAsyncTransactionState state;
-
-// default main queue
+// async queue
 + (TYGroupAsyncTransaction *)transaction;
 
 + (TYGroupAsyncTransaction *)transactionWithQueue:(dispatch_queue_t)queue;
 
 /**
- add transaction operation block
- */
-- (void)addOperationBlock:(void (^)(void))operationBlock;
-/**
  add operation to queue,if queue nil is self.queue.
  */
 - (void)addOperationBlock:(void (^)(void))operationBlock toQueue:(dispatch_queue_t)queue;
-
-/**
- when all operationBlock completed,the completion block that will be executed on main thread
- */
-- (void)setCompletionBlock:(void (^)(void))completionBlock;
 
 @end
 
@@ -59,10 +74,11 @@ typedef NS_ENUM(NSUInteger, TYAsyncQueueType) {
     TYAsyncQueuePrivate,
 };
 
-@interface TYQueueAsyncTransaction : NSObject<TYTransaction>
+@interface TYQueueAsyncTransaction : NSObject<TYAsyncTransaction>
 
 /**
- if identifierHash is equal, will return equal hash in set(collection).default nil
+ object hash identifier
+ @discussion if identifierHash is equal, will return equal hash in set(collection).default nil
  */
 @property (nonatomic, strong) NSString *identifierHash;
 
@@ -70,26 +86,14 @@ typedef NS_ENUM(NSUInteger, TYAsyncQueueType) {
 
 @property (nonatomic, assign, readonly) TYAsyncQueueType queueType;
 
-@property (nonatomic, assign, readonly) TYAsyncTransactionState state;
-
-// default main queue
+// async queue
 + (TYQueueAsyncTransaction *)transaction;
 
-+ (TYGroupAsyncTransaction *)transactionWithQueueType:(TYAsyncQueueType)queueType;
++ (TYQueueAsyncTransaction *)transactionWithQueueType:(TYAsyncQueueType)queueType;
 
 /**
  add transaction operation
  */
 - (void)addOperation:(NSOperation *)operation;
-
-/**
- add transaction operation block
- */
-- (void)addOperationBlock:(void (^)(void))operationBlock;
-
-/**
- when all operationBlock completed,the completion block that will be executed on main thread
- */
-- (void)setCompletionBlock:(void (^)(void))completionBlock;
 
 @end

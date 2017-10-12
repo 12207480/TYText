@@ -10,7 +10,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol TYTransaction <NSObject>
-
 /**
  when next runloop tick ,transaction group will call this commit
  */
@@ -19,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cancel;
 
 @end
+
 
 /**
  a transaction with a specified target and selector,or block

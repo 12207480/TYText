@@ -24,7 +24,6 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         group = [[self alloc] init];
-        [group addRunloopObserver];
     });
     return group;
 }
@@ -32,6 +31,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         _orderSet = [NSMutableOrderedSet orderedSet];
+         [self addRunloopObserver];
     }
     return self;
 }

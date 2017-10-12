@@ -8,7 +8,6 @@
 
 #import "TYLabel.h"
 #import "TYAsyncLayer.h"
-
 #import <pthread.h>
 
 #define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
@@ -102,6 +101,7 @@
 }
 
 - (void)setFrame:(CGRect)frame {
+    TYAssertMainThread();
     CGSize oldSize = self.frame.size;
     [super setFrame:frame];
     if (!CGSizeEqualToSize(self.frame.size, oldSize)) {
@@ -111,6 +111,7 @@
 }
 
 - (void)setBounds:(CGRect)bounds {
+    TYAssertMainThread();
     CGSize oldSize = self.bounds.size;
     [super setBounds:bounds];
     if (!CGSizeEqualToSize(self.bounds.size, oldSize)) {
@@ -169,6 +170,7 @@
 }
 
 - (void)clearAttachViews:(NSArray *)attachViews {
+    TYAssertMainThread();
     if (!attachViews) {
         return;
     }

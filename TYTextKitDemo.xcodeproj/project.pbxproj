@@ -32,6 +32,7 @@
 		2B8C4ECD1F628C8F00539B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B8C4ECB1F628C8F00539B07 /* LaunchScreen.storyboard */; };
 		2B8C4EDE1F62907900539B07 /* TYLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EDD1F62907900539B07 /* TYLabel.m */; };
 		2B8C4EE71F66323F00539B07 /* TYAsyncLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EE61F66323F00539B07 /* TYAsyncLayer.m */; };
+		2BF9706D1F905CD200EF14C6 /* NSLayoutManager+TYTextKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BF9706C1F905CD200EF14C6 /* NSLayoutManager+TYTextKit.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,8 @@
 		2B8C4EDD1F62907900539B07 /* TYLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYLabel.m; sourceTree = "<group>"; };
 		2B8C4EE51F66323F00539B07 /* TYAsyncLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYAsyncLayer.h; sourceTree = "<group>"; };
 		2B8C4EE61F66323F00539B07 /* TYAsyncLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYAsyncLayer.m; sourceTree = "<group>"; };
+		2BF9706B1F905CD200EF14C6 /* NSLayoutManager+TYTextKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSLayoutManager+TYTextKit.h"; sourceTree = "<group>"; };
+		2BF9706C1F905CD200EF14C6 /* NSLayoutManager+TYTextKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutManager+TYTextKit.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +205,8 @@
 				2B2A17791F7FA0A1000F6F4B /* TYTextGenerator.m */,
 				2B426F5D1F7A4311009E70D9 /* TYTextParse.h */,
 				2B426F5E1F7A4311009E70D9 /* TYTextParse.m */,
+				2BF9706B1F905CD200EF14C6 /* NSLayoutManager+TYTextKit.h */,
+				2BF9706C1F905CD200EF14C6 /* NSLayoutManager+TYTextKit.m */,
 				2B1F83221F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.h */,
 				2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */,
 			);
@@ -282,6 +287,7 @@
 			files = (
 				2B2A483E1F67CF8E00D7E613 /* TYAsyncTransaction.m in Sources */,
 				2B2A175B1F7F8199000F6F4B /* TYTextAttribute.m in Sources */,
+				2BF9706D1F905CD200EF14C6 /* NSLayoutManager+TYTextKit.m in Sources */,
 				2B426F5C1F79E7DD009E70D9 /* TYTextRender.m in Sources */,
 				2B8C4EC51F628C8F00539B07 /* ViewController.m in Sources */,
 				2B426F461F78F062009E70D9 /* TextDemoViewController.m in Sources */,

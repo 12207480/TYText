@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TYTextAttachment : NSTextAttachment
 
 @property (nonatomic, strong, nullable) UIImage *image;
+// need used TYTextRender
 @property (nonatomic, strong, nullable) UIView *view;
 @property (nonatomic, strong, nullable) CALayer *layer;
 

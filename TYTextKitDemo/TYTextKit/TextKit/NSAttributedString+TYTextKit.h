@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable id)ty_attribute:(NSString *)attrName atIndex:(NSUInteger)index;
 - (nullable id)ty_attribute:(NSString *)attrName atIndex:(NSUInteger)index effectiveRange:(nullable NSRangePointer)range;
+- (nullable id)ty_attribute:(NSString *)attrName atIndex:(NSUInteger)index longestEffectiveRange:(nullable NSRangePointer)range;
 
 // attribute property getter
 

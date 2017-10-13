@@ -14,7 +14,12 @@
 
 @interface TYLabel () <TYAsyncLayerDelegate>
 
+@property (nonatomic, strong) TYTextRender *textRenderOnDisplay;
+
 @property (nonatomic, strong) NSArray *attachViews;
+
+@property (nonatomic, assign) NSRange highlightRange;
+@property (nonatomic, strong) TYTextHighlight *textHighlight;
 
 @end
 
@@ -62,6 +67,10 @@
 
 - (void)setDisplayNeedRedraw {
     [self.layer setNeedsDisplay];
+}
+
+- (void)immediatelyDisplayRedraw {
+    [(TYAsyncLayer *)self.layer displayImmediately];
 }
 
 - (void)clearLayerContent {
@@ -120,6 +129,85 @@
     }
 }
 
+#pragma mark - private
+
+- (TYTextHighlight *)textHighlightForPoint:(CGPoint)point effectiveRange:(NSRangePointer)range {
+    NSInteger index = [_textRenderOnDisplay characterIndexForPoint:point];
+    if (index >= 0) {
+        return [_textRenderOnDisplay.textStorage textHighlightAtIndex:index effectiveRange:range];
+    }
+    return nil;
+}
+
+#pragma mark - Touch Event
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (!_textRenderOnDisplay) {
+        [super touchesBegan:touches withEvent:event];
+        return;
+    }
+    UITouch *touch = touches.anyObject;
+    CGPoint point = [touch locationInView:self];
+    NSRange range = NSMakeRange(0, 0);
+    _textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
+    _highlightRange = range;
+    if (!_textHighlight) {
+        [super touchesBegan:touches withEvent:event];
+        return;
+    }
+    [self immediatelyDisplayRedraw];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (!_textRenderOnDisplay || !_textHighlight) {
+        [super touchesBegan:touches withEvent:event];
+        return;
+    }
+    UITouch *touch = touches.anyObject;
+    CGPoint point = [touch locationInView:self];
+    NSRange range = NSMakeRange(0, 0);
+    TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
+    if (textHighlight == _textHighlight) {
+        if (_highlightRange.length == 0) {
+            _highlightRange = range;
+            [self immediatelyDisplayRedraw];
+        }
+        return;
+    }
+    if (_highlightRange.length > 0) {
+        _highlightRange = NSMakeRange(0, 0);
+        [self immediatelyDisplayRedraw];
+    }
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (!_textRenderOnDisplay || !_textHighlight) {
+        [super touchesBegan:touches withEvent:event];
+        return;
+    }
+    UITouch *touch = touches.anyObject;
+    CGPoint point = [touch locationInView:self];
+    NSRange range = NSMakeRange(0, 0);
+    TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
+    BOOL isTaped = textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange);
+    _textHighlight = nil;
+    _highlightRange = NSMakeRange(0, 0);
+    if (isTaped) {
+        NSLog(@"点击😄");
+    }
+    [self immediatelyDisplayRedraw];
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (!_textRenderOnDisplay || !_textHighlight) {
+        [super touchesBegan:touches withEvent:event];
+        return;
+    }
+    _textHighlight = nil;
+    _highlightRange = NSMakeRange(0, 0);
+    [self immediatelyDisplayRedraw];
+}
+
 #pragma mark - TYAsyncLayerDelegate
 
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
@@ -127,26 +215,33 @@
     __block NSTextStorage *textStorage = _textStorage;
     __strong NSAttributedString *attributedText = _attributedText;
     NSArray *attachViews = _attachViews;
+    
+    NSRange highlightRange  = _highlightRange;
+    TYTextHighlight *textHighlight = _textHighlight;
+    
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     // will display
     task.willDisplay = ^(CALayer * _Nonnull layer) {
         [self clearAttachViews:attachViews];
+        _textRenderOnDisplay = nil;
     };
     
     task.displaying = ^(CGContextRef  _Nonnull context, CGSize size, BOOL isAsynchronously, BOOL (^ _Nonnull isCancelled)(void)) {
         if (!textRender && !textStorage) {
-            textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];
+             textRender = [[TYTextRender alloc]initWithAttributedText:attributedText];
         }
-        if (isCancelled()) return ;
+        if (isCancelled()) return;
         if (!textRender) {
             textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
         }
         textRender.size = size;
-        if (isCancelled()) return ;
+        [textRender setTextHighlight:textHighlight range:highlightRange];
+        if (isCancelled()) return;
         [textRender drawTextAtPoint:CGPointZero isCanceled:isCancelled];
     };
     
     task.didDisplay = ^(CALayer * _Nonnull layer, BOOL finished) {
+        _textRenderOnDisplay = textRender;
         NSArray *attachViews = textRender.attachViews;
         if (!finished || !attachViews) {
             [self clearAttachViews:attachViews];

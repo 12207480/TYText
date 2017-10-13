@@ -20,4 +20,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithMutableAttributedString:(NSMutableAttributedString *)attrStr;
 
 @end
+
 NS_ASSUME_NONNULL_END

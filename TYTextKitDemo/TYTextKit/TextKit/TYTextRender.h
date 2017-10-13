@@ -10,6 +10,7 @@
 #import "NSAttributedString+TYTextKit.h"
 #import "TYTextStorage.h"
 #import "TYTextAttachment.h"
+#import "TYTextAttribute.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @interface TYTextRender : NSObject
@@ -30,11 +31,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGSize size;
 
 /**
- visible text actually bound
+ visible text bound
  @discussion if size is zero, it return zero
  */
-@property (nonatomic, assign) CGRect usedBoundingRect;
+@property (nonatomic, assign, readonly) CGRect textBound;
 
+/**
+ text rect in container
+ @discussion when text did render,will have value
+ */
+@property (atomic, assign, readonly) CGRect textRect;
+
+- (instancetype)initWithAttributedText:(NSAttributedString *)attributedText;
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage;
 - (instancetype)initWithTextContainer:(NSTextContainer *)textContainer;
 
@@ -42,7 +50,21 @@ NS_ASSUME_NONNULL_BEGIN
  visible text range
  */
 - (NSRange)visibleCharacterRange;
+
+/**
+ text bound for character range
+ */
 - (CGRect)boundingRectForCharacterRange:(NSRange)characterRange;
+
+/**
+ text character index at piont
+ */
+- (NSInteger)characterIndexForPoint:(CGPoint)point;
+
+/**
+ set text highlight
+ */
+- (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range;
 
 /**
  draw text at point

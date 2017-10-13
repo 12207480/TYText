@@ -46,15 +46,20 @@
 }
 
 - (NSAttributedString *)addAttribuetedString {
-    NSString *str = @"Async Display Test Display ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐🚋🎊😡🚖🚌💖💗💛💙🏨✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊😡🚖🚌💖💗💛💙🏨";
+    NSString *str = @"哈哈不错啊啊啊Async Display Test Display ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐🚋🎊😡🚖🚌💖💗💛💙🏨✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊😡🚖🚌💖💗💛💙🏨";
     
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
-    text.ty_lineSpacing = 0;
-    text.ty_strokeWidth = -3;
-    text.ty_strokeColor = [UIColor redColor];
-    text.ty_lineHeightMultiple = 1;
+    text.ty_lineSpacing = 1;
+    //text.ty_strokeWidth = -2;
+    //text.ty_strokeColor = [UIColor redColor];
+    //text.ty_lineHeightMultiple = 1.5;
     //        text.ty_maximumLineHeight = 12;
     //        text.ty_minimumLineHeight = 12;
+    
+    TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
+    textHighlight.color = [UIColor whiteColor];
+    textHighlight.backgroundColor = [UIColor redColor];
+    [text addTextHighlightAttribute:textHighlight range:NSMakeRange(0, 9)];
     
     TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
     attachment.image = [UIImage imageNamed:@"avatar"];
@@ -75,8 +80,8 @@
     attachmentView.size = CGSizeMake(60, 10);
     attachmentView.verticalAlignment = TYAttachmentAlignmentCenter;
     [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
-    text.ty_font = [UIFont systemFontOfSize:10];
-    text.ty_characterSpacing = 2;
+    text.ty_font = [UIFont systemFontOfSize:15];
+    text.ty_characterSpacing = 1;
     return text;
 }
 

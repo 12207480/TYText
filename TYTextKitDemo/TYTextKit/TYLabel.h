@@ -35,14 +35,14 @@ asynchronous display of the view's layer. default YES
 
 
 /**
- clear textRender, update layout and redraw
- */
-- (void)setLayoutNeedUpdate;
-
-/**
- only layer redraw
+ layer redraw on private thread
  */
 - (void)setDisplayNeedRedraw;
+
+/**
+ layer redraw on mian thread
+ */
+- (void)immediatelyDisplayRedraw;
 
 @end
 NS_ASSUME_NONNULL_END

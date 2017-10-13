@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSLayoutManager *layoutManager;
 @property (nonatomic, strong) NSTextContainer *textContainer;
 
+@property (nonatomic, strong) NSTextStorage *textStorageOnRender;
+
 @end
 
 @implementation TYTextRender
@@ -28,14 +30,9 @@
     return self;
 }
 
-- (instancetype)initWithTextContainer:(NSTextContainer *)textContainer {
-    if (self = [super init]) {
-        NSParameterAssert(textContainer.layoutManager);
-        _textContainer = textContainer;
-        _layoutManager = textContainer.layoutManager;
-        if (_layoutManager.textStorage) {
-            _textStorage = _layoutManager.textStorage;
-        }
+- (instancetype)initWithAttributedText:(NSAttributedString *)attributedText {
+    NSTextStorage *textStorage = [[TYTextStorage alloc]initWithAttributedString:attributedText];;
+    if (self = [self initWithTextStorage:textStorage]) {
     }
     return self;
 }
@@ -44,6 +41,18 @@
     if (self = [self init]) {
         [textStorage addLayoutManager:_layoutManager];
         _textStorage = textStorage;
+        _textStorageOnRender = textStorage;
+    }
+    return self;
+}
+
+- (instancetype)initWithTextContainer:(NSTextContainer *)textContainer {
+    if (self = [super init]) {
+        NSParameterAssert(textContainer.layoutManager);
+        _textContainer = textContainer;
+        _layoutManager = textContainer.layoutManager;
+        _textStorage = _layoutManager.textStorage;
+        _textStorageOnRender = _textStorage;
     }
     return self;
 }
@@ -63,11 +72,19 @@
 #pragma mark - getter setter
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
-    if (_textStorage) {
-        [_textStorage removeLayoutManager:_layoutManager];
-    }
-    [textStorage addLayoutManager:_layoutManager];
     _textStorage = textStorage;
+    self.textStorageOnRender = textStorage;
+}
+
+- (void)setTextStorageOnRender:(NSTextStorage *)textStorageOnRender {
+    if (textStorageOnRender == _textStorageOnRender) {
+        return;
+    }
+    if (_textStorageOnRender) {
+        [_textStorageOnRender removeLayoutManager:_layoutManager];
+    }
+    [textStorageOnRender addLayoutManager:_layoutManager];
+    _textStorageOnRender = textStorageOnRender;
 }
 
 - (void)setSize:(CGSize)size {
@@ -75,6 +92,23 @@
     if (!CGSizeEqualToSize(_textContainer.size, size)) {
         _textContainer.size = size;
     }
+}
+
+- (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range {
+    if (!textHighlight || range.length == 0) {
+        self.textStorageOnRender = _textStorage;
+        return;
+    }
+    NSTextStorage *highlightStorage = nil;
+    if ([_textStorage isKindOfClass:[TYTextStorage class]]) {
+        highlightStorage = [_textStorage copy];
+        [highlightStorage addTextAttribute:textHighlight range:range];
+    }else {
+        NSMutableAttributedString *string = [[_textStorage attributedSubstringFromRange:NSMakeRange(0, _textStorage.length)] mutableCopy];
+        [string addTextAttribute:textHighlight range:range];
+        highlightStorage = [[NSTextStorage alloc]initWithAttributedString:string];
+    }
+    self.textStorageOnRender = highlightStorage;
 }
 
 #pragma mark - public
@@ -97,24 +131,38 @@
                                      inTextContainer:_textContainer];
 }
 
-- (CGRect)usedBoundingRect {
+- (CGRect)textBound {
     return [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
                                      inTextContainer:_textContainer];
 }
 
+- (NSInteger)characterIndexForPoint:(CGPoint)point{
+    CGRect textRect = _textRect;
+    if (!CGRectContainsPoint(textRect, point)) {
+        return -1;
+    }
+    CGPoint realPoint = CGPointMake(point.x - textRect.origin.x, point.y - textRect.origin.y);
+    CGFloat distanceToPoint = 1.0;
+    NSUInteger index = [_layoutManager characterIndexForPoint:realPoint inTextContainer:_textContainer fractionOfDistanceBetweenInsertionPoints:&distanceToPoint];
+    return distanceToPoint < 1 ? index : -1;
+}
+
 #pragma mark - draw text
 
-- (CGPoint)textOffsetForGlyphRange:(NSRange)glyphRange atPiont:(CGPoint)point
+- (CGRect)textRectForGlyphRange:(NSRange)glyphRange atPiont:(CGPoint)point
 {
-    if (point.y > 0) {
-        return point;
+    if (glyphRange.length == 0) {
+        return CGRectZero;
     }
     CGPoint textOffset = point;
     CGRect textBounds = [_layoutManager boundingRectForGlyphRange:glyphRange
                                                   inTextContainer:_textContainer];
-    CGFloat paddingHeight = (_textContainer.size.height - ceil(textBounds.size.height)) / 2.0f;
-    textOffset.y = paddingHeight;
-    return textOffset;
+    CGSize textSize = CGSizeMake(ceil(textBounds.size.width), ceil(textBounds.size.height));
+    if (point.y == 0) {
+        textOffset.y = (_textContainer.size.height - ceil(textSize.height)) / 2.0f;
+    }
+    CGRect textRect = {textOffset,textSize};
+    return textRect;
 }
 
 - (void)drawTextAtPoint:(CGPoint)point {
@@ -124,13 +172,20 @@
 {
     // calculate the offset of the text in the view
     NSRange glyphRange = [self visibleGlyphRange];
-    CGPoint textOffset = [self textOffsetForGlyphRange:glyphRange atPiont:point];
+    CGRect textRect = [self textRectForGlyphRange:glyphRange atPiont:point];
+    _textRect = textRect;
     // drawing text
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
-        [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textOffset];
-        if (isCanceled && isCanceled()) *stop = YES;
-        [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textOffset];
-        if (isCanceled && isCanceled()) *stop = YES;
+        [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textRect.origin];
+        if (isCanceled && isCanceled()) {
+            *stop = YES;
+            return;
+        }
+        [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textRect.origin];
+        if (isCanceled && isCanceled()) {
+            *stop = YES;
+            return;
+        }
     }];
 }
 

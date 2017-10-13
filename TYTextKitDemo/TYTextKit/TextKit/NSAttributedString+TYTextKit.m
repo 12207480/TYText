@@ -28,6 +28,20 @@
     return [self attribute:attrName atIndex:index effectiveRange:range];
 }
 
+- (id)ty_attribute:(NSString *)attrName atIndex:(NSUInteger)index longestEffectiveRange:(NSRangePointer)range {
+    if (!attrName || self.length == 0) {
+        return nil;
+    }
+    
+    if (index >= self.length) {
+#ifdef DEBUG
+        NSLog(@"%s: attribute %@'s index out of range!",__FUNCTION__,attrName);
+#endif
+        return nil;
+    }
+    return [self attribute:attrName atIndex:index longestEffectiveRange:range inRange:NSMakeRange(0, self.length)];
+}
+
 - (UIFont *)ty_font {
     return [self ty_fontAtIndex:0 effectiveRange:NULL];
 }

@@ -19,6 +19,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 };
 
 #define kLongPressTimerInterval 0.5
+#define kLongPressTimerMoveDistance 5
 
 @interface TYLabel () <TYAsyncLayerDelegate> {
     struct {
@@ -193,11 +194,11 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 - (void)longPressTimerTick {
     ++_longPressTimerCount;
-    if (!_textHighlight || _touchState == TYUserTouchedStateNone) {
+    if (!_textHighlight || _touchState == TYUserTouchedStateNone || !_delegateFlags.didLongPressedTextHighlight) {
         [self endLongPressTimer];
         return;
     }
-    if (_longPressTimerCount*kLongPressTimerInterval >= _longPressDuring && _delegateFlags.didLongPressedTextHighlight) {
+    if (_longPressTimerCount*kLongPressTimerInterval >= _longPressDuring) {
         _touchState = TYUserTouchedStateLongPressed;
         [_delegate label:self didLongPressedTextHighlight:_textHighlight];
         [self endTouch];
@@ -240,7 +241,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     NSRange range = NSMakeRange(0, 0);
     TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
     if (textHighlight == _textHighlight) {
-        if (fabs(point.x - _beginTouchPiont.x) > 5 || fabs(point.y - _beginTouchPiont.y) > 5) {
+        if (fabs(point.x - _beginTouchPiont.x) > kLongPressTimerMoveDistance || fabs(point.y - _beginTouchPiont.y) > kLongPressTimerMoveDistance) {
             [self endLongPressTimer];
         }
         if (_highlightRange.length == 0) {

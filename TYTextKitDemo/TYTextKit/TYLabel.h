@@ -42,6 +42,10 @@ asynchronous display of the view's layer. default YES
  */
 @property (nonatomic, assign) BOOL clearContentBeforeAsyncDisplay;
 
+
+/**
+ user long press during time will call delegate. default 2.0
+ */
 @property (nonatomic, assign) CGFloat longPressDuring;
 
 // text

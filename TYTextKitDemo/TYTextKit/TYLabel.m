@@ -163,7 +163,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     _delegateFlags.didLongPressedTextHighlight = [delegate respondsToSelector:@selector(label:didLongPressedTextHighlight:)];
 }
 
-#pragma mark - private
+#pragma mark - Private
 
 - (TYTextHighlight *)textHighlightForPoint:(CGPoint)point effectiveRange:(NSRangePointer)range {
     NSInteger index = [_textRenderOnDisplay characterIndexForPoint:point];
@@ -173,7 +173,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     return nil;
 }
 
-#pragma mark - long press timer
+#pragma mark - LongPress timer
 
 - (void)startLongPressTimer {
     [self endLongPressTimer];

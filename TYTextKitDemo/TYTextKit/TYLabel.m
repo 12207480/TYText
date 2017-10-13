@@ -189,12 +189,12 @@
     CGPoint point = [touch locationInView:self];
     NSRange range = NSMakeRange(0, 0);
     TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
-    BOOL isTaped = textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange);
+    BOOL isTapped = textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange);
+    if (isTapped && [_delegate respondsToSelector:@selector(label:didClickedTextHighlight:)]) {
+        [_delegate label:self didClickedTextHighlight:_textHighlight];
+    }
     _textHighlight = nil;
     _highlightRange = NSMakeRange(0, 0);
-    if (isTaped) {
-        NSLog(@"点击😄");
-    }
     [self immediatelyDisplayRedraw];
 }
 

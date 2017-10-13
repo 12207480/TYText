@@ -10,7 +10,17 @@
 #import "TYTextRender.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class TYLabel;
+@protocol TYLabelDelegate <NSObject>
+@optional
+- (void)label:(TYLabel *)label didClickedTextHighlight:(TYTextHighlight *)textHighlight;
+
+@end
+
 @interface TYLabel : UIView
+
+@property (nonatomic, weak) id<TYLabelDelegate> delegate;
 
 /**
 asynchronous display of the view's layer. default YES

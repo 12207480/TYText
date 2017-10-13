@@ -13,7 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class TYLabel;
 @protocol TYLabelDelegate <NSObject>
+
 @optional
+
+/**
+ when user click text highlight,will call this
+ */
 - (void)label:(TYLabel *)label didClickedTextHighlight:(TYTextHighlight *)textHighlight;
 
 @end
@@ -45,7 +50,7 @@ asynchronous display of the view's layer. default YES
 
 
 /**
- layer redraw on private thread
+ next runloop,layer redraw on private thread
  */
 - (void)setDisplayNeedRedraw;
 

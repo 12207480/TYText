@@ -60,7 +60,7 @@
         TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
         textHighlight.color = [UIColor whiteColor];
         textHighlight.backgroundColor = [UIColor redColor];
-        [text addTextHighlightAttribute:textHighlight range:NSMakeRange(0,66)];
+        [text addTextHighlightAttribute:textHighlight range:NSMakeRange(0,20)];
         TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
         attachment.image = [UIImage imageNamed:@"avatar"];
         attachment.size = CGSizeMake(60, 60);
@@ -130,7 +130,7 @@
     if (_async) {
         cell.label.hidden = NO;
         cell.uilabel.hidden = YES;
-        cell.label.attributedText = _itemArray[indexPath.row];
+        cell.label.textRender = _renderArray[indexPath.row];
     }else {
         cell.label.hidden = YES;
         cell.uilabel.hidden = NO;

@@ -213,7 +213,7 @@
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
     __block TYTextRender *textRender = _textRender;
     __block NSTextStorage *textStorage = _textStorage;
-    __strong NSAttributedString *attributedText = _attributedText;
+    NSAttributedString *attributedText = _attributedText;
     NSArray *attachViews = _attachViews;
     
     NSRange highlightRange  = _highlightRange;

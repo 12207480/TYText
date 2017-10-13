@@ -54,10 +54,13 @@
         text.ty_lineSpacing = 2;
         text.ty_strokeWidth = -3;
         text.ty_strokeColor = [UIColor redColor];
-        text.ty_lineHeightMultiple = 1;
-//        text.ty_maximumLineHeight = 12;
-//        text.ty_minimumLineHeight = 12;
-        [text ty_addLink:@"" range:NSMakeRange(0, 8)];
+//        text.ty_lineHeightMultiple = 1;
+//        text.ty_maximumLineHeight = 15;
+//        text.ty_minimumLineHeight = 15;
+        TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
+        textHighlight.color = [UIColor whiteColor];
+        textHighlight.backgroundColor = [UIColor redColor];
+        [text addTextHighlightAttribute:textHighlight range:NSMakeRange(0,66)];
         TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
         attachment.image = [UIImage imageNamed:@"avatar"];
         attachment.size = CGSizeMake(60, 60);

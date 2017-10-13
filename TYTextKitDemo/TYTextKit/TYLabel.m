@@ -160,7 +160,7 @@
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (!_textRenderOnDisplay || !_textHighlight) {
-        [super touchesBegan:touches withEvent:event];
+        [super touchesMoved:touches withEvent:event];
         return;
     }
     UITouch *touch = touches.anyObject;
@@ -182,7 +182,7 @@
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (!_textRenderOnDisplay || !_textHighlight) {
-        [super touchesBegan:touches withEvent:event];
+        [super touchesEnded:touches withEvent:event];
         return;
     }
     UITouch *touch = touches.anyObject;
@@ -200,7 +200,7 @@
 
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (!_textRenderOnDisplay || !_textHighlight) {
-        [super touchesBegan:touches withEvent:event];
+        [super touchesCancelled:touches withEvent:event];
         return;
     }
     _textHighlight = nil;

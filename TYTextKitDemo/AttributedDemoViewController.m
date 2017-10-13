@@ -59,7 +59,7 @@
     TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
     textHighlight.color = [UIColor whiteColor];
     textHighlight.backgroundColor = [UIColor redColor];
-    [text addTextHighlightAttribute:textHighlight range:NSMakeRange(0, 9)];
+    [text addTextHighlightAttribute:textHighlight range:NSMakeRange(32, 20)];
     
     TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
     attachment.image = [UIImage imageNamed:@"avatar"];

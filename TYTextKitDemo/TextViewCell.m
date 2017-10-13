@@ -8,7 +8,7 @@
 
 #import "TextViewCell.h"
 
-@interface TextViewCell ()
+@interface TextViewCell ()<TYLabelDelegate>
 
 @property (nonatomic, weak) TYLabel *label;
 @property (nonatomic, weak) UILabel *uilabel;
@@ -36,6 +36,7 @@
 
 - (void)addLabel {
     TYLabel *label = [[TYLabel alloc]init];
+    label.delegate = self;
     [self.contentView addSubview:label];
     _label = label;
 }
@@ -45,6 +46,14 @@
     label.numberOfLines = 0;
     [self.contentView addSubview:label];
     _uilabel = label;
+}
+
+- (void)label:(TYLabel *)label didTappedTextHighlight:(TYTextHighlight *)textHighlight {
+    NSLog(@"didTappedTextHighlight");
+}
+
+- (void)label:(TYLabel *)label didLongPressedTextHighlight:(TYTextHighlight *)textHighlight {
+    NSLog(@"didLongPressedTextHighlight");
 }
 
 - (void)layoutSubviews {

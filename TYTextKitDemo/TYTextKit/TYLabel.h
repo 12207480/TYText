@@ -17,15 +17,20 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 /**
- when user click text highlight,will call this
+ when user tapped text highlight,will call this
  */
-- (void)label:(TYLabel *)label didClickedTextHighlight:(TYTextHighlight *)textHighlight;
+- (void)label:(TYLabel *)label didTappedTextHighlight:(TYTextHighlight *)textHighlight;
+
+/**
+ when user long pressed text highlight,will call this
+ */
+- (void)label:(TYLabel *)label didLongPressedTextHighlight:(TYTextHighlight *)textHighlight;
 
 @end
 
 @interface TYLabel : UIView
 
-@property (nonatomic, weak) id<TYLabelDelegate> delegate;
+@property (nonatomic, weak, nullable) id<TYLabelDelegate> delegate;
 
 /**
 asynchronous display of the view's layer. default YES
@@ -36,6 +41,8 @@ asynchronous display of the view's layer. default YES
  clear layer'content,before asynchronously display. default YES
  */
 @property (nonatomic, assign) BOOL clearContentBeforeAsyncDisplay;
+
+@property (nonatomic, assign) CGFloat longPressDuring;
 
 // text
 @property (nonatomic, strong, nullable) NSString *text;

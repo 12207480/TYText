@@ -9,7 +9,7 @@
 #import "AttributedDemoViewController.h"
 #import "TYLabel.h"
 
-@interface AttributedDemoViewController ()
+@interface AttributedDemoViewController ()<TYLabelDelegate>
 
 @property (nonatomic, strong) TYLabel *label;
 @property (nonatomic, assign) BOOL layouted;
@@ -39,6 +39,7 @@
 
 - (void)addLabel {
     TYLabel *label = [[TYLabel alloc]init];
+    label.delegate = self;
     label.backgroundColor = [UIColor lightGrayColor];
     label.attributedText = [self addAttribuetedString];
     [self.view addSubview:label];
@@ -94,14 +95,13 @@
     _label.frame = CGRectMake(_label.frame.origin.x, _label.frame.origin.y+ 10, _label.frame.size.width - 20, _label.frame.size.height);
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)label:(TYLabel *)label didTappedTextHighlight:(TYTextHighlight *)textHighlight {
+    NSLog(@"didTappedTextHighlight");
 }
-*/
+
+- (void)label:(TYLabel *)label didLongPressedTextHighlight:(TYTextHighlight *)textHighlight {
+    NSLog(@"didLongPressedTextHighlight");
+}
+
 
 @end

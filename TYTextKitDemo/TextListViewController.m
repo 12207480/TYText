@@ -35,6 +35,7 @@
 {
     // 添加tableView
     UITableView *tableView = [[UITableView alloc]init];
+    tableView.delaysContentTouches = NO;
     tableView.delegate = self;
     tableView.dataSource = self;
     [self.view addSubview:tableView];

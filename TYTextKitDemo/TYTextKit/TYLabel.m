@@ -12,7 +12,20 @@
 
 #define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
 
-@interface TYLabel () <TYAsyncLayerDelegate>
+typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
+    TYUserTouchedStateNone,
+    TYUserTouchedStateTapped,
+    TYUserTouchedStateLongPressed,
+};
+
+#define kLongPressTimerInterval 0.5
+
+@interface TYLabel () <TYAsyncLayerDelegate> {
+    struct {
+        unsigned int didTappedTextHighlight : 1;
+        unsigned int didLongPressedTextHighlight : 1;
+    }_delegateFlags;
+}
 
 @property (nonatomic, strong) TYTextRender *textRenderOnDisplay;
 
@@ -20,6 +33,12 @@
 
 @property (nonatomic, assign) NSRange highlightRange;
 @property (nonatomic, strong) TYTextHighlight *textHighlight;
+
+@property (nonatomic, strong) NSTimer *longPressTimer;
+@property (nonatomic, assign) NSUInteger longPressTimerCount;
+
+@property (nonatomic, assign) TYUserTouchedState touchState;
+@property (nonatomic, assign) CGPoint beginTouchPiont;
 
 @end
 
@@ -44,6 +63,7 @@
 }
 
 - (void)configureLabel {
+    _longPressDuring = 2.0;
     _clearContentBeforeAsyncDisplay = YES;
     self.clipsToBounds = YES;
     self.layer.contentsScale = ty_text_screen_scale();
@@ -81,6 +101,13 @@
 
 - (void)clearTextRender {
     _textRender = nil;
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    [super willMoveToSuperview:newSuperview];
+    if (!newSuperview) {
+        [self endLongPressTimer];
+    }
 }
 
 #pragma mark - Getter && Setter
@@ -129,6 +156,12 @@
     }
 }
 
+- (void)setDelegate:(id<TYLabelDelegate>)delegate {
+    _delegate = delegate;
+    _delegateFlags.didTappedTextHighlight = [delegate respondsToSelector:@selector(label:didTappedTextHighlight:)];
+    _delegateFlags.didLongPressedTextHighlight = [delegate respondsToSelector:@selector(label:didLongPressedTextHighlight:)];
+}
+
 #pragma mark - private
 
 - (TYTextHighlight *)textHighlightForPoint:(CGPoint)point effectiveRange:(NSRangePointer)range {
@@ -139,9 +172,43 @@
     return nil;
 }
 
+#pragma mark - long press timer
+
+- (void)startLongPressTimer {
+    [self endLongPressTimer];
+    _longPressTimer = [NSTimer timerWithTimeInterval:kLongPressTimerInterval
+                                              target:self selector:@selector(longPressTimerTick)
+                                            userInfo:nil
+                                             repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:_longPressTimer forMode:NSRunLoopCommonModes];
+}
+
+- (void)endLongPressTimer {
+    if (_longPressTimer && [_longPressTimer isValid]) {
+        [_longPressTimer invalidate];
+        _longPressTimer = nil;
+    }
+    _longPressTimerCount = 0;
+}
+
+- (void)longPressTimerTick {
+    ++_longPressTimerCount;
+    if (!_textHighlight || _touchState == TYUserTouchedStateNone) {
+        [self endLongPressTimer];
+        return;
+    }
+    if (_longPressTimerCount*kLongPressTimerInterval >= _longPressDuring && _delegateFlags.didLongPressedTextHighlight) {
+        _touchState = TYUserTouchedStateLongPressed;
+        [_delegate label:self didLongPressedTextHighlight:_textHighlight];
+        [self endTouch];
+    }
+}
+
 #pragma mark - Touch Event
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    _touchState = TYUserTouchedStateNone;
+    _beginTouchPiont = CGPointZero;
     if (!_textRenderOnDisplay) {
         [super touchesBegan:touches withEvent:event];
         return;
@@ -154,6 +221,11 @@
     if (!_textHighlight) {
         [super touchesBegan:touches withEvent:event];
         return;
+    }
+    _beginTouchPiont = point;
+    _touchState = TYUserTouchedStateTapped;
+    if (_delegateFlags.didLongPressedTextHighlight) {
+        [self startLongPressTimer];
     }
     [self immediatelyDisplayRedraw];
 }
@@ -168,12 +240,16 @@
     NSRange range = NSMakeRange(0, 0);
     TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
     if (textHighlight == _textHighlight) {
+        if (fabs(point.x - _beginTouchPiont.x) > 5 || fabs(point.y - _beginTouchPiont.y) > 5) {
+            [self endLongPressTimer];
+        }
         if (_highlightRange.length == 0) {
             _highlightRange = range;
             [self immediatelyDisplayRedraw];
         }
         return;
     }
+    [self endLongPressTimer];
     if (_highlightRange.length > 0) {
         _highlightRange = NSMakeRange(0, 0);
         [self immediatelyDisplayRedraw];
@@ -182,30 +258,37 @@
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (!_textRenderOnDisplay || !_textHighlight) {
+        [self endLongPressTimer];
         [super touchesEnded:touches withEvent:event];
         return;
     }
     UITouch *touch = touches.anyObject;
     CGPoint point = [touch locationInView:self];
     NSRange range = NSMakeRange(0, 0);
-    TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
-    BOOL isTapped = textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange);
-    if (isTapped && [_delegate respondsToSelector:@selector(label:didClickedTextHighlight:)]) {
-        [_delegate label:self didClickedTextHighlight:_textHighlight];
+    if (_delegateFlags.didTappedTextHighlight && _touchState == TYUserTouchedStateTapped) {
+        TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
+        if (textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange) ) {
+            [_delegate label:self didTappedTextHighlight:_textHighlight];
+        }
     }
-    _textHighlight = nil;
-    _highlightRange = NSMakeRange(0, 0);
-    [self immediatelyDisplayRedraw];
+    [self endTouch];
 }
 
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (!_textRenderOnDisplay || !_textHighlight) {
+        [self endLongPressTimer];
         [super touchesCancelled:touches withEvent:event];
         return;
     }
+    [self endTouch];
+}
+
+- (void)endTouch {
     _textHighlight = nil;
     _highlightRange = NSMakeRange(0, 0);
     [self immediatelyDisplayRedraw];
+    _touchState = TYUserTouchedStateNone;
+    _beginTouchPiont = CGPointZero;
 }
 
 #pragma mark - TYAsyncLayerDelegate
@@ -276,6 +359,7 @@
 
 - (void)dealloc {
     _textRender = nil;
+    NSLog(@"TYLabel dealloc!");
 }
 
 @end

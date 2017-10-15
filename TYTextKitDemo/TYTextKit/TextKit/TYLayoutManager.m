@@ -79,7 +79,7 @@
     
     CGFloat x = floor(rect.origin.x);
     CGFloat y  = ceil(rect.origin.y);
-    CGFloat width = ceil(rect.size.width);
+    CGFloat width = floor(rect.size.width);
     CGFloat height = ceil(rect.size.height);
     
     // 获取CGContext

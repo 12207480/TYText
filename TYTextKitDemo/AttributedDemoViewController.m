@@ -47,7 +47,7 @@
 }
 
 - (NSAttributedString *)addAttribuetedString {
-    NSString *str = @"哈哈不错啊啊啊Async Display http://baidu.com✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐🚋🎊😡🚖🚌💖💗💛💙🏨✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊😡🚖🚌💖💗💛💙🏨";
+    NSString *str = @"哈哈不错啊啊啊Async Displayhttp://baidu.com✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐🚋🎊😡🚖🚌💖💗💛💙🏨✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊😡🚖🚌💖💗💛💙🏨";
     
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
     text.ty_lineSpacing = 2;
@@ -60,7 +60,7 @@
     TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
     textHighlight.color = [UIColor whiteColor];
     textHighlight.backgroundColor = [UIColor redColor];
-    [text addTextHighlightAttribute:textHighlight range:NSMakeRange(18, 20)];
+    [text addTextHighlightAttribute:textHighlight range:NSMakeRange(1, 20)];
     
     TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
     attachment.image = [UIImage imageNamed:@"avatar"];

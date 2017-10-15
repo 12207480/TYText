@@ -81,10 +81,8 @@
     CGFloat y  = ceil(rect.origin.y);
     CGFloat width = floor(rect.size.width);
     CGFloat height = ceil(rect.size.height);
-    
-    // 获取CGContext
+
     CGContextRef context = UIGraphicsGetCurrentContext();
-    // 移动到初始点
     CGContextMoveToPoint(context, x + radius, y);
     
     // 绘制第1条线和第1个1/4圆弧
@@ -103,9 +101,7 @@
     CGContextAddLineToPoint(context, x,y+ radius);
     CGContextAddArc(context,x+ radius,y+ radius, radius, M_PI, 1.5 * M_PI, 0);
     
-    // 闭合路径
     CGContextClosePath(context);
-    // 填充颜色
     CGContextSetFillColorWithColor(context, bgColor.CGColor);
     CGContextDrawPath(context, kCGPathFill);
 }

@@ -79,7 +79,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     return ((TYAsyncLayer *)self.layer).displaysAsynchronously;
 }
 
-- (void)setLayoutNeedUpdate {
+- (void)setDisplayNeedUpdate {
     TYAssertMainThread();
     [self clearTextRender];
     [self clearLayerContent];
@@ -121,13 +121,13 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 - (void)setAttributedText:(NSAttributedString *)attributedText {
     TYAssertMainThread();
     _attributedText = attributedText;
-    [self setLayoutNeedUpdate];
+    [self setDisplayNeedUpdate];
 }
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
     TYAssertMainThread();
     _textStorage = textStorage;
-    [self setLayoutNeedUpdate];
+    [self setDisplayNeedUpdate];
 }
 
 - (void)setTextRender:(TYTextRender *)textRender {

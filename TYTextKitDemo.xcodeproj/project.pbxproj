@@ -32,6 +32,7 @@
 		2B8C4ECD1F628C8F00539B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B8C4ECB1F628C8F00539B07 /* LaunchScreen.storyboard */; };
 		2B8C4EDE1F62907900539B07 /* TYLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EDD1F62907900539B07 /* TYLabel.m */; };
 		2B8C4EE71F66323F00539B07 /* TYAsyncLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EE61F66323F00539B07 /* TYAsyncLayer.m */; };
+		B03F0F761F91A08800264F76 /* TYLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B03F0F751F91A08800264F76 /* TYLayoutManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,8 @@
 		2B8C4EDD1F62907900539B07 /* TYLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYLabel.m; sourceTree = "<group>"; };
 		2B8C4EE51F66323F00539B07 /* TYAsyncLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYAsyncLayer.h; sourceTree = "<group>"; };
 		2B8C4EE61F66323F00539B07 /* TYAsyncLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYAsyncLayer.m; sourceTree = "<group>"; };
+		B03F0F741F91A08800264F76 /* TYLayoutManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYLayoutManager.h; sourceTree = "<group>"; };
+		B03F0F751F91A08800264F76 /* TYLayoutManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYLayoutManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +207,8 @@
 				2B426F5E1F7A4311009E70D9 /* TYTextParse.m */,
 				2B1F83221F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.h */,
 				2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */,
+				B03F0F741F91A08800264F76 /* TYLayoutManager.h */,
+				B03F0F751F91A08800264F76 /* TYLayoutManager.m */,
 			);
 			path = TextKit;
 			sourceTree = "<group>";
@@ -296,6 +301,7 @@
 				2B2A177A1F7FA0A2000F6F4B /* TYTextGenerator.m in Sources */,
 				2B426F651F7A491A009E70D9 /* TYTextAttachment.m in Sources */,
 				2B426F491F78F076009E70D9 /* AttributedDemoViewController.m in Sources */,
+				B03F0F761F91A08800264F76 /* TYLayoutManager.m in Sources */,
 				2B1F83241F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m in Sources */,
 				2B2A483B1F67C65500D7E613 /* TYTransactionGroup.m in Sources */,
 				2B426F4F1F78F7AE009E70D9 /* TextViewCell.m in Sources */,

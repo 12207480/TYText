@@ -11,6 +11,7 @@
 #import "TYTextStorage.h"
 #import "TYTextAttachment.h"
 #import "TYTextAttribute.h"
+#import "TYLayoutManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @interface TYTextRender : NSObject
@@ -20,6 +21,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSLayoutManager *layoutManager;
 @property (nonatomic, strong, readonly) NSTextContainer *textContainer;
 
+/**
+ text is inset within line fragment rectangles.default 0
+ */
+@property (nonatomic, assign) CGFloat lineFragmentPadding;
+// only support TYLayoutManager. default 4.0
+@property (nonatomic, assign) CGFloat highlightBackgroundCornerRadius;
 
 /**
  text attributed contain attach views or layers

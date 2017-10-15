@@ -15,7 +15,6 @@
 
 @property (nonatomic, strong) NSLayoutManager *layoutManager;
 @property (nonatomic, strong) NSTextContainer *textContainer;
-
 @property (nonatomic, strong) NSTextStorage *textStorageOnRender;
 
 @end
@@ -26,6 +25,7 @@
     if (self = [super init]) {
         [self addTextContainer];
         [self addLayoutManager];
+        [self configure];
     }
     return self;
 }
@@ -53,20 +53,25 @@
         _layoutManager = textContainer.layoutManager;
         _textStorage = _layoutManager.textStorage;
         _textStorageOnRender = _textStorage;
+        [self configure];
     }
     return self;
 }
 
 - (void)addTextContainer {
     NSTextContainer *textContainer = [[NSTextContainer alloc]init];
-    textContainer.lineFragmentPadding = 0;
     _textContainer = textContainer;
 }
 
 - (void)addLayoutManager {
-    NSLayoutManager *layoutManager = [[NSLayoutManager alloc]init];
+    TYLayoutManager *layoutManager = [[TYLayoutManager alloc]init];
     [layoutManager addTextContainer:_textContainer];
     _layoutManager = layoutManager;
+}
+
+- (void)configure {
+    self.highlightBackgroundCornerRadius = 4;
+    self.lineFragmentPadding = 0;
 }
 
 #pragma mark - getter setter
@@ -94,7 +99,22 @@
     }
 }
 
+- (void)setLineFragmentPadding:(CGFloat)lineFragmentPadding {
+    _lineFragmentPadding = lineFragmentPadding;
+    _textContainer.lineFragmentPadding = lineFragmentPadding;
+}
+
+- (void)setHighlightBackgroundCornerRadius:(CGFloat)highlightBackgroundCornerRadius {
+    _highlightBackgroundCornerRadius = highlightBackgroundCornerRadius;
+    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
+        ((TYLayoutManager *)_layoutManager).highlightBackgroundCornerRadius = highlightBackgroundCornerRadius;
+    }
+}
+
 - (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range {
+    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
+        ((TYLayoutManager *)_layoutManager).highlightRange = range;
+    }
     if (!textHighlight || range.length == 0) {
         self.textStorageOnRender = _textStorage;
         return;
@@ -177,15 +197,8 @@
     // drawing text
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
         [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textRect.origin];
-        if (isCanceled && isCanceled()) {
-            *stop = YES;
-            return;
-        }
         [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textRect.origin];
-        if (isCanceled && isCanceled()) {
-            *stop = YES;
-            return;
-        }
+        if (isCanceled && isCanceled()) *stop = YES;
     }];
 }
 

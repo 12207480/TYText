@@ -52,8 +52,12 @@
 
 - (void)removeFromSuperView {
     TYAssertMainThread();
-    [_view removeFromSuperview];
-    [_layer removeFromSuperlayer];
+    if (_view.superview) {
+        [_view removeFromSuperview];
+    }
+    if (_layer.superlayer) {
+        [_layer removeFromSuperlayer];
+    }
 }
 
 #pragma mark - NSTextAttachmentContainer
@@ -89,7 +93,7 @@
 
 @implementation NSAttributedString (TYTextAttachment)
 
-- (NSArray *)attachViews {
+- (NSArray *)attachments {
     NSMutableArray *array = [NSMutableArray array];
     [self enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, self.length) options:kNilOptions usingBlock:^(TYTextAttachment *value, NSRange subRange, BOOL *stop) {
         if ([value isKindOfClass:[TYTextAttachment class]] && (value.view || value.layer)) {

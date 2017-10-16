@@ -31,7 +31,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  text attributed contain attach views or layers
  */
-@property (nonatomic, strong, readonly) NSArray *attachViews;
+@property (nonatomic, strong, readonly, nullable) NSArray *attachments;
+//@property (nonatomic, strong, readonly, nullable) NSSet *attachmentSet;
+/**
+ default YES, otherwise get textStorage'attachViews every time.
+ */
+@property (nonatomic, assign) BOOL onlySetTextStorageWillGetAttachViews;
 /**
  render size
  */
@@ -47,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
  text rect in container
  @discussion when text did render,will have value
  */
-@property (atomic, assign, readonly) CGRect textRect;
+@property (nonatomic, assign, readonly) CGRect textRect;
 
 - (instancetype)initWithAttributedText:(NSAttributedString *)attributedText;
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage;

@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 @property (nonatomic, strong) TYTextRender *textRenderOnDisplay;
 
-@property (nonatomic, strong) NSArray *attachViews;
+@property (nonatomic, strong) NSArray *attachments;
 
 @property (nonatomic, assign) NSRange highlightRange;
 @property (nonatomic, strong) TYTextHighlight *textHighlight;
@@ -298,7 +298,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     __block TYTextRender *textRender = _textRender;
     __block NSTextStorage *textStorage = _textStorage;
     NSAttributedString *attributedText = _attributedText;
-    NSArray *attachViews = _attachViews;
+    NSArray *attachments = _attachments;
     
     NSRange highlightRange  = _highlightRange;
     TYTextHighlight *textHighlight = _textHighlight;
@@ -306,7 +306,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     // will display
     task.willDisplay = ^(CALayer * _Nonnull layer) {
-        [self clearAttachViews:attachViews];
+        [self clearAttachments:attachments];
         _textRenderOnDisplay = nil;
     };
     
@@ -326,34 +326,33 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     
     task.didDisplay = ^(CALayer * _Nonnull layer, BOOL finished) {
         _textRenderOnDisplay = textRender;
-        NSArray *attachViews = textRender.attachViews;
-        if (!finished || !attachViews) {
-            [self clearAttachViews:attachViews];
-            _attachViews = attachViews;
+        NSArray *attachments = textRender.attachments;
+        if (!finished || !attachments) {
+            [self clearAttachments:attachments];
+            _attachments = attachments;
             return ;
         }
         NSRange visibleRange = [textRender visibleCharacterRange];
-        for (TYTextAttachment *attachment in attachViews) {
+        for (TYTextAttachment *attachment in attachments) {
             if (!NSLocationInRange(attachment.range.location, visibleRange)) {
-                [attachment.view removeFromSuperview];
-                [attachment.layer removeFromSuperlayer];
+                [attachment removeFromSuperView];
                 continue;
             }
             CGRect rect = {attachment.position,attachment.size};
             [attachment addToSuperView:self];
             attachment.frame = rect;
         }
-        _attachViews = attachViews;
+        _attachments = attachments;
     };
     return task;
 }
 
-- (void)clearAttachViews:(NSArray *)attachViews {
+- (void)clearAttachments:(NSArray *)attachments {
     TYAssertMainThread();
-    if (!attachViews) {
+    if (!attachments) {
         return;
     }
-    for (TYTextAttachment *attachment in attachViews) {
+    for (TYTextAttachment *attachment in attachments) {
         [attachment removeFromSuperView];
     }
 }

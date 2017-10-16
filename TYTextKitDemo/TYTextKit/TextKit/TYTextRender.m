@@ -21,8 +21,11 @@
 
 @implementation TYTextRender
 
+@synthesize attachments = _attachments;
+
 - (instancetype)init {
     if (self = [super init]) {
+        _onlySetTextStorageWillGetAttachViews = YES;
         [self addTextContainer];
         [self addLayoutManager];
         [self configure];
@@ -40,8 +43,7 @@
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage {
     if (self = [self init]) {
         [textStorage addLayoutManager:_layoutManager];
-        _textStorage = textStorage;
-        _textStorageOnRender = textStorage;
+        self.textStorage = textStorage;
     }
     return self;
 }
@@ -49,10 +51,10 @@
 - (instancetype)initWithTextContainer:(NSTextContainer *)textContainer {
     if (self = [super init]) {
         NSParameterAssert(textContainer.layoutManager);
+        _onlySetTextStorageWillGetAttachViews = YES;
         _textContainer = textContainer;
         _layoutManager = textContainer.layoutManager;
-        _textStorage = _layoutManager.textStorage;
-        _textStorageOnRender = _textStorage;
+        self.textStorage = _layoutManager.textStorage;
         [self configure];
     }
     return self;
@@ -78,6 +80,9 @@
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
     _textStorage = textStorage;
+    if (_onlySetTextStorageWillGetAttachViews) {
+        self.attachments = textStorage.attachments;
+    }
     self.textStorageOnRender = textStorage;
 }
 
@@ -131,11 +136,26 @@
     self.textStorageOnRender = highlightStorage;
 }
 
-#pragma mark - public
-
-- (NSArray *)attachViews {
-    return _textStorage.attachViews;
+- (void)setAttachments:(NSArray *)attachments {
+    NSArray *oldAttachViews = _attachments;
+    _attachments = attachments;
+    //_attachmentSet = [NSSet setWithArray:attachments];
+    if (!oldAttachViews) {
+        return;
+    }
+    for (TYTextAttachment *attachment in oldAttachViews) {
+        [attachment removeFromSuperView];
+    }
 }
+
+- (NSArray *)attachments {
+    if (_attachments) {
+        return _attachments;
+    }
+    return [_textStorage attachments];
+}
+
+#pragma mark - public
 
 - (NSRange)visibleGlyphRange {
     return [_layoutManager glyphRangeForTextContainer:_textContainer];
@@ -192,13 +212,14 @@
 {
     // calculate the offset of the text in the view
     NSRange glyphRange = [self visibleGlyphRange];
-    CGRect textRect = [self textRectForGlyphRange:glyphRange atPiont:point];
-    _textRect = textRect;
+    _textRect = [self textRectForGlyphRange:glyphRange atPiont:point];
+    CGPoint positon = _textRect.origin;
     // drawing text
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
-        [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textRect.origin];
-        [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textRect.origin];
-        if (isCanceled && isCanceled()) *stop = YES;
+        [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:positon];
+        if (isCanceled && isCanceled()) {*stop = YES; return ;};
+        [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:positon];
+        if (isCanceled && isCanceled()) {*stop = YES; return ;};
     }];
 }
 

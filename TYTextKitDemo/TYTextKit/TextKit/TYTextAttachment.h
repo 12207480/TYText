@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSAttributedString (TYTextAttachment)
 
-- (NSArray *__nullable)attachViews;
+- (NSArray *__nullable)attachments;
 
 @end
 

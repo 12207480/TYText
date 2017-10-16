@@ -21,7 +21,7 @@ CGFloat ty_text_screen_scale(void);
 
 @end
 
-
+// quote YYAsyncLayer
 @interface TYAsyncLayer : CALayer
 
 /**

@@ -50,12 +50,12 @@
     }
 }
 
-- (void)removeFromSuperView {
+- (void)removeFromSuperView:(UIView *)superView {
     TYAssertMainThread();
-    if (_view.superview) {
+    if (_view.superview == superView) {
         [_view removeFromSuperview];
     }
-    if (_layer.superlayer) {
+    if (_layer.superlayer == superView.layer) {
         [_layer removeFromSuperlayer];
     }
 }

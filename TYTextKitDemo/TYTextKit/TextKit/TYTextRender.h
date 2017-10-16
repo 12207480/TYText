@@ -25,14 +25,19 @@ NS_ASSUME_NONNULL_BEGIN
  text is inset within line fragment rectangles.default 0
  */
 @property (nonatomic, assign) CGFloat lineFragmentPadding;
-// only support TYLayoutManager. default 4.0
-@property (nonatomic, assign) CGFloat highlightBackgroundCornerRadius;
+
+
+/**
+ text highlight background corner radius. default 4.0
+ @discussion only support TYLayoutManager
+ */
+@property (nonatomic, assign) CGFloat highlightBackgroudRadius;
 
 /**
  text attributed contain attach views or layers
  */
 @property (nonatomic, strong, readonly, nullable) NSArray *attachments;
-//@property (nonatomic, strong, readonly, nullable) NSSet *attachmentSet;
+@property (nonatomic, strong, readonly, nullable) NSSet *attachmentSet;
 /**
  default YES, otherwise get textStorage'attachViews every time.
  */
@@ -44,15 +49,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  visible text bound
- @discussion if size is zero, it return zero
+ @discussion render should set size before call this
  */
 @property (nonatomic, assign, readonly) CGRect textBound;
 
 /**
- text rect in container
- @discussion when text did render,will have value
+ text rect on render
+ @discussion when text rendered display,will have value
  */
-@property (nonatomic, assign, readonly) CGRect textRect;
+@property (nonatomic, assign, readonly) CGRect textRectOnRender;
+/**
+ visible text range on render
+ @discussion when text rendered display,will have value
+ */
+@property (nonatomic, assign, readonly) NSRange visibleCharacterRangeOnRender;
 
 - (instancetype)initWithAttributedText:(NSAttributedString *)attributedText;
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage;

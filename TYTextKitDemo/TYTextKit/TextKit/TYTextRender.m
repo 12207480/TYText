@@ -34,7 +34,7 @@
 }
 
 - (instancetype)initWithAttributedText:(NSAttributedString *)attributedText {
-    NSTextStorage *textStorage = [[TYTextStorage alloc]initWithAttributedString:attributedText];;
+    NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];;
     if (self = [self initWithTextStorage:textStorage]) {
     }
     return self;
@@ -72,7 +72,7 @@
 }
 
 - (void)configure {
-    self.highlightBackgroundCornerRadius = 4;
+    self.highlightBackgroudRadius = 4;
     self.lineFragmentPadding = 0;
 }
 
@@ -109,10 +109,10 @@
     _textContainer.lineFragmentPadding = lineFragmentPadding;
 }
 
-- (void)setHighlightBackgroundCornerRadius:(CGFloat)highlightBackgroundCornerRadius {
-    _highlightBackgroundCornerRadius = highlightBackgroundCornerRadius;
+- (void)setHighlightBackgroudRadius:(CGFloat)highlightBackgroudRadius {
+    _highlightBackgroudRadius = highlightBackgroudRadius;
     if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
-        ((TYLayoutManager *)_layoutManager).highlightBackgroundCornerRadius = highlightBackgroundCornerRadius;
+        ((TYLayoutManager *)_layoutManager).highlightBackgroudRadius = highlightBackgroudRadius;
     }
 }
 
@@ -137,22 +137,17 @@
 }
 
 - (void)setAttachments:(NSArray *)attachments {
-    NSArray *oldAttachViews = _attachments;
     _attachments = attachments;
-    //_attachmentSet = [NSSet setWithArray:attachments];
-    if (!oldAttachViews) {
-        return;
-    }
-    for (TYTextAttachment *attachment in oldAttachViews) {
-        [attachment removeFromSuperView];
-    }
+    _attachmentSet = attachments ? [NSSet setWithArray:attachments] : nil;
 }
 
 - (NSArray *)attachments {
-    if (_attachments) {
+    if (_onlySetTextStorageWillGetAttachViews) {
         return _attachments;
     }
-    return [_textStorage attachments];
+    _attachments = [_textStorage attachments];
+    _attachmentSet = _attachments ? [NSSet setWithArray:_attachments] : nil;
+    return _attachments;
 }
 
 #pragma mark - public
@@ -177,7 +172,7 @@
 }
 
 - (NSInteger)characterIndexForPoint:(CGPoint)point{
-    CGRect textRect = _textRect;
+    CGRect textRect = _textRectOnRender;
     if (!CGRectContainsPoint(textRect, point)) {
         return -1;
     }
@@ -212,8 +207,10 @@
 {
     // calculate the offset of the text in the view
     NSRange glyphRange = [self visibleGlyphRange];
-    _textRect = [self textRectForGlyphRange:glyphRange atPiont:point];
-    CGPoint positon = _textRect.origin;
+    CGRect textRect = [self textRectForGlyphRange:glyphRange atPiont:point];
+    CGPoint positon = textRect.origin;
+    _visibleCharacterRangeOnRender = [_layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
+    _textRectOnRender = textRect;
     // drawing text
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
         [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:positon];

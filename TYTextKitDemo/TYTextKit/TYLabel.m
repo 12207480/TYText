@@ -306,7 +306,15 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     // will display
     task.willDisplay = ^(CALayer * _Nonnull layer) {
-        [self clearAttachments:attachments];
+        if (attachments) {
+            NSSet *attachmentSet = textRender.attachmentSet;
+            for (TYTextAttachment *attachment in attachments) {
+                if (!attachmentSet || ![attachmentSet containsObject:attachment]) {
+                    [attachment removeFromSuperView:self];
+                }
+            }
+        }
+        _attachments = nil;
         _textRenderOnDisplay = nil;
     };
     
@@ -319,8 +327,8 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
             textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
         }
         textRender.size = size;
-        [textRender setTextHighlight:textHighlight range:highlightRange];
         if (isCancelled()) return;
+        [textRender setTextHighlight:textHighlight range:highlightRange];
         [textRender drawTextAtPoint:CGPointZero isCanceled:isCancelled];
     };
     
@@ -328,33 +336,28 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         _textRenderOnDisplay = textRender;
         NSArray *attachments = textRender.attachments;
         if (!finished || !attachments) {
-            [self clearAttachments:attachments];
-            _attachments = attachments;
+            if (attachments) {
+                for (TYTextAttachment *attachment in attachments) {
+                    [attachment removeFromSuperView:self];
+                }
+            }
             return ;
         }
-        NSRange visibleRange = [textRender visibleCharacterRange];
+        
+        NSRange visibleRange = textRender.visibleCharacterRangeOnRender;
         for (TYTextAttachment *attachment in attachments) {
-            if (!NSLocationInRange(attachment.range.location, visibleRange)) {
-                [attachment removeFromSuperView];
-                continue;
+            if (NSLocationInRange(attachment.range.location, visibleRange)) {
+                CGRect rect = {attachment.position,attachment.size};
+                [attachment addToSuperView:self];
+                attachment.frame = rect;
+            }else {
+                [attachment removeFromSuperView:self];
             }
-            CGRect rect = {attachment.position,attachment.size};
-            [attachment addToSuperView:self];
-            attachment.frame = rect;
         }
         _attachments = attachments;
+        NSAssert(self.subviews.count == attachments.count, @"attachments count incorrect");
     };
     return task;
-}
-
-- (void)clearAttachments:(NSArray *)attachments {
-    TYAssertMainThread();
-    if (!attachments) {
-        return;
-    }
-    for (TYTextAttachment *attachment in attachments) {
-        [attachment removeFromSuperView];
-    }
 }
 
 - (void)dealloc {

@@ -96,7 +96,7 @@
         shadow.shadowOffset = CGSizeMake(0, 1);
         //text.ty_shadow = shadow;
         text.ty_characterSpacing = 2;
-        TYTextStorage *textStorage = [[TYTextStorage alloc]initWithMutableAttributedString:text];
+        NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:text];
         TYTextRender *render = [[TYTextRender alloc]init];
         render.textStorage = textStorage;
         [textArray addObject:textStorage];

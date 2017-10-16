@@ -12,6 +12,6 @@
 
 @property (nonatomic, assign) NSRange highlightRange;
 
-@property (nonatomic, assign) CGFloat highlightBackgroundCornerRadius;
+@property (nonatomic, assign) CGFloat highlightBackgroudRadius;
 
 @end

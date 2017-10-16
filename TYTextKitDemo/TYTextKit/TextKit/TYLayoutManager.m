@@ -31,7 +31,7 @@
 }
 
 - (void)configure {
-    _highlightBackgroundCornerRadius = 2;
+    _highlightBackgroudRadius = 2;
 }
 
 - (void)drawBackgroundForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin {
@@ -41,13 +41,13 @@
 }
 
 - (void)fillBackgroundRectArray:(const CGRect *)rectArray count:(NSUInteger)rectCount forCharacterRange:(NSRange)charRange color:(UIColor *)color {
-    if (_highlightBackgroundCornerRadius > 0 && NSIntersectionRange(_highlightRange, charRange).length != charRange.length) {
+    if (_highlightBackgroudRadius > 0 && NSIntersectionRange(_highlightRange, charRange).length != charRange.length) {
         [super fillBackgroundRectArray:rectArray count:rectCount forCharacterRange:charRange color:color];
         return;
     }
     for (int i = 0; i < rectCount; ++i) {
         CGRect rect = [self fixedLineHighlightRect:rectArray[i] forCharacterRange:charRange];
-        [self fillBackgroundRect:rect radius:_highlightBackgroundCornerRadius bgColor:color];
+        [self fillBackgroundRect:rect radius:_highlightBackgroudRadius bgColor:color];
     }
 }
 

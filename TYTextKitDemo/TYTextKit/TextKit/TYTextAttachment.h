@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)setFrame:(CGRect)frame;
 - (void)addToSuperView:(UIView *)superView;
-- (void)removeFromSuperView;
+- (void)removeFromSuperView:(UIView *)superView;
 
 @end
 

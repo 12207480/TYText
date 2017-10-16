@@ -195,8 +195,6 @@
 			children = (
 				2B426F5A1F79E7DD009E70D9 /* TYTextRender.h */,
 				2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */,
-				2B426F601F7A44C8009E70D9 /* TYTextStorage.h */,
-				2B426F611F7A44C8009E70D9 /* TYTextStorage.m */,
 				2B2A17591F7F8199000F6F4B /* TYTextAttribute.h */,
 				2B2A175A1F7F8199000F6F4B /* TYTextAttribute.m */,
 				2B426F631F7A491A009E70D9 /* TYTextAttachment.h */,
@@ -205,10 +203,12 @@
 				2B2A17791F7FA0A1000F6F4B /* TYTextGenerator.m */,
 				2B426F5D1F7A4311009E70D9 /* TYTextParse.h */,
 				2B426F5E1F7A4311009E70D9 /* TYTextParse.m */,
-				2B1F83221F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.h */,
-				2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */,
+				2B426F601F7A44C8009E70D9 /* TYTextStorage.h */,
+				2B426F611F7A44C8009E70D9 /* TYTextStorage.m */,
 				B03F0F741F91A08800264F76 /* TYLayoutManager.h */,
 				B03F0F751F91A08800264F76 /* TYLayoutManager.m */,
+				2B1F83221F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.h */,
+				2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */,
 			);
 			path = TextKit;
 			sourceTree = "<group>";
@@ -445,7 +445,7 @@
 				INFOPLIST_FILE = TYTextKitDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -458,7 +458,7 @@
 				INFOPLIST_FILE = TYTextKitDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYTextKitDemo6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

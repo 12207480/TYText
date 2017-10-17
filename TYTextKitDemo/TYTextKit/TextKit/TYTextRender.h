@@ -16,7 +16,6 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface TYTextRender : NSObject
 
-// textkit
 @property (nonatomic, strong, nullable) NSTextStorage *textStorage;
 @property (nonatomic, strong, readonly) NSLayoutManager *layoutManager;
 @property (nonatomic, strong, readonly) NSTextContainer *textContainer;
@@ -25,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
  text is inset within line fragment rectangles.default 0
  */
 @property (nonatomic, assign) CGFloat lineFragmentPadding;
+
+@property (nonatomic, assign) NSLineBreakMode lineBreakMode;
+@property (nonatomic, assign) NSUInteger maximumNumberOfLines;
 
 
 /**

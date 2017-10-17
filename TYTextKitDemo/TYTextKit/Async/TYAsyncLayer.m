@@ -142,8 +142,8 @@ CGFloat ty_text_screen_scale(void) {
     CGFloat scale = self.contentsScale;
     UIColor *backgroundColor = (opaque && self.backgroundColor) ? [UIColor colorWithCGColor:self.backgroundColor] : [UIColor whiteColor];
     if (asynchronously) {
-        TYSentinel *sentinel = _sentinel;
         unsigned int value = [_sentinel value];
+        TYSentinel *sentinel = _sentinel;
         BOOL (^isCancelled)(void) = ^BOOL(void){
             return value != [sentinel value];
         };

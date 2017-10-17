@@ -109,6 +109,16 @@
     _textContainer.lineFragmentPadding = lineFragmentPadding;
 }
 
+- (void)setLineBreakMode:(NSLineBreakMode)lineBreakMode {
+    _lineBreakMode = lineBreakMode;
+    _textContainer.lineBreakMode = lineBreakMode;
+}
+
+- (void)setMaximumNumberOfLines:(NSUInteger)maximumNumberOfLines {
+    _maximumNumberOfLines = maximumNumberOfLines;
+    _textContainer.maximumNumberOfLines = maximumNumberOfLines;
+}
+
 - (void)setHighlightBackgroudRadius:(CGFloat)highlightBackgroudRadius {
     _highlightBackgroudRadius = highlightBackgroudRadius;
     if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {

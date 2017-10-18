@@ -45,16 +45,16 @@
     
     [self.tableView reloadData];
     
-    TYGroupAsyncTransaction *transaction = [TYGroupAsyncTransaction transaction];
-    [transaction setCompletionBlock:^{
-        NSLog(@"Completion Operation");
-    }];
-    for (int i = 0; i < 100; ++i) {
-        [transaction addOperationBlock:^{
-            NSLog(@"Operation %d",i);
-        }];
-    }
-    [transaction commit];
+//    TYGroupAsyncTransaction *transaction = [TYGroupAsyncTransaction transaction];
+//    [transaction setCompletionBlock:^{
+//        NSLog(@"Completion Operation");
+//    }];
+//    for (int i = 0; i < 100; ++i) {
+//        [transaction addOperationBlock:^{
+//            NSLog(@"Operation %d",i);
+//        }];
+//    }
+//    [transaction commit];
 }
 
 - (NSMutableArray *)itemArray

@@ -28,13 +28,13 @@
         _onlySetTextStorageWillGetAttachViews = YES;
         [self addTextContainer];
         [self addLayoutManager];
-        [self configure];
+        [self configureRender];
     }
     return self;
 }
 
 - (instancetype)initWithAttributedText:(NSAttributedString *)attributedText {
-    NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];;
+    NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];
     if (self = [self initWithTextStorage:textStorage]) {
     }
     return self;
@@ -55,7 +55,7 @@
         _textContainer = textContainer;
         _layoutManager = textContainer.layoutManager;
         self.textStorage = _layoutManager.textStorage;
-        [self configure];
+        [self configureRender];
     }
     return self;
 }
@@ -71,7 +71,7 @@
     _layoutManager = layoutManager;
 }
 
-- (void)configure {
+- (void)configureRender {
     self.highlightBackgroudRadius = 4;
     self.lineFragmentPadding = 0;
 }

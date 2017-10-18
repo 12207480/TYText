@@ -24,6 +24,7 @@
 		2B426F5F1F7A4311009E70D9 /* TYTextParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F5E1F7A4311009E70D9 /* TYTextParse.m */; };
 		2B426F621F7A44C8009E70D9 /* TYTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F611F7A44C8009E70D9 /* TYTextStorage.m */; };
 		2B426F651F7A491A009E70D9 /* TYTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F641F7A491A009E70D9 /* TYTextAttachment.m */; };
+		2B49A1221F973B19007E1935 /* ImageTextListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B49A1211F973B18007E1935 /* ImageTextListViewController.m */; };
 		2B8C4EBF1F628C8F00539B07 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EBE1F628C8F00539B07 /* main.m */; };
 		2B8C4EC21F628C8F00539B07 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EC11F628C8F00539B07 /* AppDelegate.m */; };
 		2B8C4EC51F628C8F00539B07 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EC41F628C8F00539B07 /* ViewController.m */; };
@@ -70,6 +71,8 @@
 		2B426F611F7A44C8009E70D9 /* TYTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextStorage.m; sourceTree = "<group>"; };
 		2B426F631F7A491A009E70D9 /* TYTextAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextAttachment.h; sourceTree = "<group>"; };
 		2B426F641F7A491A009E70D9 /* TYTextAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextAttachment.m; sourceTree = "<group>"; };
+		2B49A1201F973B18007E1935 /* ImageTextListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTextListViewController.h; sourceTree = "<group>"; };
+		2B49A1211F973B18007E1935 /* ImageTextListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageTextListViewController.m; sourceTree = "<group>"; };
 		2B8C4EBA1F628C8F00539B07 /* TYTextKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TYTextKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B8C4EBE1F628C8F00539B07 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2B8C4EC01F628C8F00539B07 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -143,6 +146,8 @@
 				2B426F481F78F076009E70D9 /* AttributedDemoViewController.m */,
 				2B426F4A1F78F6ED009E70D9 /* TextListViewController.h */,
 				2B426F4B1F78F6ED009E70D9 /* TextListViewController.m */,
+				2B49A1201F973B18007E1935 /* ImageTextListViewController.h */,
+				2B49A1211F973B18007E1935 /* ImageTextListViewController.m */,
 				2B426F4D1F78F7AE009E70D9 /* TextViewCell.h */,
 				2B426F4E1F78F7AE009E70D9 /* TextViewCell.m */,
 				2B426F501F7909D4009E70D9 /* Vendor */,
@@ -304,6 +309,7 @@
 				B03F0F761F91A08800264F76 /* TYLayoutManager.m in Sources */,
 				2B1F83241F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m in Sources */,
 				2B2A483B1F67C65500D7E613 /* TYTransactionGroup.m in Sources */,
+				2B49A1221F973B19007E1935 /* ImageTextListViewController.m in Sources */,
 				2B426F4F1F78F7AE009E70D9 /* TextViewCell.m in Sources */,
 				2B426F551F790A3C009E70D9 /* TYFPSLabel.m in Sources */,
 				2B426F621F7A44C8009E70D9 /* TYTextStorage.m in Sources */,

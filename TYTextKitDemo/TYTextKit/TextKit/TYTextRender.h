@@ -21,16 +21,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSTextContainer *textContainer;
 
 /**
- render size
- */
-@property (nonatomic, assign) CGSize size;
-
-/**
  text is inset within line fragment rectangles.default 0
  */
 @property (nonatomic, assign) CGFloat lineFragmentPadding;
 @property (nonatomic, assign) NSLineBreakMode lineBreakMode;
 @property (nonatomic, assign) NSUInteger maximumNumberOfLines;
+
+/**
+ render size
+ */
+@property (nonatomic, assign) CGSize size;
 
 /**
  text highlight background corner radius. default 4.0

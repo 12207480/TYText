@@ -10,6 +10,7 @@
 #import "TextDemoViewController.h"
 #import "AttributedDemoViewController.h"
 #import "TextListViewController.h"
+#import "ImageTextListViewController.h"
 #import "TYAsyncTransaction.h"
 
 @interface tableViewItem : NSObject
@@ -86,6 +87,7 @@
     [self addTableItemWithTitle:@"SimpleText" detailText:@"简单文本显示" destVcClass:[TextDemoViewController class]];
     [self addTableItemWithTitle:@"AttributedText" detailText:@"属性文本显示" destVcClass:[AttributedDemoViewController class]];
     [self addTableItemWithTitle:@"AsyncText" detailText:@"异步文本显示" destVcClass:[TextListViewController class]];
+    [self addTableItemWithTitle:@"AsyncImageText" detailText:@"异步图文显示" destVcClass:[ImageTextListViewController class]];
 }
 
 - (void)addTableItemWithTitle:(NSString *)title detailText:(NSString *)detailText destVcClass:(Class)destVcClass

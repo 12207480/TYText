@@ -53,53 +53,22 @@
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
         text.ty_font = [UIFont systemFontOfSize:10];
-        //text.ty_lineSpacing = 2;
+        text.ty_lineSpacing = 2;
+        //text.ty_characterSpacing = 2;
         text.ty_strokeWidth = -3;
         text.ty_strokeColor = [UIColor redColor];
 //        text.ty_lineHeightMultiple = 1;
 //        text.ty_maximumLineHeight = 15;
 //        text.ty_minimumLineHeight = 15;
-        TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
-        textHighlight.color = [UIColor whiteColor];
-        textHighlight.backgroundColor = [UIColor redColor];
-        //[text addTextHighlightAttribute:textHighlight range:NSMakeRange(6,21)];
-        TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
-        attachment.image = [UIImage imageNamed:@"avatar"];
-        attachment.size = CGSizeMake(60, 60);
-//        if (i%2) {
-//            [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
-//        }
-        attachment = [[TYTextAttachment alloc]init];
-        attachment.image = [UIImage imageNamed:@"avatar"];
-        attachment.size = CGSizeMake(20, 20);
-        attachment.verticalAlignment = TYAttachmentAlignmentCenter;
-        [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
-        TYTextAttachment *attachmentView = [[TYTextAttachment alloc]init];
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button setTitle:@"button" forState:UIControlStateNormal];
-        attachmentView.view = button;
-        attachmentView.view.backgroundColor = [UIColor redColor];
-        attachmentView.size = CGSizeMake(60, 20);
-        attachmentView.verticalAlignment = TYAttachmentAlignmentCenter;
-        [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
-        attachmentView = [[TYTextAttachment alloc]init];
-        button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button setTitle:@"button" forState:UIControlStateNormal];
-        attachmentView.view = button;
-        attachmentView.view.backgroundColor = [UIColor redColor];
-        attachmentView.size = CGSizeMake(60, 20);
-        //attachmentView.verticalAlignment = TYAttachmentAlignmentBottom;
-        //[text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
         NSShadow *shadow = [NSShadow new];
         shadow.shadowBlurRadius = 1;
         shadow.shadowColor = [UIColor redColor];
         shadow.shadowOffset = CGSizeMake(0, 1);
         //text.ty_shadow = shadow;
-        //text.ty_characterSpacing = 2;
         NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:text];
         TYTextRender *render = [[TYTextRender alloc]initWithTextStorage:textStorage];
-        // 优化性能 optimize performance
         render.lineBreakMode = NSLineBreakByTruncatingTail;
+        // 优化性能 optimize performance
         render.onlySetRenderSizeWillGetTextBounds = YES;
         render.size = [render textSizeWithRenderWidth:CGRectGetWidth(self.view.frame)];
         [textArray addObject:textStorage];

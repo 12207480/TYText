@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TYTextAttachment : NSTextAttachment
 
 @property (nonatomic, strong, nullable) UIImage *image;
-// need used TYTextRender
+// used in TYTextRender
 @property (nonatomic, strong, nullable) UIView *view;
 @property (nonatomic, strong, nullable) CALayer *layer;
 
@@ -27,11 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion must set attach's size or bounds
  */
 @property (nonatomic,assign) CGSize size;
-
-// range in attributed
-@property (nonatomic, assign, readonly) NSRange range;
-// attach render positon
-@property (atomic, assign, readonly) CGPoint position;
 
 /**
  text attachment baseline offset
@@ -44,6 +39,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic,assign) TYAttachmentAlignment verticalAlignment;
 
+@end
+
+
+@interface TYTextAttachment (Rendering)
+
+// range in attributed ,after render will have value
+@property (nonatomic, assign, readonly) NSRange range;
+// attach render positon ,after render will have value
+@property (nonatomic, assign, readonly) CGPoint position;
 
 /**
  if have view or layer, set the frame
@@ -53,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeFromSuperView:(UIView *)superView;
 
 @end
+
 
 @interface NSAttributedString (TYTextAttachment)
 

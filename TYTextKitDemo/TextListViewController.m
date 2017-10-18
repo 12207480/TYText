@@ -73,15 +73,15 @@
         attachment.image = [UIImage imageNamed:@"avatar"];
         attachment.size = CGSizeMake(20, 20);
         attachment.verticalAlignment = TYAttachmentAlignmentCenter;
-        //[text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+        [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
         TYTextAttachment *attachmentView = [[TYTextAttachment alloc]init];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
         [button setTitle:@"button" forState:UIControlStateNormal];
         attachmentView.view = button;
         attachmentView.view.backgroundColor = [UIColor redColor];
-        attachmentView.size = CGSizeMake(60, 10);
+        attachmentView.size = CGSizeMake(60, 20);
         attachmentView.verticalAlignment = TYAttachmentAlignmentCenter;
-        //[text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
+        [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
         attachmentView = [[TYTextAttachment alloc]init];
         button = [UIButton buttonWithType:UIButtonTypeSystem];
         [button setTitle:@"button" forState:UIControlStateNormal];
@@ -101,7 +101,7 @@
         // 优化性能 optimize performance
         render.lineBreakMode = NSLineBreakByTruncatingTail;
         render.onlySetRenderSizeWillGetTextBounds = YES;
-        render.size = CGSizeMake(CGRectGetWidth(self.view.frame), 34);
+        render.size = [render textSizeWithRenderWidth:CGRectGetWidth(self.view.frame)];
         [textArray addObject:textStorage];
         [itemArray addObject:text];
         [renderArray addObject:render];
@@ -144,7 +144,8 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 34;
+    TYTextRender *textRender = _renderArray[indexPath.row];
+    return textRender.size.height;
 }
 
 - (void)changeAsyncAction:(UIBarButtonItem *)item {

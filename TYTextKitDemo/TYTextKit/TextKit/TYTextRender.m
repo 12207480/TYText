@@ -19,6 +19,9 @@
 @property (nonatomic, strong) NSTextContainer *textContainer;
 @property (nonatomic, strong) NSTextStorage *textStorageOnRender;
 
+@property (nonatomic, assign) CGRect textRectOnRender;
+@property (nonatomic, assign) NSRange visibleCharacterRangeOnRender;
+
 @end
 
 @implementation TYTextRender
@@ -138,26 +141,6 @@
     }
 }
 
-- (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range {
-    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
-        ((TYLayoutManager *)_layoutManager).highlightRange = range;
-    }
-    if (!textHighlight || range.length == 0) {
-        self.textStorageOnRender = _textStorage;
-        return;
-    }
-    NSTextStorage *highlightStorage = nil;
-    if ([_textStorage isKindOfClass:[TYTextStorage class]]) {
-        highlightStorage = [_textStorage copy];
-        [highlightStorage addTextAttribute:textHighlight range:range];
-    }else {
-        NSMutableAttributedString *string = [[_textStorage attributedSubstringFromRange:NSMakeRange(0, _textStorage.length)] mutableCopy];
-        [string addTextAttribute:textHighlight range:range];
-        highlightStorage = [[NSTextStorage alloc]initWithAttributedString:string];
-    }
-    self.textStorageOnRender = highlightStorage;
-}
-
 - (void)setAttachments:(NSArray *)attachments {
     _attachments = attachments;
     _attachmentSet = attachments ? [NSSet setWithArray:attachments] : nil;
@@ -196,6 +179,15 @@
                                      inTextContainer:_textContainer];
 }
 
+- (CGSize)textSizeWithRenderWidth:(CGFloat)renderWidth {
+    CGSize size = _textContainer.size;
+    _textContainer.size = CGSizeMake(renderWidth, MAXFLOAT);
+    CGSize textSize = [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
+                                            inTextContainer:_textContainer].size;
+    _textContainer.size = size;
+    return CGSizeMake(ceil(textSize.width), ceil(textSize.height));
+}
+
 - (NSInteger)characterIndexForPoint:(CGPoint)point{
     CGRect textRect = _textRectOnRender;
     if (!CGRectContainsPoint(textRect, point)) {
@@ -207,7 +199,35 @@
     return distanceToPoint < 1 ? index : -1;
 }
 
+- (void)drawTextAtPoint:(CGPoint)point {
+    [self drawTextAtPoint:point isCanceled:nil];
+}
+
+@end
+
+@implementation TYTextRender (Rendering)
+
 #pragma mark - draw text
+
+- (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range {
+    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
+        ((TYLayoutManager *)_layoutManager).highlightRange = range;
+    }
+    if (!textHighlight || range.length == 0) {
+        self.textStorageOnRender = _textStorage;
+        return;
+    }
+    NSTextStorage *highlightStorage = nil;
+    if ([_textStorage isKindOfClass:[TYTextStorage class]]) {
+        highlightStorage = [_textStorage copy];
+        [highlightStorage addTextAttribute:textHighlight range:range];
+    }else {
+        NSMutableAttributedString *string = [[_textStorage attributedSubstringFromRange:NSMakeRange(0, _textStorage.length)] mutableCopy];
+        [string addTextAttribute:textHighlight range:range];
+        highlightStorage = [[NSTextStorage alloc]initWithAttributedString:string];
+    }
+    _textStorageOnRender = highlightStorage;
+}
 
 - (CGRect)textRectForGlyphRange:(NSRange)glyphRange atPiont:(CGPoint)point
 {
@@ -228,9 +248,6 @@
     return textRect;
 }
 
-- (void)drawTextAtPoint:(CGPoint)point {
-    [self drawTextAtPoint:point isCanceled:nil];
-}
 - (void)drawTextAtPoint:(CGPoint)point isCanceled:(BOOL (^)(void))isCanceled
 {
     // calculate the offset of the text in the view
@@ -249,3 +266,4 @@
 }
 
 @end
+

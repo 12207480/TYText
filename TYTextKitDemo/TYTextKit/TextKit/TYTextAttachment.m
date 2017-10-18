@@ -14,6 +14,7 @@
 
 @interface TYTextAttachment ()
 @property (nonatomic, assign) NSRange range;
+@property (nonatomic, assign) CGPoint position;
 @end
 
 @implementation TYTextAttachment
@@ -32,32 +33,6 @@
 - (void)setBaseline:(CGFloat)baseline {
     _baseline = baseline;
     self.bounds = CGRectOffset(self.bounds, 0, baseline);
-}
-
-#pragma mark - public
-
-- (void)setFrame:(CGRect)frame {
-    _view.frame = frame;
-    _layer.frame = frame;
-}
-
-- (void)addToSuperView:(UIView *)superView {
-    TYAssertMainThread();
-    if (_view) {
-        [superView addSubview:_view];
-    }else if (_layer) {
-        [superView.layer addSublayer:_layer];
-    }
-}
-
-- (void)removeFromSuperView:(UIView *)superView {
-    TYAssertMainThread();
-    if (_view.superview == superView) {
-        [_view removeFromSuperview];
-    }
-    if (_layer.superlayer == superView.layer) {
-        [_layer removeFromSuperlayer];
-    }
 }
 
 #pragma mark - NSTextAttachmentContainer
@@ -87,6 +62,34 @@
             break;
     }
     return CGRectMake(0, -offset, _size.width, _size.height);
+}
+
+@end
+
+@implementation TYTextAttachment (Rendering)
+
+- (void)setFrame:(CGRect)frame {
+    _view.frame = frame;
+    _layer.frame = frame;
+}
+
+- (void)addToSuperView:(UIView *)superView {
+    TYAssertMainThread();
+    if (_view) {
+        [superView addSubview:_view];
+    }else if (_layer) {
+        [superView.layer addSublayer:_layer];
+    }
+}
+
+- (void)removeFromSuperView:(UIView *)superView {
+    TYAssertMainThread();
+    if (_view.superview == superView) {
+        [_view removeFromSuperview];
+    }
+    if (_layer.superlayer == superView.layer) {
+        [_layer removeFromSuperlayer];
+    }
 }
 
 @end

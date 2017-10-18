@@ -11,7 +11,9 @@
 
 #define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
 
-@interface TYTextRender ()
+@interface TYTextRender () {
+    CGRect _textBound;
+}
 
 @property (nonatomic, strong) NSLayoutManager *layoutManager;
 @property (nonatomic, strong) NSTextContainer *textContainer;
@@ -101,21 +103,31 @@
     _size = size;
     if (!CGSizeEqualToSize(_textContainer.size, size)) {
         _textContainer.size = size;
+        if (_onlySetRenderSizeWillGetTextBounds) {
+            _textBound =  [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
+                                                    inTextContainer:_textContainer];
+        }
     }
 }
 
+-(CGFloat)lineFragmentPadding {
+    return _textContainer.lineFragmentPadding;
+}
 - (void)setLineFragmentPadding:(CGFloat)lineFragmentPadding {
-    _lineFragmentPadding = lineFragmentPadding;
     _textContainer.lineFragmentPadding = lineFragmentPadding;
 }
 
+-(NSLineBreakMode)lineBreakMode {
+    return _textContainer.lineBreakMode;
+}
 - (void)setLineBreakMode:(NSLineBreakMode)lineBreakMode {
-    _lineBreakMode = lineBreakMode;
     _textContainer.lineBreakMode = lineBreakMode;
 }
 
+- (NSUInteger)maximumNumberOfLines {
+    return _textContainer.maximumNumberOfLines;
+}
 - (void)setMaximumNumberOfLines:(NSUInteger)maximumNumberOfLines {
-    _maximumNumberOfLines = maximumNumberOfLines;
     _textContainer.maximumNumberOfLines = maximumNumberOfLines;
 }
 
@@ -177,6 +189,9 @@
 }
 
 - (CGRect)textBound {
+    if (_onlySetRenderSizeWillGetTextBounds && !CGRectIsEmpty(_textBound)) {
+        return _textBound;
+    }
     return [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
                                      inTextContainer:_textContainer];
 }
@@ -200,8 +215,11 @@
         return CGRectZero;
     }
     CGPoint textOffset = point;
-    CGRect textBounds = [_layoutManager boundingRectForGlyphRange:glyphRange
-                                                  inTextContainer:_textContainer];
+    CGRect textBounds = _textBound;
+    if (!_onlySetRenderSizeWillGetTextBounds || CGRectIsEmpty(_textBound)) {
+        textBounds = [_layoutManager boundingRectForGlyphRange:glyphRange
+                                               inTextContainer:_textContainer];
+    }
     CGSize textSize = CGSizeMake(ceil(textBounds.size.width), ceil(textBounds.size.height));
     if (point.y == 0) {
         textOffset.y = (_textContainer.size.height - ceil(textSize.height)) / 2.0f;

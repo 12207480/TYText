@@ -66,7 +66,8 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 - (void)configureLabel {
     _longPressDuring = 2.0;
     _clearContentBeforeAsyncDisplay = YES;
-    self.clipsToBounds = YES;
+    self.opaque = NO;
+    self.backgroundColor = [UIColor clearColor];
     self.layer.contentsScale = ty_text_screen_scale();
     ((TYAsyncLayer *)self.layer).asyncDelegate = self;
 }

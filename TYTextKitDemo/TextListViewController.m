@@ -97,8 +97,11 @@
         //text.ty_shadow = shadow;
         //text.ty_characterSpacing = 2;
         NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:text];
-        TYTextRender *render = [[TYTextRender alloc]init];
-        render.textStorage = textStorage;
+        TYTextRender *render = [[TYTextRender alloc]initWithTextStorage:textStorage];
+        // 优化性能 optimize performance
+        render.lineBreakMode = NSLineBreakByTruncatingTail;
+        render.onlySetRenderSizeWillGetTextBounds = YES;
+        render.size = CGSizeMake(CGRectGetWidth(self.view.frame), 34);
         [textArray addObject:textStorage];
         [itemArray addObject:text];
         [renderArray addObject:render];

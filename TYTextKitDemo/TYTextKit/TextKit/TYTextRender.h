@@ -24,10 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
  text is inset within line fragment rectangles.default 0
  */
 @property (nonatomic, assign) CGFloat lineFragmentPadding;
-
 @property (nonatomic, assign) NSLineBreakMode lineBreakMode;
 @property (nonatomic, assign) NSUInteger maximumNumberOfLines;
-
 
 /**
  text highlight background corner radius. default 4.0
@@ -36,22 +34,29 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat highlightBackgroudRadius;
 
 /**
+ default YES, if NO every time call textStorage'attachViews will re-get attachViews.
+ */
+@property (nonatomic, assign) BOOL onlySetTextStorageWillGetAttachViews;
+/**
  text attributed contain attach views or layers
  */
 @property (nonatomic, strong, readonly, nullable) NSArray *attachments;
 @property (nonatomic, strong, readonly, nullable) NSSet *attachmentSet;
-/**
- default YES, otherwise get textStorage'attachViews every time.
- */
-@property (nonatomic, assign) BOOL onlySetTextStorageWillGetAttachViews;
+
 /**
  render size
  */
 @property (nonatomic, assign) CGSize size;
 
 /**
+ default NO,if YES, only set render size will caculate text bounds and cache
+ @discussion if YES cache text bounds will optimize performance,otherwise every time you call -(CGRect)textBound will re-caculate text bound.
+ */
+@property (nonatomic, assign) BOOL onlySetRenderSizeWillGetTextBounds;
+
+/**
  visible text bound
- @discussion render should set size before call this
+ @discussion render should set size before call this, you can set onlySetRenderSizeWillGetTextBounds YES,will cahce text bounds
  */
 @property (nonatomic, assign, readonly) CGRect textBound;
 
@@ -66,6 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly) NSRange visibleCharacterRangeOnRender;
 
+// initialize
 - (instancetype)initWithAttributedText:(NSAttributedString *)attributedText;
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage;
 - (instancetype)initWithTextContainer:(NSTextContainer *)textContainer;

@@ -13,6 +13,8 @@
 
 @interface TYTextRender () {
     CGRect _textBound;
+    NSArray *_attachmentViews;
+    NSSet *_attachmentViewSet;
 }
 
 @property (nonatomic, weak) UIView *renderView;
@@ -27,8 +29,6 @@
 @end
 
 @implementation TYTextRender
-
-@synthesize attachmentViews = _attachmentViews;
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -152,8 +152,16 @@
         return _attachmentViews;
     }
     _attachmentViews = [_textStorage attachmentViews];
-    _attachmentViewSet = _attachmentViews ? [NSSet setWithArray:_attachmentViews] : nil;
     return _attachmentViews;
+}
+
+- (NSSet *)attachmentViewSet {
+    if (_onlySetTextStorageWillGetAttachViews && !_editable) {
+        return _attachmentViewSet;
+    }
+    NSArray *attachmentViews = [_textStorage attachmentViews];
+    _attachmentViewSet = attachmentViews ? [NSSet setWithArray:attachmentViews] : nil;
+    return _attachmentViewSet;
 }
 
 #pragma mark - public

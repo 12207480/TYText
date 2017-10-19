@@ -51,7 +51,7 @@
     if (!_attachments && !attachments) {
         return;
     }
-    NSSet *attachmentSet = _textRender.attachmentViewSet;
+    NSSet *attachmentSet = [NSSet setWithArray:attachments];
     for (TYTextAttachment *attachment in _attachments) {
         if (!attachmentSet || ![attachmentSet containsObject:attachment]) {
             [attachment removeFromSuperView:self];

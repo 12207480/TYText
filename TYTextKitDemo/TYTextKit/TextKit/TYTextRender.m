@@ -47,7 +47,6 @@
 
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage {
     if (self = [self init]) {
-        [textStorage addLayoutManager:_layoutManager];
         self.textStorage = textStorage;
     }
     return self;
@@ -85,7 +84,7 @@
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
     _textStorage = textStorage;
-    if (_onlySetTextStorageWillGetAttachViews) {
+    if (_onlySetTextStorageWillGetAttachViews && !_editable) {
         self.attachments = textStorage.attachments;
     }
     self.textStorageOnRender = textStorage;
@@ -106,7 +105,7 @@
     _size = size;
     if (!CGSizeEqualToSize(_textContainer.size, size)) {
         _textContainer.size = size;
-        if (_onlySetRenderSizeWillGetTextBounds) {
+        if (_onlySetRenderSizeWillGetTextBounds && !_editable) {
             _textBound =  [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
                                                     inTextContainer:_textContainer];
         }
@@ -147,7 +146,7 @@
 }
 
 - (NSArray *)attachments {
-    if (_onlySetTextStorageWillGetAttachViews) {
+    if (_onlySetTextStorageWillGetAttachViews && !_editable) {
         return _attachments;
     }
     _attachments = [_textStorage attachments];
@@ -172,7 +171,7 @@
 }
 
 - (CGRect)textBound {
-    if (_onlySetRenderSizeWillGetTextBounds && !CGRectIsEmpty(_textBound)) {
+    if (_onlySetRenderSizeWillGetTextBounds && !CGRectIsEmpty(_textBound) && !_editable) {
         return _textBound;
     }
     return [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
@@ -222,11 +221,11 @@
         highlightStorage = [_textStorage copy];
         [highlightStorage addTextAttribute:textHighlight range:range];
     }else {
-        NSMutableAttributedString *string = [[_textStorage attributedSubstringFromRange:NSMakeRange(0, _textStorage.length)] mutableCopy];
+        NSMutableAttributedString *string = [_textStorage mutableCopy];
         [string addTextAttribute:textHighlight range:range];
         highlightStorage = [[NSTextStorage alloc]initWithAttributedString:string];
     }
-    _textStorageOnRender = highlightStorage;
+    self.textStorageOnRender = highlightStorage;
 }
 
 - (CGRect)textRectForGlyphRange:(NSRange)glyphRange atPiont:(CGPoint)point
@@ -236,7 +235,7 @@
     }
     CGPoint textOffset = point;
     CGRect textBounds = _textBound;
-    if (!_onlySetRenderSizeWillGetTextBounds || CGRectIsEmpty(_textBound)) {
+    if (!_onlySetRenderSizeWillGetTextBounds || _editable || CGRectIsEmpty(_textBound)) {
         textBounds = [_layoutManager boundingRectForGlyphRange:glyphRange
                                                inTextContainer:_textContainer];
     }

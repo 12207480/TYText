@@ -24,17 +24,17 @@
 }
 
 - (instancetype)initWithMutableAttributedString:(NSMutableAttributedString *)attrStr {
-    if (self = [self init]) {
+    if (self = [super init]) {
         _imp = attrStr;
-        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.length) changeInLength:0];
+        [self edited:NSTextStorageEditedAttributes|NSTextStorageEditedCharacters range:NSMakeRange(0,0) changeInLength:_imp.length];
     }
     return self;
 }
 
 - (instancetype)initWithAttributedString:(NSAttributedString *)attrStr {
-    if (self = [self init]) {
+    if (self = [super init]) {
         _imp = [attrStr mutableCopy];
-        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.length) changeInLength:0];
+        [self edited:NSTextStorageEditedAttributes|NSTextStorageEditedCharacters range:NSMakeRange(0,0) changeInLength:_imp.length];
     }
     return self;
 }
@@ -42,7 +42,7 @@
 - (instancetype)initWithString:(NSString *)str {
     if (self = [super init]) {
         _imp = [[NSMutableAttributedString alloc]initWithString:str];
-        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.length) changeInLength:0];
+        [self edited:NSTextStorageEditedAttributes|NSTextStorageEditedCharacters range:NSMakeRange(0,0) changeInLength:_imp.length];
     }
     return self;
 }
@@ -50,7 +50,7 @@
 - (instancetype)initWithString:(NSString *)str attributes:(NSDictionary<NSAttributedStringKey,id> *)attrs {
     if (self = [super init]) {
         _imp = [[NSMutableAttributedString alloc]initWithString:str attributes:attrs];
-        [self edited:NSTextStorageEditedAttributes range:NSMakeRange(0,_imp.string.length) changeInLength:0];
+        [self edited:NSTextStorageEditedAttributes|NSTextStorageEditedCharacters range:NSMakeRange(0,0) changeInLength:_imp.length];
     }
     return self;
 }
@@ -84,6 +84,11 @@
 - (void)setAttributes:(NSDictionary *)attrs range:(NSRange)range
 {
     [_imp setAttributes:attrs range:range];
+    [self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
+}
+
+- (void)addAttributes:(NSDictionary<NSAttributedStringKey,id> *)attrs range:(NSRange)range {
+    [_imp addAttributes:attrs range:range];
     [self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 

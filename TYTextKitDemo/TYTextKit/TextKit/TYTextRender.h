@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSLayoutManager *layoutManager;
 @property (nonatomic, strong, readonly) NSTextContainer *textContainer;
 
+// textStorage will be edited, use in textView
+@property (nonatomic, assign) BOOL editable;
+
 /**
  text is inset within line fragment rectangles.default 0
  */

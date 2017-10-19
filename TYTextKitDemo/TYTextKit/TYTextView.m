@@ -8,9 +8,11 @@
 
 #import "TYTextView.h"
 
-@interface TYTextView ()
+@interface TYTextView ()<TYLayoutManagerEditRender>
 
 @property (nonatomic, strong) TYTextRender *textRender;
+
+@property (nonatomic, strong) NSArray *attachments;
 
 @end
 
@@ -37,13 +39,46 @@
 }
 
 - (void)setTextRender:(TYTextRender *)textRender {
-    _textRender = textRender;
+    if ([textRender.layoutManager isKindOfClass:[TYLayoutManager class]]) {
+        ((TYLayoutManager *)textRender.layoutManager).render = self;
+    }
     textRender.editable = YES;
+    _textRender = textRender;
 }
 
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
+- (void)addAttachmentViews {
+    NSArray *attachments = _textRender.attachmentViews;
+    if (!_attachments && !attachments) {
+        return;
+    }
+    NSSet *attachmentSet = _textRender.attachmentViewSet;
+    for (TYTextAttachment *attachment in _attachments) {
+        if (!attachmentSet || ![attachmentSet containsObject:attachment]) {
+            [attachment removeFromSuperView:self];
+        }
+    }
+    NSRange visibleRange = [_textRender visibleCharacterRange];
+    for (TYTextAttachment *attachment in attachments) {
+        if (NSLocationInRange(attachment.range.location, visibleRange)) {
+            CGRect rect = {attachment.position,attachment.size};
+            [attachment addToSuperView:self];
+            attachment.frame = rect;
+        }else {
+            [attachment removeFromSuperView:self];
+        }
+    }
+    _attachments = attachments;
+}
+
+#pragma mark - TYLayoutManagerEditRender
+
+- (void)layoutManager:(TYLayoutManager *)layoutManager processEditingForTextStorage:(NSTextStorage *)textStorage edited:(NSTextStorageEditActions)editMask range:(NSRange)newCharRange changeInLength:(NSInteger)delta invalidatedRange:(NSRange)invalidatedCharRange {
     
 }
+
+- (void)layoutManager:(TYLayoutManager *)layoutManager drawGlyphsForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin {
+    [self addAttachmentViews];
+}
+
 
 @end

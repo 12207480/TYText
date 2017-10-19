@@ -41,12 +41,23 @@
     [self.view addSubview:textView];
     _textView = textView;
 }
-- (IBAction)buttonAction:(id)sender {
-    TYTextAttachment *attachMent = [[TYTextAttachment alloc]init];
-    attachMent.size = CGSizeMake(60, 60);
-    attachMent.image = [UIImage imageNamed:@"avatar"];
-    attachMent.verticalAlignment = TYAttachmentAlignmentCenter;
-    NSAttributedString *attString = [NSAttributedString attributedStringWithAttachment:attachMent];
+- (IBAction)buttonAction:(UIButton *)sender {
+    NSAttributedString *attString = nil;
+    if (sender.tag == 0) {
+        TYTextAttachment *attachMent = [[TYTextAttachment alloc]init];
+        attachMent.size = CGSizeMake(60, 60);
+        attachMent.image = [UIImage imageNamed:@"avatar"];
+        attachMent.verticalAlignment = TYAttachmentAlignmentCenter;
+        attString = [NSAttributedString attributedStringWithAttachment:attachMent];
+    }else if (sender.tag == 1) {
+        UISwitch *switchView = [[UISwitch alloc]init];
+        TYTextAttachment *attachMent = [[TYTextAttachment alloc]init];
+        attachMent.view = switchView;
+        attachMent.size = switchView.bounds.size;
+        attachMent.verticalAlignment = TYAttachmentAlignmentCenter;
+        attString = [NSAttributedString attributedStringWithAttachment:attachMent];
+    }
+    
     if (_textView.selectedRange.length > 0) {
         [_textView.textStorage replaceCharactersInRange:_textView.selectedRange withAttributedString:attString];
     }else {

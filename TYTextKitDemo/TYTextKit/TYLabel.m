@@ -308,7 +308,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     // will display
     task.willDisplay = ^(CALayer * _Nonnull layer) {
         if (attachments) {
-            NSSet *attachmentSet = textRender.attachmentSet;
+            NSSet *attachmentSet = textRender.attachmentViewSet;
             for (TYTextAttachment *attachment in attachments) {
                 if (!attachmentSet || ![attachmentSet containsObject:attachment]) {
                     [attachment removeFromSuperView:self];
@@ -335,7 +335,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     
     task.didDisplay = ^(CALayer * _Nonnull layer, BOOL finished) {
         _textRenderOnDisplay = textRender;
-        NSArray *attachments = textRender.attachments;
+        NSArray *attachments = textRender.attachmentViews;
         if (!finished || !attachments) {
             if (attachments) {
                 for (TYTextAttachment *attachment in attachments) {

@@ -106,4 +106,18 @@
     CGContextDrawPath(context, kCGPathFill);
 }
 
+- (void)processEditingForTextStorage:(NSTextStorage *)textStorage edited:(NSTextStorageEditActions)editMask range:(NSRange)newCharRange changeInLength:(NSInteger)delta invalidatedRange:(NSRange)invalidatedCharRange {
+    [super processEditingForTextStorage:textStorage edited:editMask range:newCharRange changeInLength:delta invalidatedRange:invalidatedCharRange];
+    if (_render) {
+        [_render layoutManager:self processEditingForTextStorage:textStorage edited:editMask range:newCharRange changeInLength:delta invalidatedRange:invalidatedCharRange];
+    }
+}
+
+- (void)drawGlyphsForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin {
+    [super drawGlyphsForGlyphRange:glyphsToShow atPoint:origin];
+    if (_render) {
+        [_render layoutManager:self drawGlyphsForGlyphRange:glyphsToShow atPoint:origin];
+    }
+}
+
 @end

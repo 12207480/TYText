@@ -15,6 +15,8 @@
     CGRect _textBound;
 }
 
+@property (nonatomic, weak) UIView *renderView;
+
 @property (nonatomic, strong) NSLayoutManager *layoutManager;
 @property (nonatomic, strong) NSTextContainer *textContainer;
 @property (nonatomic, strong) NSTextStorage *textStorageOnRender;
@@ -26,7 +28,7 @@
 
 @implementation TYTextRender
 
-@synthesize attachments = _attachments;
+@synthesize attachmentViews = _attachmentViews;
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -85,7 +87,7 @@
 - (void)setTextStorage:(NSTextStorage *)textStorage {
     _textStorage = textStorage;
     if (_onlySetTextStorageWillGetAttachViews && !_editable) {
-        self.attachments = textStorage.attachments;
+        self.attachmentViews = textStorage.attachmentViews;
     }
     self.textStorageOnRender = textStorage;
 }
@@ -140,18 +142,18 @@
     }
 }
 
-- (void)setAttachments:(NSArray *)attachments {
-    _attachments = attachments;
-    _attachmentSet = attachments ? [NSSet setWithArray:attachments] : nil;
+- (void)setAttachmentViews:(NSArray *)attachmentViews {
+    _attachmentViews = attachmentViews;
+    _attachmentViewSet = attachmentViews ? [NSSet setWithArray:attachmentViews] : nil;
 }
 
-- (NSArray *)attachments {
+- (NSArray *)attachmentViews {
     if (_onlySetTextStorageWillGetAttachViews && !_editable) {
-        return _attachments;
+        return _attachmentViews;
     }
-    _attachments = [_textStorage attachments];
-    _attachmentSet = _attachments ? [NSSet setWithArray:_attachments] : nil;
-    return _attachments;
+    _attachmentViews = [_textStorage attachmentViews];
+    _attachmentViewSet = _attachmentViews ? [NSSet setWithArray:_attachmentViews] : nil;
+    return _attachmentViews;
 }
 
 #pragma mark - public

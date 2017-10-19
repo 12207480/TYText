@@ -96,10 +96,10 @@
 
 @implementation NSAttributedString (TYTextAttachment)
 
-- (NSArray *)attachments {
+- (NSArray *)attachmentViews {
     NSMutableArray *array = [NSMutableArray array];
     [self enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, self.length) options:kNilOptions usingBlock:^(TYTextAttachment *value, NSRange subRange, BOOL *stop) {
-        if ([value isKindOfClass:[TYTextAttachment class]] && (value.view || value.layer)) {
+        if (value && [value isKindOfClass:[TYTextAttachment class]] && (value.view || value.layer)) {
             ((TYTextAttachment *)value).range = subRange;
             [array addObject:value];
         }

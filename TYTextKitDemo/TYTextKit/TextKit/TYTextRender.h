@@ -45,11 +45,12 @@ NS_ASSUME_NONNULL_BEGIN
  default YES, if NO every time call textStorage'attachViews will re-get attachViews.
  */
 @property (nonatomic, assign) BOOL onlySetTextStorageWillGetAttachViews;
+
 /**
- text attributed contain attach views or layers
+ text attributed contain attachment views or layers
  */
-@property (nonatomic, strong, readonly, nullable) NSArray *attachments;
-@property (nonatomic, strong, readonly, nullable) NSSet *attachmentSet;
+@property (nonatomic, strong, readonly, nullable) NSArray<TYTextAttachment *> *attachmentViews;
+@property (nonatomic, strong, readonly, nullable) NSSet<TYTextAttachment *> *attachmentViewSet;
 
 /**
  default NO,if YES, only set render size will caculate text bounds and cache

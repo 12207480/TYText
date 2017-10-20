@@ -15,4 +15,37 @@
 
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender;
 
+// override
+- (void)textAtrributedDidChange;
+
+@end
+
+@class TYGrowingTextView;
+@protocol GrowingTextViewDelegate <NSObject>
+
+// text height did change
+- (void)growingTextView:(TYGrowingTextView *)growingTextView didChangeTextHeight:(CGFloat)textHeight;
+
+// text did change
+- (void)growingTextViewDidChangeText:(TYGrowingTextView *)growingTextView;
+
+@end
+
+// grow height text view
+@interface TYGrowingTextView : TYTextView
+
+@property (nonatomic, weak) id<GrowingTextViewDelegate> growingTextDelegate;
+
+// placeHolder
+@property (nonatomic, weak, readonly) UILabel *placeHolderLabel;
+@property (nonatomic, assign) UIEdgeInsets placeHolderEdge;
+
+// max num line of text default 0
+@property (nonatomic, assign) NSUInteger maxNumOfLines;
+// max text length default 0
+@property (nonatomic, assign) NSInteger maxTextLength;
+
+// default NO
+@property (nonatomic, assign) BOOL fisrtCharacterIgnoreBreak;
+
 @end

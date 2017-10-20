@@ -35,9 +35,10 @@
 
 
 - (void)addTextView {
-    TYTextView *textView = [[TYTextView alloc]init];
-    textView.text = @"这种遮罩是动态的，只要输入😄😄是纯数字那么NSLayoutManager的对象就不会对其进行绘制，而用黑色的遮罩挡住。 ";
-    textView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    TYGrowingTextView *textView = [[TYGrowingTextView alloc]init];
+    textView.placeHolderLabel.text = @"请输入";
+    //textView.text = @"这种遮罩是动态的，只要输入😄😄是纯数字那么NSLayoutManager的对象就不会对其进行绘制，而用黑色的遮罩挡住。 ";
+    //textView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10);
     textView.backgroundColor = [UIColor lightGrayColor];
     [self.view addSubview:textView];
     _textView = textView;
@@ -51,14 +52,14 @@
         TYTextAttachment *attachMent = [[TYTextAttachment alloc]init];
         attachMent.size = CGSizeMake(60, 60);
         attachMent.image = [UIImage imageNamed:@"avatar"];
-        attachMent.verticalAlignment = TYAttachmentAlignmentCenter;
+        //attachMent.verticalAlignment = TYAttachmentAlignmentCenter;
         attString = [NSAttributedString attributedStringWithAttachment:attachMent];
     }else if (sender.tag == 1) {
         UISwitch *switchView = [[UISwitch alloc]init];
         TYTextAttachment *attachMent = [[TYTextAttachment alloc]init];
         attachMent.view = switchView;
         attachMent.size = switchView.bounds.size;
-        attachMent.verticalAlignment = TYAttachmentAlignmentCenter;
+        //attachMent.verticalAlignment = TYAttachmentAlignmentCenter;
         attString = [NSAttributedString attributedStringWithAttachment:attachMent];
     }
     

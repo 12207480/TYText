@@ -344,7 +344,6 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
             }
             return ;
         }
-        
         NSRange visibleRange = textRender.visibleCharacterRangeOnRender;
         for (TYTextAttachment *attachment in attachments) {
             if (NSLocationInRange(attachment.range.location, visibleRange)) {

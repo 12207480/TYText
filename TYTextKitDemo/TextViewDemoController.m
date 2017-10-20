@@ -37,11 +37,15 @@
 - (void)addTextView {
     TYTextView *textView = [[TYTextView alloc]init];
     textView.text = @"这种遮罩是动态的，只要输入😄😄是纯数字那么NSLayoutManager的对象就不会对其进行绘制，而用黑色的遮罩挡住。 ";
+    textView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10);
     textView.backgroundColor = [UIColor lightGrayColor];
     [self.view addSubview:textView];
     _textView = textView;
 }
 - (IBAction)buttonAction:(UIButton *)sender {
+    if (![_textView isFocused]) {
+        [_textView becomeFirstResponder];
+    }
     NSAttributedString *attString = nil;
     if (sender.tag == 0) {
         TYTextAttachment *attachMent = [[TYTextAttachment alloc]init];

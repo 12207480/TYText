@@ -24,6 +24,14 @@
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender {
     if (self = [super initWithFrame:frame textContainer:textRender.textContainer]) {
         self.textRender = textRender;
+        self.autocorrectionType = UITextAutocorrectionTypeNo;
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer {
+    TYTextRender *textRender = [[TYTextRender alloc]initWithTextContainer:textContainer];
+    if (self = [self initWithFrame:frame textRender:textRender]) {
     }
     return self;
 }
@@ -141,7 +149,6 @@
 
 - (void)setMaxNumOfLines:(NSUInteger)maxNumOfLines {
     _maxNumOfLines = maxNumOfLines;
-    _maxTextHeight = ceil(self.font.lineHeight * maxNumOfLines + self.textContainerInset.top + self.textContainerInset.bottom);
 }
 
 - (void)textAtrributedDidChange {

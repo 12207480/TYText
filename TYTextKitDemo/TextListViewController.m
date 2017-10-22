@@ -49,17 +49,17 @@
     NSMutableArray *textArray = [NSMutableArray array];
     NSMutableArray *renderArray = [NSMutableArray array];
     for (int i = 0; i < 200; ++i) {
-        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ᴗ❛∗)◞✺ ✺◟(∗❛ᴗ❛∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ᴗ❛∗)◞✺ ✺◟(∗❛ᴗ❛∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i%3 ? i:i*100];
+        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i%3 ? i:i*100];
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
         text.ty_font = [UIFont systemFontOfSize:10];
-        text.ty_lineSpacing = 2;
+        text.ty_lineSpacing = 0;
         //text.ty_characterSpacing = 2;
         text.ty_strokeWidth = -3;
         text.ty_strokeColor = [UIColor redColor];
-//        text.ty_lineHeightMultiple = 1;
-//        text.ty_maximumLineHeight = 15;
-//        text.ty_minimumLineHeight = 15;
+        text.ty_lineHeightMultiple = 1;
+        text.ty_maximumLineHeight = 12;
+        text.ty_minimumLineHeight = 12;
         NSShadow *shadow = [NSShadow new];
         shadow.shadowBlurRadius = 1;
         shadow.shadowColor = [UIColor redColor];
@@ -70,7 +70,6 @@
         render.lineBreakMode = NSLineBreakByTruncatingTail;
         // 优化性能 optimize performance
         render.onlySetRenderSizeWillGetTextBounds = YES;
-        render.size = [render textSizeWithRenderWidth:CGRectGetWidth(self.view.frame)];
         [textArray addObject:textStorage];
         [itemArray addObject:text];
         [renderArray addObject:render];
@@ -113,8 +112,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TYTextRender *textRender = _renderArray[indexPath.row];
-    return textRender.size.height;
+    return 32;
 }
 
 - (void)changeAsyncAction:(UIBarButtonItem *)item {

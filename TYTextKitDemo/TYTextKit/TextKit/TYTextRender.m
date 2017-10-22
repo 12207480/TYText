@@ -114,6 +114,15 @@
     }
 }
 
+- (NSInteger)numberOfLines {
+    __block NSInteger lineCount = 0;
+    NSRange glyphRange = [self visibleGlyphRange];
+    [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
+        ++lineCount;
+    }];
+    return lineCount;
+}
+
 -(CGFloat)lineFragmentPadding {
     return _textContainer.lineFragmentPadding;
 }

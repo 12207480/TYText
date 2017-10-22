@@ -42,17 +42,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat highlightBackgroudRadius;
 
 /**
- default YES, if NO every time call textStorage'attachViews will re-get attachViews.
- */
-@property (nonatomic, assign) BOOL onlySetTextStorageWillGetAttachViews;
-
-/**
- text attributed contain attachment views or layers
- */
-@property (nonatomic, strong, readonly, nullable) NSArray<TYTextAttachment *> *attachmentViews;
-@property (nonatomic, strong, readonly, nullable) NSSet<TYTextAttachment *> *attachmentViewSet;
-
-/**
  default NO,if YES, only set render size will caculate text bounds and cache
  @discussion if YES cache text bounds will optimize performance,otherwise every time you call -(CGRect)textBound will re-caculate text bound.
  */
@@ -63,6 +52,17 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion render should set size before call this, you can set onlySetRenderSizeWillGetTextBounds YES,will cahce text bounds
  */
 @property (nonatomic, assign, readonly) CGRect textBound;
+
+/**
+ default YES, if NO every time call textStorage'attachViews will re-get attachViews.
+ */
+@property (nonatomic, assign) BOOL onlySetTextStorageWillGetAttachViews;
+
+/**
+ text attributed contain attachment views or layers
+ */
+@property (nonatomic, strong, readonly, nullable) NSArray<TYTextAttachment *> *attachmentViews;
+@property (nonatomic, strong, readonly, nullable) NSSet<TYTextAttachment *> *attachmentViewSet;
 
 // initialize
 - (instancetype)initWithAttributedText:(NSAttributedString *)attributedText;
@@ -79,6 +79,11 @@ NS_ASSUME_NONNULL_BEGIN
  visible text range,must have been set render size
  */
 - (NSRange)visibleCharacterRange;
+
+/**
+ text's lines
+ */
+- (NSInteger)numberOfLines;
 
 /**
  text bound for character range,must have been set render size

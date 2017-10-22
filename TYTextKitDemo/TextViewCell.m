@@ -42,7 +42,6 @@
 }
 - (void)addUILabel {
     UILabel *label = [[UILabel alloc]init];
-    label.font = [UIFont systemFontOfSize:8];
     label.numberOfLines = 0;
     [self.contentView addSubview:label];
     _uilabel = label;

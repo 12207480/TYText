@@ -121,19 +121,22 @@
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender {
     if (self = [super initWithFrame:frame textRender:textRender]) {
         [self configureGrowingTextView];
+        
+        [self addPlaceHolderLabel];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:nil];
     }
     return self;
 }
 
 - (void)configureGrowingTextView {
+    _maxNumOfLines = 0;
+    _maxTextHeight = 0;
+    _maxTextLength = 0;
     _textDidChange = NO;
     self.scrollsToTop = NO;
     self.showsHorizontalScrollIndicator = NO;
     self.enablesReturnKeyAutomatically = YES;
-    
-    [self addPlaceHolderLabel];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:nil];
 }
 
 - (void)addPlaceHolderLabel {
@@ -149,6 +152,7 @@
 
 - (void)setMaxNumOfLines:(NSUInteger)maxNumOfLines {
     _maxNumOfLines = maxNumOfLines;
+    self.textRender.textContainer.maximumNumberOfLines = maxNumOfLines;
 }
 
 - (void)textAtrributedDidChange {
@@ -167,7 +171,7 @@
 
 - (void)textDidChange {
     // 占位文字是否显示
-    self.placeHolderLabel.hidden = self.text.length > 0;
+    self.placeHolderLabel.hidden = self.textStorage.length > 0;
         if (_fisrtCharacterIgnoreBreak && self.text.length == 1) {
             if ([self.text isEqualToString:@"\n"]) {
                 self.text = @"";
@@ -176,14 +180,23 @@
     
     if (_maxTextLength > 0) {
         // 只有当maxLength字段的值不为无穷大整型也不为0时才计算限制字符数.
-        NSString    *toBeString    = self.text;
+        NSTextStorage *toBeString    = self.textStorage;
         UITextRange *selectedRange = [self markedTextRange];
         UITextPosition *position   = [self positionFromPosition:selectedRange.start offset:0];
         if (!position) {
             if (toBeString.length > _maxTextLength) {
-                self.text = [toBeString substringToIndex:_maxTextLength]; // 截取最大限制字符数.
+                // 截取最大限制字符数
+                NSAttributedString *attStr = [toBeString attributedSubstringFromRange:NSMakeRange(0,_maxTextLength)];
+                self.textRender.textStorage = [[[self.textRender.textStorage class] alloc]initWithAttributedString:attStr];
+                if ([self.textRender.textStorage isKindOfClass:[TYTextStorage class]] && [toBeString isKindOfClass:[TYTextStorage class]]) {
+                    ((TYTextStorage *)self.textRender.textStorage).textParse = ((TYTextStorage *)toBeString).textParse;
+                }
             }
         }
+    }
+    
+    if (_maxNumOfLines > 0) {
+        
     }
     
     if ([_growingTextDelegate respondsToSelector:@selector(growingTextViewDidChangeText:)]) {
@@ -196,8 +209,8 @@
     CGFloat height = ceilf([self sizeThatFits:CGSizeMake(self.bounds.size.width, MAXFLOAT)].height);
     if (_textHeight != height) { // 高度不一样，就改变了高度
         // 最大高度，可以滚动
-        if (_maxTextHeight > 0 || _maxNumOfLines > 0) {
-            self.scrollEnabled = _maxNumOfLines > 0 && height > _maxTextHeight;
+        if (_maxTextHeight > 0) {
+            self.scrollEnabled = height > _maxTextHeight;
         }
         _textHeight = height;
         if (!self.scrollEnabled) {

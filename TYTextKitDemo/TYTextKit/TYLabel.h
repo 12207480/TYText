@@ -54,10 +54,19 @@ asynchronous display of the view's layer. default YES
 @property (nonatomic, strong, nullable) NSTextStorage *textStorage;
 
 /**
- textkit render engine
- @discussion suggest use it,will improve performance
+ textkit render engine. default nil
  */
 @property (nonatomic, strong, nullable) TYTextRender *textRender;
+
+/**
+ if you set textRender,will ignore the common propertys.defult NO
+ */
+@property (nonatomic, assign) BOOL ignoreTextRenderCommonPropertys;
+
+/**
+ text vertical alignment. default center
+ */
+@property (nonatomic, assign) TYTextVerticalAlignment verticalAlignment;
 
 
 /**

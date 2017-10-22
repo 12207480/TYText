@@ -14,14 +14,23 @@
 #import "TYLayoutManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
+    TYTextVerticalAlignmentCenter,
+    TYTextVerticalAlignmentTop,
+    TYTextVerticalAlignmentBottom,
+};
+
 @interface TYTextRender : NSObject
 
 @property (nonatomic, strong, nullable) NSTextStorage *textStorage;
 @property (nonatomic, strong, readonly) NSLayoutManager *layoutManager;
 @property (nonatomic, strong, readonly) NSTextContainer *textContainer;
 
-// textStorage will be edited, use in textView
+// use in textView,textStorage can edited
 @property (nonatomic, assign) BOOL editable;
+
+@property (nonatomic, assign) TYTextVerticalAlignment verticalAlignment;
 
 /**
  text is inset within line fragment rectangles.default 0

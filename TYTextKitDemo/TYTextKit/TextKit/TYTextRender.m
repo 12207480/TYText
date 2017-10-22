@@ -253,14 +253,22 @@
         return CGRectZero;
     }
     CGPoint textOffset = point;
-    CGRect textBounds = _textBound;
-    if (!_onlySetRenderSizeWillGetTextBounds || _editable || CGRectIsEmpty(_textBound)) {
-        textBounds = [_layoutManager boundingRectForGlyphRange:glyphRange
+    CGRect textBound = _textBound;
+    if (!_onlySetRenderSizeWillGetTextBounds || _editable || CGRectIsEmpty(textBound)) {
+        textBound = [_layoutManager boundingRectForGlyphRange:glyphRange
                                                inTextContainer:_textContainer];
     }
-    CGSize textSize = CGSizeMake(ceil(textBounds.size.width), ceil(textBounds.size.height));
-    if (point.y == 0) {
-        textOffset.y = (_textContainer.size.height - ceil(textSize.height)) / 2.0f;
+    CGSize textSize = CGSizeMake(ceil(textBound.size.width), ceil(textBound.size.height));
+    switch (_verticalAlignment) {
+        case TYTextVerticalAlignmentTop:
+            textOffset.y = point.y;
+            break;
+        case TYTextVerticalAlignmentBottom:
+            textOffset.y = (_textContainer.size.height - textSize.height);
+            break;
+        default:
+            textOffset.y = (_textContainer.size.height - textSize.height) / 2.0;
+            break;
     }
     CGRect textRect = {textOffset,textSize};
     return textRect;

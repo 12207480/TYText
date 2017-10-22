@@ -304,6 +304,9 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     NSRange highlightRange  = _highlightRange;
     TYTextHighlight *textHighlight = _textHighlight;
     
+    BOOL ignoreTextRenderCommonPropertys = _ignoreTextRenderCommonPropertys;
+    TYTextVerticalAlignment verticalAlignment = _verticalAlignment;
+    
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     // will display
     task.willDisplay = ^(CALayer * _Nonnull layer) {
@@ -326,6 +329,9 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         if (isCancelled()) return;
         if (!textRender) {
             textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
+        }
+        if (!ignoreTextRenderCommonPropertys) {
+            textRender.verticalAlignment = verticalAlignment;
         }
         textRender.size = size;
         if (isCancelled()) return;

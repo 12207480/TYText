@@ -33,6 +33,7 @@
     TYLabel *label = [[TYLabel alloc]init];
     label.backgroundColor = [UIColor lightGrayColor];
     label.text = @"这种遮罩是动态的，只要输入😄😄是纯数字那么NSLayoutManager的对象就不会对其进行绘制，而用黑色的遮罩挡住。 ";
+    label.verticalAlignment = TYTextVerticalAlignmentCenter;
     [self.view addSubview:label];
     _label = label;
 }

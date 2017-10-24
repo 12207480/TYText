@@ -65,7 +65,7 @@
         //attachMent.verticalAlignment = TYAttachmentAlignmentCenter;
         attString = [NSAttributedString attributedStringWithAttachment:attachMent];
     }
-    [_textView insertAttributedString:attString];
+    [_textView insertAttributedText:attString];
 }
 
 - (void)barItemDoneAction {

@@ -9,6 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "TYTextRender.h"
 
+@class TYTextView;
+@protocol TYTextViewDelegate <UITextViewDelegate>
+@optional
+
+- (BOOL)textView:(TYTextView *)textView shouldInsertText:(NSString *)text;
+
+- (BOOL)textView:(TYTextView *)textView shouldInsertAttributedText:(NSAttributedString *)attributedText;
+
+- (BOOL)textView:(TYTextView *)textView processEditingForTextStorage:(NSTextStorage *)textStorage edited:(NSTextStorageEditActions)editMask range:(NSRange)newCharRange changeInLength:(NSInteger)delta invalidatedRange:(NSRange)invalidatedCharRange;
+
+@end
+
 @interface TYTextView : UITextView
 
 @property (nonatomic, strong, readonly) TYTextRender *textRender;
@@ -28,7 +40,10 @@
 
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender;
 
-- (void)insertAttributedString:(NSAttributedString *)attributedString;
+/**
+ insert attributed string
+ */
+- (void)insertAttributedText:(NSAttributedString *)attributedText;
 
 // override
 - (void)textAtrributedDidChange;

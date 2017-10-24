@@ -62,23 +62,23 @@
 
 #pragma mark - public
 
-- (void)insertAttributedString:(NSAttributedString *)attString {
-    if (!attString) {
+- (void)insertAttributedText:(NSAttributedString *)attributedText {
+    if (!attributedText) {
         return;
     }
     
     if (_textRender.textStorage.length == 0 && self.textAlignment == NSTextAlignmentRight) {
-        NSMutableAttributedString *att = [attString mutableCopy];
+        NSMutableAttributedString *att = [attributedText mutableCopy];
         att.ty_alignment = self.textAlignment;
-        attString = att;
+        attributedText = att;
     }
     
     if (self.selectedRange.length > 0) {
-        [_textRender.textStorage replaceCharactersInRange:self.selectedRange withAttributedString:attString];
+        [_textRender.textStorage replaceCharactersInRange:self.selectedRange withAttributedString:attributedText];
     }else {
-        [_textRender.textStorage insertAttributedString:attString atIndex:self.selectedRange.location];
+        [_textRender.textStorage insertAttributedString:attributedText atIndex:self.selectedRange.location];
     }
-    self.selectedRange = NSMakeRange(self.selectedRange.location+attString.length, 0);
+    self.selectedRange = NSMakeRange(self.selectedRange.location+attributedText.length, 0);
 }
 
 #pragma mark - private

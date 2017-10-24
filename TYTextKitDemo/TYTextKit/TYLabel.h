@@ -47,8 +47,9 @@ asynchronous display of the view's layer. default YES
 //if set, the label ignores the common properties. see ignoreLabelCommonPropertys.
 @property (nonatomic, strong, nullable) NSAttributedString *attributedText;
 @property (nonatomic, strong, nullable) NSTextStorage *textStorage;
+
 /**
- textkit render engine. default nil,if set, the label ignores the common properties. see ignoreLabelCommonPropertys.
+ textkit render engine. default nil,if set, the label ignores the common properties. see ignoreAboveLabelRelatePropertys.
  */
 @property (nonatomic, strong, nullable) TYTextRender *textRender;
 

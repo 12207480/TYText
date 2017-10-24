@@ -41,7 +41,7 @@
 }
 
 - (void)fillBackgroundRectArray:(const CGRect *)rectArray count:(NSUInteger)rectCount forCharacterRange:(NSRange)charRange color:(UIColor *)color {
-    if (_highlightRange.length == 0 || NSIntersectionRange(_highlightRange, charRange).length != charRange.length) {
+    if (_highlightRange.length == 0 || NSIntersectionRange(_highlightRange, charRange).length > charRange.length) {
         [super fillBackgroundRectArray:rectArray count:rectCount forCharacterRange:charRange color:color];
         return;
     }
@@ -72,7 +72,7 @@
     }
     lineBounds.origin.y = startDrawY;
     lineBounds.size.height = maxLineHeight;
-    return CGRectIntersection(lineBounds, rect);
+    return UIEdgeInsetsInsetRect(CGRectIntersection(lineBounds, rect), _highlightBackgroudInset);
 }
 
 - (void)fillBackgroundRect:(CGRect)rect radius:(CGFloat)radius bgColor:(UIColor *)bgColor {

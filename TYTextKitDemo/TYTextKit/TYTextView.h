@@ -13,7 +13,22 @@
 
 @property (nonatomic, strong, readonly) TYTextRender *textRender;
 
+// text related propertys
+//super @property (nonatomic, strong. nullable) UIFont *font;
+@property (nonatomic, assign) CGFloat characterSpacing;
+@property (nonatomic, assign) CGFloat lineSpacing;
+//super @property (nonatomic, assign) NSTextAlignment textAlignment;
+@property (nonatomic, assign) NSLineBreakMode lineBreakMode;
+
+/**
+ ignore the above text related propertys. default NO
+ 忽略上面的文本相关属性设置.
+ */
+@property (nonatomic, assign) BOOL ignoreAboveTextRelatedPropertys;
+
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender;
+
+- (void)insertAttributedString:(NSAttributedString *)attributedString;
 
 // override
 - (void)textAtrributedDidChange;

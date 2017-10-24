@@ -65,7 +65,11 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 - (void)configureLabel {
     _longPressDuring = 2.0;
+    _numberOfLines = 0;
     _clearContentBeforeAsyncDisplay = YES;
+    _ignoreAboveLabelRelatePropertys = YES;
+    _textAlignment = [[[UIDevice currentDevice] systemVersion] floatValue] >= 9 ?NSTextAlignmentNatural : NSTextAlignmentLeft;
+    _lineBreakMode = NSLineBreakByTruncatingTail;
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.layer.contentsScale = ty_text_screen_scale();
@@ -89,6 +93,14 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 - (void)setDisplayNeedRedraw {
     [self.layer setNeedsDisplay];
+}
+
+- (void)displayRedrawIfNeed {
+    if (_ignoreAboveLabelRelatePropertys && !_text) {
+        return;
+    }
+    [self clearLayerContent];
+    [self setDisplayNeedRedraw];
 }
 
 - (void)immediatelyDisplayRedraw {
@@ -115,27 +127,63 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 #pragma mark - Getter && Setter
 
 - (void)setText:(NSString *)text {
+    TYAssertMainThread();
     _text = text;
-    self.attributedText = [[NSAttributedString alloc]initWithString:text];
+    _attributedText = nil;
+    _textStorage = nil;
+    [self setDisplayNeedUpdate];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
     TYAssertMainThread();
+    _text = nil;
     _attributedText = attributedText;
     [self setDisplayNeedUpdate];
 }
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
     TYAssertMainThread();
+    _text = nil;
     _textStorage = textStorage;
     [self setDisplayNeedUpdate];
 }
 
 - (void)setTextRender:(TYTextRender *)textRender {
     TYAssertMainThread();
+    _text = nil;
     _textRender = textRender;
     [self clearLayerContent];
     [self setDisplayNeedRedraw];
+}
+
+- (void)setFont:(UIFont *)font {
+    _font = font;
+    [self displayRedrawIfNeed];
+}
+
+- (void)setTextColor:(UIColor *)textColor {
+    _textColor = textColor;
+    [self displayRedrawIfNeed];
+}
+
+- (void)setShadow:(NSShadow *)shadow {
+    _shadow = shadow;
+    [self displayRedrawIfNeed];
+}
+
+- (void)setTextAlignment:(NSTextAlignment)textAlignment {
+    _textAlignment = textAlignment;
+    [self displayRedrawIfNeed];
+}
+
+- (void)setLineBreakMode:(NSLineBreakMode)lineBreakMode {
+    _lineBreakMode = lineBreakMode;
+    [self displayRedrawIfNeed];
+}
+
+- (void)setNumberOfLines:(NSInteger)numberOfLines {
+    _numberOfLines = numberOfLines;
+    [self displayRedrawIfNeed];
 }
 
 - (void)setFrame:(CGRect)frame {
@@ -159,6 +207,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 }
 
 - (void)setDelegate:(id<TYLabelDelegate>)delegate {
+    TYAssertMainThread();
     _delegate = delegate;
     _delegateFlags.didTappedTextHighlight = [delegate respondsToSelector:@selector(label:didTappedTextHighlight:)];
     _delegateFlags.didLongPressedTextHighlight = [delegate respondsToSelector:@selector(label:didLongPressedTextHighlight:)];
@@ -298,14 +347,19 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
     __block TYTextRender *textRender = _textRender;
     __block NSTextStorage *textStorage = _textStorage;
-    NSAttributedString *attributedText = _attributedText;
+    NSAttributedString *attributedText = _text ? [[NSAttributedString alloc]initWithString:_text] : _attributedText;
     NSArray *attachments = _attachments;
     
     NSRange highlightRange  = _highlightRange;
     TYTextHighlight *textHighlight = _textHighlight;
     
-    BOOL ignoreTextRenderCommonPropertys = _ignoreTextRenderCommonPropertys;
+    BOOL ignoreLabelCommonPropertys = _ignoreAboveLabelRelatePropertys && !_text;
     TYTextVerticalAlignment verticalAlignment = _verticalAlignment;
+    NSInteger numberOfLines = _numberOfLines;
+    NSLineBreakMode lineBreakMode = _lineBreakMode;
+    UIFont *font = _font;
+    UIColor *textColor = _textColor;
+    NSShadow *shadow = _shadow;
     
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     // will display
@@ -330,8 +384,19 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         if (!textRender) {
             textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
         }
-        if (!ignoreTextRenderCommonPropertys) {
+        if (!ignoreLabelCommonPropertys) {
+            if (font) {
+                textRender.textStorage.ty_font = font;
+            }
+            if (textColor) {
+                textRender.textStorage.ty_color = textColor;
+            }
+            if (shadow) {
+                textRender.textStorage.ty_shadow = shadow;
+            }
             textRender.verticalAlignment = verticalAlignment;
+            textRender.maximumNumberOfLines = numberOfLines;
+            textRender.lineBreakMode = lineBreakMode;
         }
         textRender.size = size;
         if (isCancelled()) return;

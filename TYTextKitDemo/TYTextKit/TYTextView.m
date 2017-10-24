@@ -11,7 +11,9 @@
 
 #define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
 
-@interface TYTextView ()<TYLayoutManagerEditRender>
+@interface TYTextView ()<TYLayoutManagerEditRender> {
+    UIFont *_textFont;
+}
 
 @property (nonatomic, strong) TYTextRender *textRender;
 
@@ -25,6 +27,7 @@
     if (self = [super initWithFrame:frame textContainer:textRender.textContainer]) {
         self.textRender = textRender;
         self.autocorrectionType = UITextAutocorrectionTypeNo;
+        self.text = @"";
     }
     return self;
 }
@@ -57,7 +60,39 @@
     _textRender = textRender;
 }
 
+#pragma mark - public
+
+- (void)insertAttributedString:(NSAttributedString *)attString {
+    if (!attString) {
+        return;
+    }
+    
+    if (_textRender.textStorage.length == 0 && self.textAlignment == NSTextAlignmentRight) {
+        NSMutableAttributedString *att = [attString mutableCopy];
+        att.ty_alignment = self.textAlignment;
+        attString = att;
+    }
+    
+    if (self.selectedRange.length > 0) {
+        [_textRender.textStorage replaceCharactersInRange:self.selectedRange withAttributedString:attString];
+    }else {
+        [_textRender.textStorage insertAttributedString:attString atIndex:self.selectedRange.location];
+    }
+    self.selectedRange = NSMakeRange(self.selectedRange.location+attString.length, 0);
+}
+
 #pragma mark - private
+
+- (void)ifNeedSetTextPropertys:(NSTextStorage *)textStorage {
+    if (_ignoreAboveTextRelatedPropertys) {
+        return;
+    }
+    textStorage.ty_font = self.font;
+    textStorage.ty_lineBreakMode = _lineBreakMode;
+    textStorage.ty_characterSpacing = _characterSpacing;
+    textStorage.ty_lineSpacing = _lineSpacing;
+    textStorage.ty_alignment = self.textAlignment;
+}
 
 - (void)addAttachmentViews {
     TYAssertMainThread();
@@ -91,7 +126,10 @@
 #pragma mark - TYLayoutManagerEditRender
 
 - (void)layoutManager:(TYLayoutManager *)layoutManager processEditingForTextStorage:(NSTextStorage *)textStorage edited:(NSTextStorageEditActions)editMask range:(NSRange)newCharRange changeInLength:(NSInteger)delta invalidatedRange:(NSRange)invalidatedCharRange {
+    [self ifNeedSetTextPropertys:textStorage];
+    
     [self textAtrributedDidChange];
+    
     if (delta < 0 && newCharRange.location == 0 && newCharRange.length == 0) {
         [self addAttachmentViews];
     }
@@ -121,7 +159,6 @@
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender {
     if (self = [super initWithFrame:frame textRender:textRender]) {
         [self configureGrowingTextView];
-        
         [self addPlaceHolderLabel];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:nil];
@@ -194,11 +231,7 @@
             }
         }
     }
-    
-    if (_maxNumOfLines > 0) {
-        
-    }
-    
+
     if ([_growingTextDelegate respondsToSelector:@selector(growingTextViewDidChangeText:)]) {
         [_growingTextDelegate growingTextViewDidChangeText:self];
     }
@@ -221,9 +254,21 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
+    [self layoutPlaceHolderLabel];
+}
+
+- (void)layoutPlaceHolderLabel {
     CGRect beginRect = [self caretRectForPosition:self.beginningOfDocument];
-    _placeHolderLabel.frame = CGRectMake(beginRect.origin.x + _placeHolderEdge.left, beginRect.origin.y + _placeHolderEdge.top, CGRectGetWidth(self.frame)-_placeHolderEdge.left - _placeHolderEdge.right - beginRect.origin.x - beginRect.origin.y, beginRect.size.height - _placeHolderEdge.bottom);
-    _placeHolderLabel.hidden = self.text.length > 0;
+    CGFloat orignX = _placeHolderEdge.left+self.contentInset.left+self.textRender.lineFragmentPadding;
+    CGFloat width = CGRectGetWidth(self.frame) - _placeHolderEdge.right - orignX - self.contentInset.right;
+    if (self.textAlignment == NSTextAlignmentRight) {
+        [_placeHolderLabel sizeToFit];
+        orignX = CGRectGetWidth(self.frame) - CGRectGetWidth(_placeHolderLabel.frame) - _placeHolderEdge.left - self.textRender.lineFragmentPadding - self.contentInset.left;
+        width = orignX - (CGRectGetWidth(self.frame) - orignX) - _placeHolderEdge.right - self.contentInset.right;
+    }
+    _placeHolderLabel.frame = CGRectMake(orignX, beginRect.origin.y + _placeHolderEdge.top, width, beginRect.size.height - _placeHolderEdge.bottom);
+    _placeHolderLabel.hidden = self.textStorage.length > 0;
 }
 
 - (void)dealloc {

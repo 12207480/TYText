@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, TYAttachmentAlignment) {
 NS_ASSUME_NONNULL_BEGIN
 @interface TYTextAttachment : NSTextAttachment
 
-@property (nonatomic, strong, nullable) UIImage *image;
+//super @property (nonatomic, strong, nullable) UIImage *image;
 // used in TYTextRender
 @property (nonatomic, strong, nullable) UIView *view;
 @property (nonatomic, strong, nullable) CALayer *layer;

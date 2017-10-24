@@ -141,6 +141,9 @@
     return _textContainer.maximumNumberOfLines;
 }
 - (void)setMaximumNumberOfLines:(NSUInteger)maximumNumberOfLines {
+    if (_textContainer.maximumNumberOfLines == maximumNumberOfLines) {
+        return;
+    }
     _textContainer.maximumNumberOfLines = maximumNumberOfLines;
 }
 
@@ -148,6 +151,13 @@
     _highlightBackgroudRadius = highlightBackgroudRadius;
     if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
         ((TYLayoutManager *)_layoutManager).highlightBackgroudRadius = highlightBackgroudRadius;
+    }
+}
+
+- (void)setHighlightBackgroudInset:(UIEdgeInsets)highlightBackgroudInset {
+    _highlightBackgroudInset = highlightBackgroudInset;
+    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
+        ((TYLayoutManager *)_layoutManager).highlightBackgroudInset = highlightBackgroudInset;
     }
 }
 
@@ -278,10 +288,10 @@
 {
     // calculate the offset of the text in the view
     NSRange glyphRange = [self visibleGlyphRange];
-    CGRect textRect = [self textRectForGlyphRange:glyphRange atPiont:point];
-    CGPoint positon = textRect.origin;
     _visibleCharacterRangeOnRender = [_layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
-    _textRectOnRender = textRect;
+    _textRectOnRender = [self textRectForGlyphRange:glyphRange atPiont:point];
+    CGPoint positon = _textRectOnRender.origin;
+    
     // drawing text
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
         [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:positon];

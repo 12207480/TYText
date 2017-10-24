@@ -24,5 +24,6 @@
 @property (nonatomic, assign) NSRange highlightRange;
 
 @property (nonatomic, assign) CGFloat highlightBackgroudRadius;
+@property (nonatomic, assign) UIEdgeInsets highlightBackgroudInset;
 
 @end

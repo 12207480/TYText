@@ -37,9 +37,12 @@
 - (void)addTextView {
     TYGrowingTextView *textView = [[TYGrowingTextView alloc]init];
     textView.placeHolderLabel.text = @"请输入";
-    //textView.text = @"这种遮罩是动态的，只要输入😄😄是纯数字那么NSLayoutManager的对象就不会对其进行绘制，而用黑色的遮罩挡住。 ";
+//    textView.text = @"这种遮罩是动态的，只要输入😄😄是纯数字那么NSLayoutManager的对象就不会对其进行绘制，而用黑色的遮罩挡住。";
     //textView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    textView.font = [UIFont systemFontOfSize:18];
     textView.backgroundColor = [UIColor lightGrayColor];
+    textView.lineBreakMode = NSLineBreakByCharWrapping;
+    //textView.textAlignment = NSTextAlignmentRight;
     [self.view addSubview:textView];
     _textView = textView;
 }
@@ -62,13 +65,7 @@
         //attachMent.verticalAlignment = TYAttachmentAlignmentCenter;
         attString = [NSAttributedString attributedStringWithAttachment:attachMent];
     }
-    
-    if (_textView.selectedRange.length > 0) {
-        [_textView.textStorage replaceCharactersInRange:_textView.selectedRange withAttributedString:attString];
-    }else {
-        [_textView.textStorage insertAttributedString:attString atIndex:_textView.selectedRange.location];
-    }
-    _textView.selectedRange = NSMakeRange(_textView.selectedRange.location+attString.length, 0);
+    [_textView insertAttributedString:attString];
 }
 
 - (void)barItemDoneAction {

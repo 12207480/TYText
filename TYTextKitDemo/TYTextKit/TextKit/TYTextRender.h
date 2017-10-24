@@ -30,25 +30,24 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
 // use in textView,textStorage can edited
 @property (nonatomic, assign) BOOL editable;
 
-@property (nonatomic, assign) TYTextVerticalAlignment verticalAlignment;
-
-/**
- text is inset within line fragment rectangles.default 0
- */
-@property (nonatomic, assign) CGFloat lineFragmentPadding;
-@property (nonatomic, assign) NSLineBreakMode lineBreakMode;
-@property (nonatomic, assign) NSUInteger maximumNumberOfLines;
-
 /**
  render size
  */
 @property (nonatomic, assign) CGSize size;
 
 /**
- text highlight background corner radius. default 4.0
- @discussion only support TYLayoutManager
+ text vertical alignment. default center
  */
-@property (nonatomic, assign) CGFloat highlightBackgroudRadius;
+@property (nonatomic, assign) TYTextVerticalAlignment verticalAlignment;
+
+// text is inset within line fragment rectangles.default 0
+@property (nonatomic, assign) CGFloat lineFragmentPadding;
+@property (nonatomic, assign) NSLineBreakMode lineBreakMode;
+@property (nonatomic, assign) NSUInteger maximumNumberOfLines;
+
+// text highlight. support TYLayoutManager
+@property (nonatomic, assign) CGFloat highlightBackgroudRadius;// default 4.0
+@property (nonatomic, assign) UIEdgeInsets highlightBackgroudInset;// default zero
 
 /**
  default NO,if YES, only set render size will caculate text bounds and cache
@@ -58,7 +57,7 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
 
 /**
  visible text bound
- @discussion render should set size before call this, you can set onlySetRenderSizeWillGetTextBounds YES,will cahce text bounds
+ @discussion render should set size before call this, you can set onlySetRenderSizeWillGetTextBounds YES, will cahce text bounds
  */
 @property (nonatomic, assign, readonly) CGRect textBound;
 
@@ -66,7 +65,6 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
  default YES, if NO every time call textStorage'attachViews will re-get attachViews.
  */
 @property (nonatomic, assign) BOOL onlySetTextStorageWillGetAttachViews;
-
 /**
  text attributed contain attachment views or layers
  */
@@ -131,6 +129,9 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
  */
 - (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range;
 
+/**
+ draw text at point
+ */
 - (void)drawTextAtPoint:(CGPoint)point isCanceled:(BOOL (^__nullable)(void))isCanceled;
 
 @end

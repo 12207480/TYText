@@ -76,6 +76,9 @@
 #pragma mark - public
 
 - (void)insertText:(NSString *)text {
+    if (!text) {
+        return;
+    }
     if (_delegateFlags.shouldInsertText && ![((id<TYTextViewDelegate>)self.delegate) textView:self shouldInsertText:text]) {
         return;
     }
@@ -86,11 +89,9 @@
     if (!attributedText) {
         return;
     }
-    
     if (_delegateFlags.shouldInsertAttributedText && ![((id<TYTextViewDelegate>)self.delegate) textView:self shouldInsertAttributedText:attributedText]) {
         return;
     }
-
     if (attributedText.length == 1 && [attributedText.string isEqualToString:@"\U0000FFFC"]) {
         // fixed textAttachment's font and textAlignment
         NSMutableAttributedString *att = [attributedText mutableCopy];
@@ -98,7 +99,6 @@
         att.ty_font = self.font;
         attributedText = att;
     }
-    
     if (self.selectedRange.length > 0) {
         [_textRender.textStorage replaceCharactersInRange:self.selectedRange withAttributedString:attributedText];
     }else {

@@ -18,6 +18,8 @@
 
 @end
 
+#define kCellHight 32
+
 @implementation TextListViewController
 
 - (void)viewDidLoad {
@@ -52,7 +54,7 @@
         NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i%3 ? i:i*100];
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
-        text.ty_font = [UIFont systemFontOfSize:10];
+        text.ty_font = [UIFont italicSystemFontOfSize:10];
         text.ty_lineSpacing = 0;
         //text.ty_characterSpacing = 2;
         text.ty_strokeWidth = -3;
@@ -67,9 +69,9 @@
         //text.ty_shadow = shadow;
         NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:text];
         TYTextRender *render = [[TYTextRender alloc]initWithTextStorage:textStorage];
-        render.lineBreakMode = NSLineBreakByTruncatingTail;
-        // 优化性能 optimize performance
+        // optimize performance
         render.onlySetRenderSizeWillGetTextBounds = YES;
+        render.size = CGSizeMake(CGRectGetWidth(self.view.frame), kCellHight);
         [textArray addObject:textStorage];
         [itemArray addObject:text];
         [renderArray addObject:render];
@@ -112,7 +114,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 32;
+    return kCellHight;
 }
 
 - (void)changeAsyncAction:(UIBarButtonItem *)item {

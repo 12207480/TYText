@@ -7,9 +7,6 @@
 //
 
 #import "TYTextView.h"
-#import <pthread.h>
-
-#define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
 
 @interface TYTextView ()<TYLayoutManagerEditRender> {
     struct {
@@ -124,7 +121,6 @@
 }
 
 - (void)addAttachmentViews {
-    TYAssertMainThread();
     NSArray *attachments = _textRender.attachmentViews;
     if (!_attachments && !attachments) {
         return;

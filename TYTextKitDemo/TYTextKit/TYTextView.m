@@ -12,12 +12,19 @@
 #define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
 
 @interface TYTextView ()<TYLayoutManagerEditRender> {
-    UIFont *_textFont;
+    struct {
+        unsigned int shouldInsertText : 1;
+        unsigned int shouldInsertAttributedText : 1;
+        unsigned int processEditingForTextStorage : 1;
+    }_delegateFlags;
 }
 
 @property (nonatomic, strong) TYTextRender *textRender;
 
 @property (nonatomic, strong) NSArray *attachments;
+
+// override
+- (void)textAtrributedDidChange;
 
 @end
 
@@ -45,6 +52,8 @@
     return self;
 }
 
+#pragma mark - getter && setter
+
 - (TYTextRender *)defaultTextRender {
     NSTextStorage *textStorage = [[TYTextStorage alloc]init];
     TYTextRender *textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
@@ -60,15 +69,33 @@
     _textRender = textRender;
 }
 
+- (void)setDelegate:(id<UITextViewDelegate>)delegate {
+    [super setDelegate:delegate];
+    _delegateFlags.shouldInsertText = [delegate respondsToSelector:@selector(textView:shouldInsertText:)];
+    _delegateFlags.shouldInsertAttributedText = [delegate respondsToSelector:@selector(textView:shouldInsertAttributedText:)];
+    _delegateFlags.processEditingForTextStorage = [delegate respondsToSelector:@selector(textView:processEditingForTextStorage:edited:range:changeInLength:invalidatedRange:)];
+}
+
 #pragma mark - public
+
+- (void)insertText:(NSString *)text {
+    if (_delegateFlags.shouldInsertText && ![((id<TYTextViewDelegate>)self.delegate) textView:self shouldInsertText:text]) {
+        return;
+    }
+    [super insertText:text];
+}
 
 - (void)insertAttributedText:(NSAttributedString *)attributedText {
     if (!attributedText) {
         return;
     }
+    
+    if (_delegateFlags.shouldInsertAttributedText && ![((id<TYTextViewDelegate>)self.delegate) textView:self shouldInsertAttributedText:attributedText]) {
+        return;
+    }
 
     if (attributedText.length == 1 && [attributedText.string isEqualToString:@"\U0000FFFC"]) {
-        // fixed NSTextAttachment's font and textAlignment
+        // fixed textAttachment's font and textAlignment
         NSMutableAttributedString *att = [attributedText mutableCopy];
         att.ty_alignment = self.textAlignment;
         att.ty_font = self.font;
@@ -135,6 +162,10 @@
     if (delta < 0 && newCharRange.location == 0 && newCharRange.length == 0) {
         [self addAttachmentViews];
     }
+    
+    if (_delegateFlags.processEditingForTextStorage) {
+        [((id<TYTextViewDelegate>)self.delegate) textView:self processEditingForTextStorage:textStorage edited:editMask range:newCharRange changeInLength:delta invalidatedRange:invalidatedCharRange];
+    }
 }
 
 - (void)layoutManager:(TYLayoutManager *)layoutManager drawGlyphsForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin {
@@ -161,6 +192,7 @@
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender {
     if (self = [super initWithFrame:frame textRender:textRender]) {
         [self configureGrowingTextView];
+        
         [self addPlaceHolderLabel];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:nil];
@@ -188,6 +220,14 @@
 }
 
 #pragma mark - getter && setter
+
+- (void)setTextAlignment:(NSTextAlignment)textAlignment {
+    BOOL change = self.textAlignment == textAlignment;
+    [super setTextAlignment:textAlignment];
+    if (change && self.superview) {
+        [self setNeedsLayout];
+    }
+}
 
 - (void)setMaxNumOfLines:(NSUInteger)maxNumOfLines {
     _maxNumOfLines = maxNumOfLines;
@@ -257,14 +297,13 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    [self layoutPlaceHolderLabel];
-}
-
-- (void)layoutPlaceHolderLabel {
+    // placeHolderLabel
+    CGFloat orignX, width;
     CGRect beginRect = [self caretRectForPosition:self.beginningOfDocument];
-    CGFloat orignX = _placeHolderEdge.left+self.contentInset.left+self.textRender.lineFragmentPadding;
-    CGFloat width = CGRectGetWidth(self.frame) - _placeHolderEdge.right - orignX - self.contentInset.right;
-    if (self.textAlignment == NSTextAlignmentRight) {
+    if (self.textAlignment != NSTextAlignmentRight) {
+        orignX = _placeHolderEdge.left+self.contentInset.left+self.textRender.lineFragmentPadding;
+        width = CGRectGetWidth(self.frame) - _placeHolderEdge.right - orignX - self.contentInset.right;
+    }else {
         [_placeHolderLabel sizeToFit];
         orignX = CGRectGetWidth(self.frame) - CGRectGetWidth(_placeHolderLabel.frame) - _placeHolderEdge.left - self.textRender.lineFragmentPadding - self.contentInset.left;
         width = orignX - (CGRectGetWidth(self.frame) - orignX) - _placeHolderEdge.right - self.contentInset.right;

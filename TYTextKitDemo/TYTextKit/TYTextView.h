@@ -40,12 +40,13 @@
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender;
 
 /**
- insert attributed string
+ insert a character into the displayed text.
+ */
+- (void)insertText:(NSString *)text;
+/**
+ insert attributed string into the displayed text.
  */
 - (void)insertAttributedText:(NSAttributedString *)attributedText;
-
-// override
-- (void)textAtrributedDidChange;
 
 @end
 

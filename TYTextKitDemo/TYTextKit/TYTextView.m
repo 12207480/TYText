@@ -66,10 +66,12 @@
     if (!attributedText) {
         return;
     }
-    
-    if (_textRender.textStorage.length == 0 && self.textAlignment == NSTextAlignmentRight) {
+
+    if (attributedText.length == 1 && [attributedText.string isEqualToString:@"\U0000FFFC"]) {
+        // fixed NSTextAttachment's font and textAlignment
         NSMutableAttributedString *att = [attributedText mutableCopy];
         att.ty_alignment = self.textAlignment;
+        att.ty_font = self.font;
         attributedText = att;
     }
     
@@ -87,7 +89,7 @@
     if (_ignoreAboveTextRelatedPropertys) {
         return;
     }
-    textStorage.ty_font = self.font;
+    //textStorage.ty_font = self.font;
     textStorage.ty_lineBreakMode = _lineBreakMode;
     textStorage.ty_characterSpacing = _characterSpacing;
     textStorage.ty_lineSpacing = _lineSpacing;

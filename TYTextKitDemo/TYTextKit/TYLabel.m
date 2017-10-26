@@ -227,10 +227,10 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 - (TYTextHighlight *)textHighlightForPoint:(CGPoint)point effectiveRange:(NSRangePointer)range {
     NSInteger index = [_textRenderOnDisplay characterIndexForPoint:point];
-    if (index >= 0) {
-        return [_textRenderOnDisplay.textStorage textHighlightAtIndex:index effectiveRange:range];
+    if (index < 0) {
+        return nil;
     }
-    return nil;
+    return [_textRenderOnDisplay.textStorage textHighlightAtIndex:index effectiveRange:range];
 }
 
 #pragma mark - LongPress timer

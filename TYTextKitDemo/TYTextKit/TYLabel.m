@@ -171,6 +171,16 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     [self displayRedrawIfNeed];
 }
 
+- (void)setCharacterSpacing:(CGFloat)characterSpacing {
+    _characterSpacing = characterSpacing;
+    [self displayRedrawIfNeed];
+}
+
+- (void)setLineSpacing:(CGFloat)lineSpacing {
+    _lineSpacing = lineSpacing;
+    [self displayRedrawIfNeed];
+}
+
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     _textAlignment = textAlignment;
     [self displayRedrawIfNeed];
@@ -357,6 +367,8 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     TYTextVerticalAlignment verticalAlignment = _verticalAlignment;
     NSInteger numberOfLines = _numberOfLines;
     NSLineBreakMode lineBreakMode = _lineBreakMode;
+    CGFloat characterSpacing = _characterSpacing;
+    CGFloat lineSpacing = _lineSpacing;
     UIFont *font = _font;
     UIColor *textColor = _textColor;
     NSShadow *shadow = _shadow;
@@ -394,6 +406,8 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
             if (shadow) {
                 textRender.textStorage.ty_shadow = shadow;
             }
+            textRender.textStorage.ty_characterSpacing = characterSpacing;
+            textRender.textStorage.ty_lineSpacing = lineSpacing;
             textRender.verticalAlignment = verticalAlignment;
             textRender.maximumNumberOfLines = numberOfLines;
             textRender.lineBreakMode = lineBreakMode;

@@ -9,5 +9,7 @@
 #ifndef TYTextKit_h
 #define TYTextKit_h
 
+#import "TYLabel.h"
+#import "TYTextView.h"
 
 #endif /* TYTextKit_h */

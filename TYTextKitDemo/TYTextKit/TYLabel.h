@@ -53,10 +53,12 @@ asynchronous display of the view's layer. default YES
  */
 @property (nonatomic, strong, nullable) TYTextRender *textRender;
 
-@property (nonatomic, strong, nullable) UIFont *font;       // default nil (17 system font)
-@property (nonatomic, strong, nullable) UIColor *textColor; // default nil
-@property (nonatomic, strong, nullable) NSShadow *shadow;   // default nil
+@property (nonatomic, strong, nullable) UIFont      *font;       // default nil (17 system font)
+@property (nonatomic, strong, nullable) UIColor     *textColor; // default nil
+@property (nonatomic, strong, nullable) NSShadow    *shadow;   // default nil
 
+@property (nonatomic, assign) CGFloat            characterSpacing;
+@property (nonatomic, assign) CGFloat            lineSpacing;
 @property (nonatomic, assign) NSTextAlignment    textAlignment;   // default is NSTextAlignmentNatural (before iOS 9, the default was NSTextAlignmentLeft)
 @property (nonatomic, assign) NSLineBreakMode    lineBreakMode;   // default is NSLineBreakByTruncatingTail. used for single and multiple lines of text
 

@@ -31,7 +31,6 @@
     if (self = [super initWithFrame:frame textContainer:textRender.textContainer]) {
         self.textRender = textRender;
         self.autocorrectionType = UITextAutocorrectionTypeNo;
-        self.text = @"";
     }
     return self;
 }
@@ -109,11 +108,10 @@
 
 #pragma mark - private
 
-- (void)ifNeedSetTextPropertys:(NSTextStorage *)textStorage {
+- (void)configireTextSorage:(NSTextStorage *)textStorage {
     if (_ignoreAboveTextRelatedPropertys) {
         return;
     }
-    //textStorage.ty_font = self.font;
     textStorage.ty_lineBreakMode = _lineBreakMode;
     textStorage.ty_characterSpacing = _characterSpacing;
     textStorage.ty_lineSpacing = _lineSpacing;
@@ -151,14 +149,12 @@
 #pragma mark - TYLayoutManagerEditRender
 
 - (void)layoutManager:(TYLayoutManager *)layoutManager processEditingForTextStorage:(NSTextStorage *)textStorage edited:(NSTextStorageEditActions)editMask range:(NSRange)newCharRange changeInLength:(NSInteger)delta invalidatedRange:(NSRange)invalidatedCharRange {
-    [self ifNeedSetTextPropertys:textStorage];
-    
+    [self configireTextSorage:textStorage];
     [self textAtrributedDidChange];
     
     if (delta < 0 && newCharRange.location == 0 && newCharRange.length == 0) {
         [self addAttachmentViews];
     }
-    
     if (_delegateFlags.processEditingForTextStorage) {
         [((id<TYTextViewDelegate>)self.delegate) textView:self processEditingForTextStorage:textStorage edited:editMask range:newCharRange changeInLength:delta invalidatedRange:invalidatedCharRange];
     }

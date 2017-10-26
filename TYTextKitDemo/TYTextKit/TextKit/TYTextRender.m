@@ -17,8 +17,6 @@
     NSSet *_attachmentViewSet;
 }
 
-@property (nonatomic, weak) UIView *renderView;
-
 @property (nonatomic, strong) NSLayoutManager *layoutManager;
 @property (nonatomic, strong) NSTextContainer *textContainer;
 @property (nonatomic, strong) NSTextStorage *textStorageOnRender;
@@ -280,8 +278,9 @@
             textOffset.y = (_textContainer.size.height - textSize.height) / 2.0;
             break;
     }
-    CGRect textRect = {textOffset,textSize};
-    return textRect;
+    textBound.origin = textOffset;
+    textBound.size = textSize;
+    return textBound;
 }
 
 - (void)drawTextAtPoint:(CGPoint)point isCanceled:(BOOL (^)(void))isCanceled

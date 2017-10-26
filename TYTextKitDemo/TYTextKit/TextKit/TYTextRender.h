@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NSAttributedString+TYTextKit.h"
 #import "TYTextStorage.h"
 #import "TYTextAttachment.h"
 #import "TYTextAttribute.h"
 #import "TYLayoutManager.h"
+#import "NSAttributedString+TYTextKit.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

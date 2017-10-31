@@ -51,7 +51,7 @@
     NSMutableArray *textArray = [NSMutableArray array];
     NSMutableArray *renderArray = [NSMutableArray array];
     for (int i = 0; i < 200; ++i) {
-        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ัᴗ❛ั∗)◞✺ ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i%3 ? i:i*100];
+        NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(❛ัᴗ❛∗)◞✺ ✺◟(∗❛ᴗ❛∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ᴗ❛∗)◞✺ ✺◟(∗❛ᴗ❛∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i%3 ? i:i*100];
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
         text.ty_font = [UIFont italicSystemFontOfSize:10];
@@ -76,9 +76,9 @@
         [itemArray addObject:text];
         [renderArray addObject:render];
     }
-    _itemArray = [itemArray copy];
-    _textArray = [textArray copy];
-    _renderArray = [renderArray copy];
+    _itemArray = itemArray;
+    _textArray = textArray;
+    _renderArray = renderArray;
      CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
     NSLog(@"useed time %.2f",end - begin);
     [self.tableView reloadData];

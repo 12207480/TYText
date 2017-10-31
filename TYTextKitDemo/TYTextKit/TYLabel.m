@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     }_delegateFlags;
 }
 
+@property (nonatomic, strong) NSTextStorage *textStorageOnRender;
 @property (nonatomic, strong) TYTextRender *textRenderOnDisplay;
 
 @property (nonatomic, strong) NSArray *attachments;
@@ -67,9 +68,11 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     _longPressDuring = 2.0;
     _numberOfLines = 0;
     _clearContentBeforeAsyncDisplay = YES;
-    _ignoreAboveLabelRelatePropertys = YES;
+    _ignoreAboveAtrributedRelatePropertys = YES;
+    _ignoreAboveRenderRelatePropertys = YES;
     _textAlignment = [[[UIDevice currentDevice] systemVersion] floatValue] >= 9 ?NSTextAlignmentNatural : NSTextAlignmentLeft;
     _lineBreakMode = NSLineBreakByTruncatingTail;
+    _verticalAlignment = TYTextVerticalAlignmentCenter;
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.layer.contentsScale = ty_text_screen_scale();
@@ -96,9 +99,6 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 }
 
 - (void)displayRedrawIfNeed {
-    if (_ignoreAboveLabelRelatePropertys && !_text) {
-        return;
-    }
     [self clearLayerContent];
     [self setDisplayNeedRedraw];
 }
@@ -129,6 +129,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 - (void)setText:(NSString *)text {
     TYAssertMainThread();
     _text = text;
+    _textStorageOnRender = [[NSTextStorage alloc]initWithString:text];
     _attributedText = nil;
     _textStorage = nil;
     [self setDisplayNeedUpdate];
@@ -136,63 +137,98 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
     TYAssertMainThread();
-    _text = nil;
     _attributedText = attributedText;
+    _textStorageOnRender = [[NSTextStorage alloc]initWithAttributedString:attributedText];
+    _text = nil;
     [self setDisplayNeedUpdate];
 }
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
     TYAssertMainThread();
-    _text = nil;
     _textStorage = textStorage;
+    _textStorageOnRender = textStorage;
+    _text = nil;
     [self setDisplayNeedUpdate];
 }
 
 - (void)setTextRender:(TYTextRender *)textRender {
     TYAssertMainThread();
-    _text = nil;
     _textRender = textRender;
+    _textStorageOnRender = textRender.textStorage;
+    _text = nil;
     [self clearLayerContent];
     [self setDisplayNeedRedraw];
 }
 
 - (void)setFont:(UIFont *)font {
     _font = font;
+    if (_ignoreAboveAtrributedRelatePropertys && !_text) {
+        return;
+    }
     [self displayRedrawIfNeed];
 }
 
 - (void)setTextColor:(UIColor *)textColor {
     _textColor = textColor;
+    if (_ignoreAboveAtrributedRelatePropertys && !_text) {
+        return;
+    }
     [self displayRedrawIfNeed];
 }
 
 - (void)setShadow:(NSShadow *)shadow {
     _shadow = shadow;
+    if (_ignoreAboveAtrributedRelatePropertys && !_text) {
+        return;
+    }
     [self displayRedrawIfNeed];
 }
 
 - (void)setCharacterSpacing:(CGFloat)characterSpacing {
     _characterSpacing = characterSpacing;
+    if (_ignoreAboveAtrributedRelatePropertys && !_text) {
+        return;
+    }
     [self displayRedrawIfNeed];
 }
 
 - (void)setLineSpacing:(CGFloat)lineSpacing {
     _lineSpacing = lineSpacing;
+    if (_ignoreAboveAtrributedRelatePropertys && !_text) {
+        return;
+    }
     [self displayRedrawIfNeed];
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     _textAlignment = textAlignment;
+    if (_ignoreAboveAtrributedRelatePropertys && !_text) {
+        return;
+    }
     [self displayRedrawIfNeed];
 }
 
 - (void)setLineBreakMode:(NSLineBreakMode)lineBreakMode {
     _lineBreakMode = lineBreakMode;
+    if (_ignoreAboveRenderRelatePropertys && _textRender) {
+        return;
+    }
     [self displayRedrawIfNeed];
 }
 
 - (void)setNumberOfLines:(NSInteger)numberOfLines {
     _numberOfLines = numberOfLines;
+    if (_ignoreAboveRenderRelatePropertys && _textRender) {
+        return;
+    }
+    [self displayRedrawIfNeed];
+}
+
+- (void)setVerticalAlignment:(TYTextVerticalAlignment)verticalAlignment {
+    _verticalAlignment = verticalAlignment;
+    if (_ignoreAboveRenderRelatePropertys && _textRender) {
+        return;
+    }
     [self displayRedrawIfNeed];
 }
 
@@ -356,17 +392,18 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
     __block TYTextRender *textRender = _textRender;
-    __block NSTextStorage *textStorage = _textStorage;
-    NSAttributedString *attributedText = _text ? [[NSAttributedString alloc]initWithString:_text] : _attributedText;
+    __block NSTextStorage *textStorage = _textStorageOnRender;
     NSArray *attachments = _attachments;
     
     NSRange highlightRange  = _highlightRange;
     TYTextHighlight *textHighlight = _textHighlight;
     
-    BOOL ignoreLabelCommonPropertys = _ignoreAboveLabelRelatePropertys && !_text;
+    BOOL ignoreAboveAtrributedRelatePropertys = _ignoreAboveAtrributedRelatePropertys && !_text;
+    BOOL ignoreAboveRenderRelatePropertys = _ignoreAboveRenderRelatePropertys && textRender;
     TYTextVerticalAlignment verticalAlignment = _verticalAlignment;
     NSInteger numberOfLines = _numberOfLines;
     NSLineBreakMode lineBreakMode = _lineBreakMode;
+    NSTextAlignment textAlignment = _textAlignment;
     CGFloat characterSpacing = _characterSpacing;
     CGFloat lineSpacing = _lineSpacing;
     UIFont *font = _font;
@@ -389,25 +426,26 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     };
     
     task.displaying = ^(CGContextRef  _Nonnull context, CGSize size, BOOL isAsynchronously, BOOL (^ _Nonnull isCancelled)(void)) {
-        if (!textRender && !textStorage) {
-             textRender = [[TYTextRender alloc]initWithAttributedText:attributedText];
+        if (!ignoreAboveAtrributedRelatePropertys) {
+            if (font) {
+                textStorage.ty_font = font;
+            }
+            if (textColor) {
+                textStorage.ty_color = textColor;
+            }
+            if (shadow) {
+                textStorage.ty_shadow = shadow;
+            }
+            textStorage.ty_alignment = textAlignment;
+            textStorage.ty_characterSpacing = characterSpacing;
+            textStorage.ty_lineSpacing = lineSpacing;
         }
-        if (isCancelled()) return;
+        
         if (!textRender) {
             textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
         }
-        if (!ignoreLabelCommonPropertys) {
-            if (font) {
-                textRender.textStorage.ty_font = font;
-            }
-            if (textColor) {
-                textRender.textStorage.ty_color = textColor;
-            }
-            if (shadow) {
-                textRender.textStorage.ty_shadow = shadow;
-            }
-            textRender.textStorage.ty_characterSpacing = characterSpacing;
-            textRender.textStorage.ty_lineSpacing = lineSpacing;
+        
+        if (!ignoreAboveRenderRelatePropertys) {
             textRender.verticalAlignment = verticalAlignment;
             textRender.maximumNumberOfLines = numberOfLines;
             textRender.lineBreakMode = lineBreakMode;

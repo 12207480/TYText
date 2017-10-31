@@ -56,24 +56,20 @@ asynchronous display of the view's layer. default YES
 @property (nonatomic, strong, nullable) UIFont      *font;       // default nil (17 system font)
 @property (nonatomic, strong, nullable) UIColor     *textColor; // default nil
 @property (nonatomic, strong, nullable) NSShadow    *shadow;   // default nil
-
+@property (nonatomic, assign) NSTextAlignment    textAlignment;   // default is NSTextAlignmentNatural (before iOS 9, the default was NSTextAlignmentLeft)
 @property (nonatomic, assign) CGFloat            characterSpacing;// deault 0
 @property (nonatomic, assign) CGFloat            lineSpacing;     // deault 0
-@property (nonatomic, assign) NSTextAlignment    textAlignment;   // default is NSTextAlignmentNatural (before iOS 9, the default was NSTextAlignmentLeft)
+//  if you set attributedText&&textStorage&&textRender,will ignore above atrributed relate propertys.defult YES
+@property (nonatomic, assign) BOOL ignoreAboveAtrributedRelatePropertys;
+
 @property (nonatomic, assign) NSLineBreakMode    lineBreakMode;   // default is NSLineBreakByTruncatingTail. used for single and multiple lines of text
-
-// text vertical alignment. default center
-@property (nonatomic, assign) TYTextVerticalAlignment verticalAlignment;
-
+@property (nonatomic, assign) TYTextVerticalAlignment verticalAlignment; // text vertical alignment. default center
 // A value of 0 means no limit.default 0
 // if the height of the text reaches the # of lines or the height of the view is less than the # of lines allowed, the text will be
 // truncated using the line break mode.
 @property (nonatomic, assign) NSInteger numberOfLines;
-
-/**
- if you set textRender,will ignore above label relate propertys.defult YES
- */
-@property (nonatomic, assign) BOOL ignoreAboveLabelRelatePropertys;
+//  if you set textRender,will ignore above label relate propertys.defult YES
+@property (nonatomic, assign) BOOL ignoreAboveRenderRelatePropertys;
 
 /**
  user long press during time will call delegate. default 2.0

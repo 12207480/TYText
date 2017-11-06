@@ -105,8 +105,7 @@
     if (!CGSizeEqualToSize(_textContainer.size, size)) {
         _textContainer.size = size;
         if (_onlySetRenderSizeWillGetTextBounds && !_editable) {
-            _textBound =  [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
-                                                    inTextContainer:_textContainer];
+            _textBound =  [self boundingRectForGlyphRange:[self visibleGlyphRange]];
         }
     }
 }
@@ -195,8 +194,7 @@
 
 - (CGRect)boundingRectForCharacterRange:(NSRange)characterRange {
     NSRange glyphRange = [_layoutManager glyphRangeForCharacterRange:characterRange actualCharacterRange:nil];
-    return [_layoutManager boundingRectForGlyphRange:glyphRange
-                                     inTextContainer:_textContainer];
+    return [self boundingRectForGlyphRange:glyphRange];
 }
 
 - (CGRect)boundingRectForGlyphRange:(NSRange)glyphRange {
@@ -208,15 +206,13 @@
     if (_onlySetRenderSizeWillGetTextBounds && !CGRectIsEmpty(_textBound) && !_editable) {
         return _textBound;
     }
-    return [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
-                                     inTextContainer:_textContainer];
+    return [self boundingRectForGlyphRange:[self visibleGlyphRange]];
 }
 
 - (CGSize)textSizeWithRenderWidth:(CGFloat)renderWidth {
     CGSize size = _textContainer.size;
     _textContainer.size = CGSizeMake(renderWidth, MAXFLOAT);
-    CGSize textSize = [_layoutManager boundingRectForGlyphRange:[self visibleGlyphRange]
-                                            inTextContainer:_textContainer].size;
+    CGSize textSize = [self boundingRectForGlyphRange:[self visibleGlyphRange]].size;
     _textContainer.size = size;
     return CGSizeMake(ceil(textSize.width), ceil(textSize.height));
 }
@@ -263,8 +259,7 @@
     CGPoint textOffset = point;
     CGRect textBound = _textBound;
     if (!_onlySetRenderSizeWillGetTextBounds || _editable || CGRectIsEmpty(textBound)) {
-        textBound = [_layoutManager boundingRectForGlyphRange:glyphRange
-                                               inTextContainer:_textContainer];
+        textBound = [self boundingRectForGlyphRange:glyphRange];
     }
     CGSize textSize = CGSizeMake(ceil(textBound.size.width), ceil(textBound.size.height));
     switch (_verticalAlignment) {

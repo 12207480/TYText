@@ -66,7 +66,7 @@
     attachment.image = [UIImage imageNamed:@"avatar"];
     attachment.bounds = CGRectMake(0, 0, 60, 60);
     //attachment.verticalAlignment = TYAttachmentAlignmentCenter;
-    //[text insertAttributedString:[NSAttributedString attributedStringWithAttachment:attachment] atIndex:text.length/2];
+    [text insertAttributedString:[NSAttributedString attributedStringWithAttachment:attachment] atIndex:text.length/2];
     attachment = [[TYTextAttachment alloc]init];
     attachment.image = [UIImage imageNamed:@"avatar"];
     attachment.size = CGSizeMake(20, 20);
@@ -77,7 +77,7 @@
     [button setTitle:@"button" forState:UIControlStateNormal];
     attachmentView.view = button;
     attachmentView.view.backgroundColor = [UIColor redColor];
-    attachmentView.size = CGSizeMake(60, 10);
+    attachmentView.size = CGSizeMake(60, 20);
     attachmentView.verticalAlignment = TYAttachmentAlignmentCenter;
     [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
     text.ty_font = [UIFont systemFontOfSize:15];

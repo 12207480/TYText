@@ -96,6 +96,7 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
  text bound for character range,must have been set render size
  */
 - (CGRect)boundingRectForCharacterRange:(NSRange)characterRange;
+- (CGRect)boundingRectForGlyphRange:(NSRange)glyphRange;
 
 /**
  text character index at piont

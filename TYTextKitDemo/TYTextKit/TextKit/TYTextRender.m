@@ -289,7 +289,7 @@
     NSRange glyphRange = [_layoutManager glyphRangeForTextContainer:_textContainer];
     NSRange visibleCharacterRange = [_layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
     CGRect textRect = [self textRectForGlyphRange:glyphRange atPiont:point];
-    CGPoint positon = _textRectOnRender.origin;
+    CGPoint positon = textRect.origin;
     _visibleCharacterRangeOnRender = visibleCharacterRange;
     _textRectOnRender = textRect;
     

@@ -66,10 +66,10 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 - (void)configureLabel {
     _longPressDuring = 2.0;
-    _numberOfLines = 0;
     _clearContentBeforeAsyncDisplay = YES;
     _ignoreAboveAtrributedRelatePropertys = YES;
     _ignoreAboveRenderRelatePropertys = YES;
+    _numberOfLines = 0;
     _textAlignment = [[[UIDevice currentDevice] systemVersion] floatValue] >= 9 ?NSTextAlignmentNatural : NSTextAlignmentLeft;
     _lineBreakMode = NSLineBreakByTruncatingTail;
     _verticalAlignment = TYTextVerticalAlignmentCenter;
@@ -133,6 +133,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     _attributedText = nil;
     _textStorage = nil;
     [self setDisplayNeedUpdate];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
@@ -141,6 +142,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     _textStorageOnRender = [[NSTextStorage alloc]initWithAttributedString:attributedText];
     _text = nil;
     [self setDisplayNeedUpdate];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
@@ -149,6 +151,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     _textStorageOnRender = textStorage;
     _text = nil;
     [self setDisplayNeedUpdate];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setTextRender:(TYTextRender *)textRender {
@@ -158,6 +161,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     _text = nil;
     [self clearLayerContent];
     [self setDisplayNeedRedraw];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setFont:(UIFont *)font {
@@ -166,6 +170,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         return;
     }
     [self displayRedrawIfNeed];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setTextColor:(UIColor *)textColor {
@@ -190,6 +195,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         return;
     }
     [self displayRedrawIfNeed];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setLineSpacing:(CGFloat)lineSpacing {
@@ -198,6 +204,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         return;
     }
     [self displayRedrawIfNeed];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
@@ -214,6 +221,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         return;
     }
     [self displayRedrawIfNeed];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setNumberOfLines:(NSInteger)numberOfLines {
@@ -222,6 +230,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         return;
     }
     [self displayRedrawIfNeed];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setVerticalAlignment:(TYTextVerticalAlignment)verticalAlignment {
@@ -257,6 +266,15 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     _delegate = delegate;
     _delegateFlags.didTappedTextHighlight = [delegate respondsToSelector:@selector(label:didTappedTextHighlight:)];
     _delegateFlags.didLongPressedTextHighlight = [delegate respondsToSelector:@selector(label:didLongPressedTextHighlight:)];
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    return [self contentSizeWithWidth:size.width];
+}
+
+- (CGSize)intrinsicContentSize {
+    CGFloat width = _preferredMaxLayoutWidth > 0 ? _preferredMaxLayoutWidth : CGRectGetWidth(self.frame);
+    return [self contentSizeWithWidth:width>0?width:10000];
 }
 
 #pragma mark - Private
@@ -388,6 +406,35 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     _beginTouchPiont = CGPointZero;
 }
 
+#pragma mark - private
+
+- (CGSize)contentSizeWithWidth:(CGFloat)width {
+    if (_textRender) {
+        if (ABS(_textRender.size.width - width)<0.1 || _textRender.size.height == 0 || _textRender.size.width == 0) {
+            return [_textRender textSizeWithRenderWidth:width];
+        }
+        return _textRender.size;
+    }
+    BOOL ignoreAboveAtrributedRelatePropertys = _ignoreAboveAtrributedRelatePropertys && !_text;
+    BOOL ignoreAboveRenderRelatePropertys = _ignoreAboveRenderRelatePropertys && _textRender;
+    NSTextStorage *textStorage = [_textStorageOnRender ty_deepCopy];
+    if (!ignoreAboveAtrributedRelatePropertys) {
+        textStorage.ty_font = _font;
+        textStorage.ty_color = _textColor;
+        textStorage.ty_shadow = _shadow;
+        textStorage.ty_alignment = _textAlignment;
+        textStorage.ty_characterSpacing = _characterSpacing;
+        textStorage.ty_lineSpacing = _lineSpacing;
+    }
+    TYTextRender *textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
+    if (!ignoreAboveRenderRelatePropertys) {
+        textRender.verticalAlignment = _verticalAlignment;
+        textRender.maximumNumberOfLines = _numberOfLines;
+        textRender.lineBreakMode = _lineBreakMode;
+    }
+    return [textRender textSizeWithRenderWidth:width];
+}
+
 #pragma mark - TYAsyncLayerDelegate
 
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
@@ -424,27 +471,19 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         _attachments = nil;
         _textRenderOnDisplay = nil;
     };
-    
     task.displaying = ^(CGContextRef  _Nonnull context, CGSize size, BOOL isAsynchronously, BOOL (^ _Nonnull isCancelled)(void)) {
         if (!ignoreAboveAtrributedRelatePropertys) {
-            if (font) {
-                textStorage.ty_font = font;
-            }
-            if (textColor) {
-                textStorage.ty_color = textColor;
-            }
-            if (shadow) {
-                textStorage.ty_shadow = shadow;
-            }
+            textStorage.ty_font = font;
+            textStorage.ty_color = textColor;
+            textStorage.ty_shadow = shadow;
             textStorage.ty_alignment = textAlignment;
             textStorage.ty_characterSpacing = characterSpacing;
             textStorage.ty_lineSpacing = lineSpacing;
         }
-        
         if (!textRender) {
             textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
+            if (isCancelled()) return;
         }
-        
         if (!ignoreAboveRenderRelatePropertys) {
             textRender.verticalAlignment = verticalAlignment;
             textRender.maximumNumberOfLines = numberOfLines;
@@ -455,7 +494,6 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         [textRender setTextHighlight:textHighlight range:highlightRange];
         [textRender drawTextAtPoint:CGPointZero isCanceled:isCancelled];
     };
-    
     task.didDisplay = ^(CALayer * _Nonnull layer, BOOL finished) {
         _textRenderOnDisplay = textRender;
         NSArray *attachments = textRender.attachmentViews;
@@ -470,15 +508,19 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         NSRange visibleRange = textRender.visibleCharacterRangeOnRender;
         for (TYTextAttachment *attachment in attachments) {
             if (NSLocationInRange(attachment.range.location, visibleRange)) {
-                CGRect rect = {attachment.position,attachment.size};
-                [attachment addToSuperView:self];
-                attachment.frame = rect;
+                if (textRender.maximumNumberOfLines > 0 && attachment.range.location != 0 && CGPointEqualToPoint(attachment.position, CGPointZero)) {
+                    [attachment removeFromSuperView:self];
+                }else {
+                    CGRect rect = {attachment.position,attachment.size};
+                    [attachment addToSuperView:self];
+                    attachment.frame = rect;
+                }
             }else {
                 [attachment removeFromSuperView:self];
             }
         }
         _attachments = attachments;
-        NSAssert(self.subviews.count == attachments.count, @"attachments count incorrect");
+//        NSAssert(self.subviews.count == attachments.count, @"attachments count incorrect");
     };
     return task;
 }

@@ -22,4 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface NSTextStorage (TYTextKit)
+
+- (NSTextStorage *)ty_deepCopy;
+
+@end
+
 NS_ASSUME_NONNULL_END

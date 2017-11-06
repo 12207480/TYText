@@ -317,9 +317,6 @@
         return;
     }
     if (!value || [NSNull isEqual:value]) {
-#ifdef DEBUG
-        NSLog(@"%s: addAttribute %@'s value is nil or null!",__FUNCTION__,attrName);
-#endif
         [self removeAttribute:attrName range:range];
         return;
     }

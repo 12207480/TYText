@@ -104,3 +104,16 @@
 }
 
 @end
+
+@implementation NSTextStorage (TYTextKit)
+
+- (NSTextStorage *)ty_deepCopy {
+    if ([self isKindOfClass:[TYTextStorage class]]) {
+        return [self copy];
+    }else {
+        NSMutableAttributedString *string = [self mutableCopy];
+        return [[NSTextStorage alloc]initWithAttributedString:string];
+    }
+}
+
+@end

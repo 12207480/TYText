@@ -48,6 +48,8 @@ asynchronous display of the view's layer. default YES
 @property (nonatomic, strong, nullable) NSAttributedString *attributedText;
 @property (nonatomic, strong, nullable) NSTextStorage *textStorage;
 
+@property (nonatomic, assign) CGFloat preferredMaxLayoutWidth;
+
 /**
  textkit render engine. default nil,if set, the label ignores the common properties. see ignoreAboveLabelRelatePropertys.
  */

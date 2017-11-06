@@ -58,16 +58,16 @@
     //        text.ty_minimumLineHeight = 12;
     
     TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
-    textHighlight.color = [UIColor whiteColor];
+    textHighlight.color = [UIColor blueColor];
+    textHighlight.highlightColor = [UIColor whiteColor];
     textHighlight.backgroundColor = [UIColor redColor];
     [text addTextHighlightAttribute:textHighlight range:NSMakeRange(1, 20)];
     
     TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
     attachment.image = [UIImage imageNamed:@"avatar"];
-    attachment.size = CGSizeMake(60, 60);
-    //        if (i%2) {
-    //            [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
-    //        }
+    attachment.bounds = CGRectMake(0, 0, 60, 60);
+    //attachment.verticalAlignment = TYAttachmentAlignmentCenter;
+    //[text insertAttributedString:[NSAttributedString attributedStringWithAttachment:attachment] atIndex:text.length/2];
     attachment = [[TYTextAttachment alloc]init];
     attachment.image = [UIImage imageNamed:@"avatar"];
     attachment.size = CGSizeMake(20, 20);

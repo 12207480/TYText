@@ -39,8 +39,7 @@
 }
 
 - (instancetype)initWithAttributedText:(NSAttributedString *)attributedText {
-    NSTextStorage *textStorage = [[NSTextStorage alloc]initWithAttributedString:attributedText];
-    if (self = [self initWithTextStorage:textStorage]) {
+    if (self = [self initWithTextStorage:[[NSTextStorage alloc]initWithAttributedString:attributedText]]) {
     }
     return self;
 }
@@ -114,7 +113,7 @@
 
 - (NSInteger)numberOfLines {
     __block NSInteger lineCount = 0;
-    NSRange glyphRange = [self visibleGlyphRange];
+    NSRange glyphRange = [_layoutManager glyphRangeForTextContainer:_textContainer];
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
         ++lineCount;
     }];
@@ -132,6 +131,9 @@
     return _textContainer.lineBreakMode;
 }
 - (void)setLineBreakMode:(NSLineBreakMode)lineBreakMode {
+    if (_textContainer.lineBreakMode == lineBreakMode) {
+        return;
+    }
     _textContainer.lineBreakMode = lineBreakMode;
 }
 
@@ -197,6 +199,11 @@
                                      inTextContainer:_textContainer];
 }
 
+- (CGRect)boundingRectForGlyphRange:(NSRange)glyphRange {
+    return [_layoutManager boundingRectForGlyphRange:glyphRange
+                                     inTextContainer:_textContainer];
+}
+
 - (CGRect)textBound {
     if (_onlySetRenderSizeWillGetTextBounds && !CGRectIsEmpty(_textBound) && !_editable) {
         return _textBound;
@@ -243,15 +250,8 @@
         self.textStorageOnRender = _textStorage;
         return;
     }
-    NSTextStorage *highlightStorage = nil;
-    if ([_textStorage isKindOfClass:[TYTextStorage class]]) {
-        highlightStorage = [_textStorage copy];
-        [highlightStorage addTextAttribute:textHighlight range:range];
-    }else {
-        NSMutableAttributedString *string = [_textStorage mutableCopy];
-        [string addTextAttribute:textHighlight range:range];
-        highlightStorage = [[NSTextStorage alloc]initWithAttributedString:string];
-    }
+    NSTextStorage *highlightStorage = [_textStorage ty_deepCopy];
+    [highlightStorage addTextAttribute:textHighlight range:range];
     self.textStorageOnRender = highlightStorage;
 }
 
@@ -286,10 +286,12 @@
 - (void)drawTextAtPoint:(CGPoint)point isCanceled:(BOOL (^)(void))isCanceled
 {
     // calculate the offset of the text in the view
-    NSRange glyphRange = [self visibleGlyphRange];
-    _visibleCharacterRangeOnRender = [_layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
-    _textRectOnRender = [self textRectForGlyphRange:glyphRange atPiont:point];
+    NSRange glyphRange = [_layoutManager glyphRangeForTextContainer:_textContainer];
+    NSRange visibleCharacterRange = [_layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
+    CGRect textRect = [self textRectForGlyphRange:glyphRange atPiont:point];
     CGPoint positon = _textRectOnRender.origin;
+    _visibleCharacterRangeOnRender = visibleCharacterRange;
+    _textRectOnRender = textRect;
     
     // drawing text
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {

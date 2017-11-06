@@ -12,6 +12,7 @@
 #import "TextListViewController.h"
 #import "ImageTextListViewController.h"
 #import "TextViewDemoController.h"
+#import "TextAutolayoutController.h"
 #import "TYAsyncTransaction.h"
 
 @interface tableViewItem : NSObject
@@ -87,6 +88,7 @@
 {
     [self addTableItemWithTitle:@"SimpleText" detailText:@"简单文本显示" destVcClass:[TextDemoViewController class]];
     [self addTableItemWithTitle:@"AttributedText" detailText:@"属性文本显示" destVcClass:[AttributedDemoViewController class]];
+    [self addTableItemWithTitle:@"AutolayoutText" detailText:@"文本自动布局显示" destVcClass:[TextAutolayoutController class]];
     [self addTableItemWithTitle:@"EditTextView" detailText:@"图文编辑" destVcClass:[TextViewDemoController class]];
     [self addTableItemWithTitle:@"AsyncText" detailText:@"异步文本显示" destVcClass:[TextListViewController class]];
     [self addTableItemWithTitle:@"AsyncImageText" detailText:@"异步图文显示" destVcClass:[ImageTextListViewController class]];

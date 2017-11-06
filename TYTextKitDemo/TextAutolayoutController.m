@@ -48,7 +48,6 @@
     
     TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
     textHighlight.color = [UIColor blueColor];
-    textHighlight.highlightColor = [UIColor whiteColor];
     textHighlight.backgroundColor = [UIColor redColor];
     [text addTextHighlightAttribute:textHighlight range:NSMakeRange(1, 20)];
     

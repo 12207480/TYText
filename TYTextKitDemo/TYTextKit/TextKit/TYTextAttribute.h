@@ -37,6 +37,8 @@ UIKIT_EXTERN NSString *const TYTextHighlightAttributeName;
 @property (nonatomic, strong , readonly) NSString *attributeName;
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *attributes;
 
+@property (nonatomic, strong, nullable) NSDictionary *userInfo;
+
 @property (nonatomic, strong, nullable) UIColor *color;
 @property (nonatomic, strong, nullable) UIFont *font;
 @property (nonatomic, strong, nullable) UIColor *backgroundColor;
@@ -62,10 +64,6 @@ UIKIT_EXTERN NSString *const TYTextHighlightAttributeName;
 @end
 
 @interface TYTextHighlight : TYTextAttribute
-
-@property (nonatomic, strong, nullable) UIColor *highlightColor;
-
-@property (nonatomic, strong, nullable) NSDictionary *userInfo;
 
 @end
 

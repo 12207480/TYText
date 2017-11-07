@@ -22,7 +22,7 @@
 
 - (void)setSize:(CGSize)size {
     _size = size;
-    self.bounds = CGRectMake(0, 0, _size.width, _size.height);
+    self.bounds = CGRectMake(0, _baseline, _size.width, _size.height);
 }
 
 - (void)setBounds:(CGRect)bounds {
@@ -32,7 +32,21 @@
 
 - (void)setBaseline:(CGFloat)baseline {
     _baseline = baseline;
-    self.bounds = CGRectOffset(self.bounds, 0, baseline);
+    self.bounds = CGRectMake(0, _baseline, _size.width, _size.height);
+}
+
+- (void)setImage:(UIImage *)image {
+    [super setImage:image];
+    if (_size.width == 0 && _size.height == 0 ) {
+        _size = image.size;
+    }
+}
+
+- (void)setView:(UIView *)view {
+    _view = view;
+    if (_size.width == 0 && _size.height == 0 ) {
+        _size = view.frame.size;
+    }
 }
 
 #pragma mark - NSTextAttachmentContainer

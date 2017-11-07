@@ -527,7 +527,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 - (void)dealloc {
     _textRender = nil;
-    NSLog(@"TYLabel dealloc!");
+//    NSLog(@"TYLabel dealloc!");
 }
 
 @end

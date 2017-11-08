@@ -22,7 +22,6 @@
 @property (nonatomic, weak) id<TYLayoutManagerEditRender> render;
 
 @property (nonatomic, assign) NSRange highlightRange;
-
 @property (nonatomic, assign) CGFloat highlightBackgroudRadius;
 @property (nonatomic, assign) UIEdgeInsets highlightBackgroudInset;
 

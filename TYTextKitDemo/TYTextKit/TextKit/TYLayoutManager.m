@@ -8,9 +8,9 @@
 
 #import "TYLayoutManager.h"
 
-@interface TYLayoutManager ()
-
-@property (nonatomic, assign) CGPoint lastDrawPoint;
+@interface TYLayoutManager () {
+    CGPoint _lastDrawPoint;
+}
 
 @end
 
@@ -35,9 +35,9 @@
 }
 
 - (void)drawBackgroundForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin {
-    self.lastDrawPoint = origin;
+    _lastDrawPoint = origin;
     [super drawBackgroundForGlyphRange:glyphsToShow atPoint:origin];
-    self.lastDrawPoint = CGPointZero;
+    _lastDrawPoint = CGPointZero;
 }
 
 - (void)fillBackgroundRectArray:(const CGRect *)rectArray count:(NSUInteger)rectCount forCharacterRange:(NSRange)charRange color:(UIColor *)color {
@@ -54,8 +54,8 @@
 - (CGRect)fixedLineHighlightRect:(CGRect)rect forCharacterRange:(NSRange)charRange {
     NSUInteger index = [self glyphIndexForCharacterAtIndex:charRange.location];
     CGRect lineBounds = [self lineFragmentUsedRectForGlyphAtIndex:index effectiveRange:NULL];
-    lineBounds.origin.x += self.lastDrawPoint.x;
-    lineBounds.origin.y += self.lastDrawPoint.y;
+    lineBounds.origin.x += _lastDrawPoint.x;
+    lineBounds.origin.y += _lastDrawPoint.y;
     CGFloat startDrawY = CGFLOAT_MAX;
     CGFloat maxLineHeight = 0.0f;
     for (NSInteger charIndex = charRange.location; charIndex<NSMaxRange(charRange); ++charIndex) {

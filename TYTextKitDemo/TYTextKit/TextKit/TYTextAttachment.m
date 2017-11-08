@@ -38,14 +38,14 @@
 - (void)setImage:(UIImage *)image {
     [super setImage:image];
     if (_size.width == 0 && _size.height == 0 ) {
-        _size = image.size;
+        self.size = image.size;
     }
 }
 
 - (void)setView:(UIView *)view {
     _view = view;
     if (_size.width == 0 && _size.height == 0 ) {
-        _size = view.frame.size;
+        self.size = view.frame.size;
     }
 }
 

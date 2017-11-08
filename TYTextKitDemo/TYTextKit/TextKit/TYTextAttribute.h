@@ -65,6 +65,8 @@ UIKIT_EXTERN NSString *const TYTextHighlightAttributeName;
 
 @interface TYTextHighlight : TYTextAttribute
 
+@property (nonatomic, assign) UIEdgeInsets backgroudInset;
+@property (nonatomic, assign) CGFloat backgroudRadius;
 @end
 
 NS_ASSUME_NONNULL_END

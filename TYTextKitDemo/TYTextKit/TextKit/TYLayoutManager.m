@@ -72,15 +72,15 @@
     }
     lineBounds.origin.y = startDrawY;
     lineBounds.size.height = maxLineHeight;
-    return UIEdgeInsetsInsetRect(CGRectIntersection(lineBounds, rect), _highlightBackgroudInset);
+    return CGRectIntersection(lineBounds, rect);
 }
 
 - (void)fillBackgroundRect:(CGRect)rect radius:(CGFloat)radius bgColor:(UIColor *)bgColor {
     
-    CGFloat x = floor(rect.origin.x);
-    CGFloat y  = ceil(rect.origin.y);
-    CGFloat width = floor(rect.size.width);
-    CGFloat height = ceil(rect.size.height);
+    CGFloat x = floor(rect.origin.x)-_highlightBackgroudInset.left;
+    CGFloat y  = ceil(rect.origin.y)-_highlightBackgroudInset.top;
+    CGFloat width = ceil(rect.size.width)+_highlightBackgroudInset.left+_highlightBackgroudInset.right;
+    CGFloat height = ceil(rect.size.height)+_highlightBackgroudInset.top+_highlightBackgroudInset.bottom;
 
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextMoveToPoint(context, x + radius, y);

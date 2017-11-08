@@ -239,12 +239,22 @@
 #pragma mark - draw text
 
 - (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range {
-    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
-        ((TYLayoutManager *)_layoutManager).highlightRange = range;
-    }
     if (!textHighlight || range.length == 0) {
+        if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
+            TYLayoutManager *layoutManager = (TYLayoutManager *)_layoutManager;
+            layoutManager.highlightRange = NSMakeRange(0, 0);
+            layoutManager.highlightBackgroudInset = _highlightBackgroudInset;
+            layoutManager.highlightBackgroudRadius = _highlightBackgroudRadius;
+            layoutManager.highlightBackgroudRadius = _highlightBackgroudRadius;
+        }
         self.textStorageOnRender = _textStorage;
         return;
+    }
+    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
+        TYLayoutManager *layoutManager = (TYLayoutManager *)_layoutManager;
+        layoutManager.highlightRange = range;
+        layoutManager.highlightBackgroudInset = UIEdgeInsetsEqualToEdgeInsets(textHighlight.backgroudInset, UIEdgeInsetsZero)?_highlightBackgroudInset : textHighlight.backgroudInset;
+        layoutManager.highlightBackgroudRadius = textHighlight.backgroudRadius > 0 ? textHighlight.backgroudRadius : _highlightBackgroudRadius;
     }
     NSTextStorage *highlightStorage = [_textStorage ty_deepCopy];
     [highlightStorage addTextAttribute:textHighlight range:range];

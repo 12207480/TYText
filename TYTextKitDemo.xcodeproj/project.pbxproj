@@ -136,19 +136,19 @@
 			isa = PBXGroup;
 			children = (
 				2B4851001FBD7B230021BB28 /* TYTextRender.h */,
-				2B4851011FBD7B230021BB28 /* TYTextParse.h */,
-				2B4851021FBD7B230021BB28 /* NSAttributedString+TYText.h */,
-				2B4851031FBD7B230021BB28 /* TYLayoutManager.h */,
-				2B4851041FBD7B230021BB28 /* TYTextAttribute.m */,
-				2B4851051FBD7B230021BB28 /* TYTextAttachment.h */,
-				2B4851061FBD7B230021BB28 /* TYTextStorage.m */,
 				2B4851071FBD7B230021BB28 /* TYTextRender.m */,
-				2B4851081FBD7B230021BB28 /* TYTextParse.m */,
-				2B4851091FBD7B230021BB28 /* NSAttributedString+TYText.m */,
-				2B48510A1FBD7B230021BB28 /* TYTextAttachment.m */,
 				2B48510B1FBD7B230021BB28 /* TYTextStorage.h */,
-				2B48510C1FBD7B230021BB28 /* TYTextAttribute.h */,
+				2B4851061FBD7B230021BB28 /* TYTextStorage.m */,
+				2B4851031FBD7B230021BB28 /* TYLayoutManager.h */,
 				2B48510D1FBD7B230021BB28 /* TYLayoutManager.m */,
+				2B4851051FBD7B230021BB28 /* TYTextAttachment.h */,
+				2B48510A1FBD7B230021BB28 /* TYTextAttachment.m */,
+				2B48510C1FBD7B230021BB28 /* TYTextAttribute.h */,
+				2B4851041FBD7B230021BB28 /* TYTextAttribute.m */,
+				2B4851011FBD7B230021BB28 /* TYTextParse.h */,
+				2B4851081FBD7B230021BB28 /* TYTextParse.m */,
+				2B4851021FBD7B230021BB28 /* NSAttributedString+TYText.h */,
+				2B4851091FBD7B230021BB28 /* NSAttributedString+TYText.m */,
 			);
 			path = TextKit;
 			sourceTree = "<group>";

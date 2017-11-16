@@ -7,7 +7,7 @@
 //
 
 #import "TYTextAttribute.h"
-#import "NSAttributedString+TYTextKit.h"
+#import "NSAttributedString+TYText.h"
 
 NSString *const TYTextAttributeName = @"TYTextAttribute";
 NSString *const TYTextHighlightAttributeName = @"TYTextHighlightAttribute";

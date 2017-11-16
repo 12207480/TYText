@@ -11,7 +11,7 @@
 #import "TYTextAttachment.h"
 #import "TYTextAttribute.h"
 #import "TYLayoutManager.h"
-#import "NSAttributedString+TYTextKit.h"
+#import "NSAttributedString+TYText.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -47,7 +47,7 @@ asynchronous display of the view's layer. default YES
 //if set, the label ignores the common properties. see ignoreLabelCommonPropertys.
 @property (nonatomic, strong, nullable) NSAttributedString *attributedText;
 @property (nonatomic, strong, nullable) NSTextStorage *textStorage;
-
+// on xib ,autolayout prefer max width
 @property (nonatomic, assign) CGFloat preferredMaxLayoutWidth;
 
 /**

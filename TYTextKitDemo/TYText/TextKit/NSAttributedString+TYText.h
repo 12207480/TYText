@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSAttributedString (TYTextKit)
+@interface NSAttributedString (TYText)
 
 #pragma mark - Get Attribute
 

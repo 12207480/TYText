@@ -13,7 +13,6 @@
 #import "ImageTextListViewController.h"
 #import "TextViewDemoController.h"
 #import "TextAutolayoutController.h"
-#import "TYAsyncTransaction.h"
 
 @interface tableViewItem : NSObject
 

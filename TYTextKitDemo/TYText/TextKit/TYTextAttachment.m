@@ -7,7 +7,7 @@
 //
 
 #import "TYTextAttachment.h"
-#import "NSAttributedString+TYTextKit.h"
+#import "NSAttributedString+TYText.h"
 #import <pthread.h>
 
 #define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")

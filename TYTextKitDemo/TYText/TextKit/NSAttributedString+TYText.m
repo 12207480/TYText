@@ -6,9 +6,9 @@
 //  Copyright © 2017年 tany. All rights reserved.
 //
 
-#import "NSAttributedString+TYTextKit.h"
+#import "NSAttributedString+TYText.h"
 
-@implementation NSAttributedString (TYTextKit)
+@implementation NSAttributedString (TYText)
 
 - (id)ty_attribute:(NSString *)attrName atIndex:(NSUInteger)index {
     return [self ty_attribute:attrName atIndex:index effectiveRange:NULL];

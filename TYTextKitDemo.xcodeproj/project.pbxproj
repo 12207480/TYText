@@ -9,11 +9,6 @@
 /* Begin PBXBuildFile section */
 		2B0869F11FAFFB85008062CF /* TextAutolayoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0869EF1FAFFB85008062CF /* TextAutolayoutController.m */; };
 		2B0869F21FAFFB85008062CF /* TextAutolayoutController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2B0869F01FAFFB85008062CF /* TextAutolayoutController.xib */; };
-		2B1F83241F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */; };
-		2B2177091F669683005E07E0 /* TYTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2177061F669683005E07E0 /* TYTransaction.m */; };
-		2B2A175B1F7F8199000F6F4B /* TYTextAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A175A1F7F8199000F6F4B /* TYTextAttribute.m */; };
-		2B2A483B1F67C65500D7E613 /* TYTransactionGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A483A1F67C65500D7E613 /* TYTransactionGroup.m */; };
-		2B2A483E1F67CF8E00D7E613 /* TYAsyncTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A483D1F67CF8E00D7E613 /* TYAsyncTransaction.m */; };
 		2B426F461F78F062009E70D9 /* TextDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F451F78F062009E70D9 /* TextDemoViewController.m */; };
 		2B426F491F78F076009E70D9 /* AttributedDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F481F78F076009E70D9 /* AttributedDemoViewController.m */; };
 		2B426F4C1F78F6ED009E70D9 /* TextListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F4B1F78F6ED009E70D9 /* TextListViewController.m */; };
@@ -21,12 +16,17 @@
 		2B426F551F790A3C009E70D9 /* TYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F511F7909DA009E70D9 /* TYFPSLabel.m */; };
 		2B426F561F790A3E009E70D9 /* TYFPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F541F7909DB009E70D9 /* TYFPSMonitor.m */; };
 		2B426F591F790A8C009E70D9 /* TYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F571F790A8C009E70D9 /* TYWeakProxy.m */; };
-		2B426F5C1F79E7DD009E70D9 /* TYTextRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */; };
-		2B426F5F1F7A4311009E70D9 /* TYTextParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F5E1F7A4311009E70D9 /* TYTextParse.m */; };
-		2B426F621F7A44C8009E70D9 /* TYTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F611F7A44C8009E70D9 /* TYTextStorage.m */; };
-		2B426F651F7A491A009E70D9 /* TYTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F641F7A491A009E70D9 /* TYTextAttachment.m */; };
+		2B48510F1FBD7B230021BB28 /* TYTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4850FB1FBD7B230021BB28 /* TYTextView.m */; };
+		2B4851101FBD7B230021BB28 /* TYLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4850FE1FBD7B230021BB28 /* TYLabel.m */; };
+		2B4851111FBD7B230021BB28 /* TYTextAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4851041FBD7B230021BB28 /* TYTextAttribute.m */; };
+		2B4851121FBD7B230021BB28 /* TYTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4851061FBD7B230021BB28 /* TYTextStorage.m */; };
+		2B4851131FBD7B230021BB28 /* TYTextRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4851071FBD7B230021BB28 /* TYTextRender.m */; };
+		2B4851141FBD7B230021BB28 /* TYTextParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4851081FBD7B230021BB28 /* TYTextParse.m */; };
+		2B4851151FBD7B230021BB28 /* NSAttributedString+TYText.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4851091FBD7B230021BB28 /* NSAttributedString+TYText.m */; };
+		2B4851161FBD7B230021BB28 /* TYTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B48510A1FBD7B230021BB28 /* TYTextAttachment.m */; };
+		2B4851171FBD7B230021BB28 /* TYLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B48510D1FBD7B230021BB28 /* TYLayoutManager.m */; };
+		2B48511A1FBD7B510021BB28 /* TYAsyncLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B4851181FBD7B510021BB28 /* TYAsyncLayer.m */; };
 		2B49A1221F973B19007E1935 /* ImageTextListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B49A1211F973B18007E1935 /* ImageTextListViewController.m */; };
-		2B49A1321F985932007E1935 /* TYTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B49A1301F985931007E1935 /* TYTextView.m */; };
 		2B49A1361F98593B007E1935 /* TextViewDemoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2B49A1331F98593B007E1935 /* TextViewDemoController.xib */; };
 		2B49A1371F98593B007E1935 /* TextViewDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B49A1351F98593B007E1935 /* TextViewDemoController.m */; };
 		2B8C4EBF1F628C8F00539B07 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EBE1F628C8F00539B07 /* main.m */; };
@@ -35,25 +35,12 @@
 		2B8C4EC81F628C8F00539B07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B8C4EC61F628C8F00539B07 /* Main.storyboard */; };
 		2B8C4ECA1F628C8F00539B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B8C4EC91F628C8F00539B07 /* Assets.xcassets */; };
 		2B8C4ECD1F628C8F00539B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B8C4ECB1F628C8F00539B07 /* LaunchScreen.storyboard */; };
-		2B8C4EDE1F62907900539B07 /* TYLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EDD1F62907900539B07 /* TYLabel.m */; };
-		2B8C4EE71F66323F00539B07 /* TYAsyncLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C4EE61F66323F00539B07 /* TYAsyncLayer.m */; };
-		B03F0F761F91A08800264F76 /* TYLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B03F0F751F91A08800264F76 /* TYLayoutManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2B0869EE1FAFFB85008062CF /* TextAutolayoutController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextAutolayoutController.h; sourceTree = "<group>"; };
 		2B0869EF1FAFFB85008062CF /* TextAutolayoutController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextAutolayoutController.m; sourceTree = "<group>"; };
 		2B0869F01FAFFB85008062CF /* TextAutolayoutController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextAutolayoutController.xib; sourceTree = "<group>"; };
-		2B1F83221F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+TYTextKit.h"; sourceTree = "<group>"; };
-		2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+TYTextKit.m"; sourceTree = "<group>"; };
-		2B2177051F669683005E07E0 /* TYTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTransaction.h; sourceTree = "<group>"; };
-		2B2177061F669683005E07E0 /* TYTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTransaction.m; sourceTree = "<group>"; };
-		2B2A17591F7F8199000F6F4B /* TYTextAttribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextAttribute.h; sourceTree = "<group>"; };
-		2B2A175A1F7F8199000F6F4B /* TYTextAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextAttribute.m; sourceTree = "<group>"; };
-		2B2A48391F67C65500D7E613 /* TYTransactionGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTransactionGroup.h; sourceTree = "<group>"; };
-		2B2A483A1F67C65500D7E613 /* TYTransactionGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTransactionGroup.m; sourceTree = "<group>"; };
-		2B2A483C1F67CF8E00D7E613 /* TYAsyncTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYAsyncTransaction.h; sourceTree = "<group>"; };
-		2B2A483D1F67CF8E00D7E613 /* TYAsyncTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYAsyncTransaction.m; sourceTree = "<group>"; };
 		2B426F441F78F062009E70D9 /* TextDemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextDemoViewController.h; sourceTree = "<group>"; };
 		2B426F451F78F062009E70D9 /* TextDemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextDemoViewController.m; sourceTree = "<group>"; };
 		2B426F471F78F076009E70D9 /* AttributedDemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributedDemoViewController.h; sourceTree = "<group>"; };
@@ -68,18 +55,29 @@
 		2B426F541F7909DB009E70D9 /* TYFPSMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYFPSMonitor.m; sourceTree = "<group>"; };
 		2B426F571F790A8C009E70D9 /* TYWeakProxy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYWeakProxy.m; sourceTree = "<group>"; };
 		2B426F581F790A8C009E70D9 /* TYWeakProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYWeakProxy.h; sourceTree = "<group>"; };
-		2B426F5A1F79E7DD009E70D9 /* TYTextRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextRender.h; sourceTree = "<group>"; };
-		2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextRender.m; sourceTree = "<group>"; };
-		2B426F5D1F7A4311009E70D9 /* TYTextParse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextParse.h; sourceTree = "<group>"; };
-		2B426F5E1F7A4311009E70D9 /* TYTextParse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextParse.m; sourceTree = "<group>"; };
-		2B426F601F7A44C8009E70D9 /* TYTextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextStorage.h; sourceTree = "<group>"; };
-		2B426F611F7A44C8009E70D9 /* TYTextStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextStorage.m; sourceTree = "<group>"; };
-		2B426F631F7A491A009E70D9 /* TYTextAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYTextAttachment.h; sourceTree = "<group>"; };
-		2B426F641F7A491A009E70D9 /* TYTextAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYTextAttachment.m; sourceTree = "<group>"; };
+		2B4850FB1FBD7B230021BB28 /* TYTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextView.m; sourceTree = "<group>"; };
+		2B4850FC1FBD7B230021BB28 /* TYLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYLabel.h; sourceTree = "<group>"; };
+		2B4850FD1FBD7B230021BB28 /* TYText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYText.h; sourceTree = "<group>"; };
+		2B4850FE1FBD7B230021BB28 /* TYLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYLabel.m; sourceTree = "<group>"; };
+		2B4851001FBD7B230021BB28 /* TYTextRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextRender.h; sourceTree = "<group>"; };
+		2B4851011FBD7B230021BB28 /* TYTextParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextParse.h; sourceTree = "<group>"; };
+		2B4851021FBD7B230021BB28 /* NSAttributedString+TYText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+TYText.h"; sourceTree = "<group>"; };
+		2B4851031FBD7B230021BB28 /* TYLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYLayoutManager.h; sourceTree = "<group>"; };
+		2B4851041FBD7B230021BB28 /* TYTextAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextAttribute.m; sourceTree = "<group>"; };
+		2B4851051FBD7B230021BB28 /* TYTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextAttachment.h; sourceTree = "<group>"; };
+		2B4851061FBD7B230021BB28 /* TYTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextStorage.m; sourceTree = "<group>"; };
+		2B4851071FBD7B230021BB28 /* TYTextRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextRender.m; sourceTree = "<group>"; };
+		2B4851081FBD7B230021BB28 /* TYTextParse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextParse.m; sourceTree = "<group>"; };
+		2B4851091FBD7B230021BB28 /* NSAttributedString+TYText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+TYText.m"; sourceTree = "<group>"; };
+		2B48510A1FBD7B230021BB28 /* TYTextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextAttachment.m; sourceTree = "<group>"; };
+		2B48510B1FBD7B230021BB28 /* TYTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextStorage.h; sourceTree = "<group>"; };
+		2B48510C1FBD7B230021BB28 /* TYTextAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextAttribute.h; sourceTree = "<group>"; };
+		2B48510D1FBD7B230021BB28 /* TYLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYLayoutManager.m; sourceTree = "<group>"; };
+		2B48510E1FBD7B230021BB28 /* TYTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextView.h; sourceTree = "<group>"; };
+		2B4851181FBD7B510021BB28 /* TYAsyncLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYAsyncLayer.m; sourceTree = "<group>"; };
+		2B4851191FBD7B510021BB28 /* TYAsyncLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYAsyncLayer.h; sourceTree = "<group>"; };
 		2B49A1201F973B18007E1935 /* ImageTextListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTextListViewController.h; sourceTree = "<group>"; };
 		2B49A1211F973B18007E1935 /* ImageTextListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageTextListViewController.m; sourceTree = "<group>"; };
-		2B49A1301F985931007E1935 /* TYTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextView.m; sourceTree = "<group>"; };
-		2B49A1311F985932007E1935 /* TYTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextView.h; sourceTree = "<group>"; };
 		2B49A1331F98593B007E1935 /* TextViewDemoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextViewDemoController.xib; sourceTree = "<group>"; };
 		2B49A1341F98593B007E1935 /* TextViewDemoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewDemoController.h; sourceTree = "<group>"; };
 		2B49A1351F98593B007E1935 /* TextViewDemoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewDemoController.m; sourceTree = "<group>"; };
@@ -93,13 +91,6 @@
 		2B8C4EC91F628C8F00539B07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B8C4ECC1F628C8F00539B07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2B8C4ECE1F628C8F00539B07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2B8C4EDA1F628E6800539B07 /* TYTextKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextKit.h; sourceTree = "<group>"; };
-		2B8C4EDC1F62907900539B07 /* TYLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYLabel.h; sourceTree = "<group>"; };
-		2B8C4EDD1F62907900539B07 /* TYLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYLabel.m; sourceTree = "<group>"; };
-		2B8C4EE51F66323F00539B07 /* TYAsyncLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYAsyncLayer.h; sourceTree = "<group>"; };
-		2B8C4EE61F66323F00539B07 /* TYAsyncLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYAsyncLayer.m; sourceTree = "<group>"; };
-		B03F0F741F91A08800264F76 /* TYLayoutManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYLayoutManager.h; sourceTree = "<group>"; };
-		B03F0F751F91A08800264F76 /* TYLayoutManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYLayoutManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +117,42 @@
 			path = Vendor;
 			sourceTree = "<group>";
 		};
+		2B4850FA1FBD7B230021BB28 /* TYText */ = {
+			isa = PBXGroup;
+			children = (
+				2B4850FD1FBD7B230021BB28 /* TYText.h */,
+				2B4850FC1FBD7B230021BB28 /* TYLabel.h */,
+				2B4850FE1FBD7B230021BB28 /* TYLabel.m */,
+				2B48510E1FBD7B230021BB28 /* TYTextView.h */,
+				2B4850FB1FBD7B230021BB28 /* TYTextView.m */,
+				2B4851191FBD7B510021BB28 /* TYAsyncLayer.h */,
+				2B4851181FBD7B510021BB28 /* TYAsyncLayer.m */,
+				2B4850FF1FBD7B230021BB28 /* TextKit */,
+			);
+			path = TYText;
+			sourceTree = "<group>";
+		};
+		2B4850FF1FBD7B230021BB28 /* TextKit */ = {
+			isa = PBXGroup;
+			children = (
+				2B4851001FBD7B230021BB28 /* TYTextRender.h */,
+				2B4851011FBD7B230021BB28 /* TYTextParse.h */,
+				2B4851021FBD7B230021BB28 /* NSAttributedString+TYText.h */,
+				2B4851031FBD7B230021BB28 /* TYLayoutManager.h */,
+				2B4851041FBD7B230021BB28 /* TYTextAttribute.m */,
+				2B4851051FBD7B230021BB28 /* TYTextAttachment.h */,
+				2B4851061FBD7B230021BB28 /* TYTextStorage.m */,
+				2B4851071FBD7B230021BB28 /* TYTextRender.m */,
+				2B4851081FBD7B230021BB28 /* TYTextParse.m */,
+				2B4851091FBD7B230021BB28 /* NSAttributedString+TYText.m */,
+				2B48510A1FBD7B230021BB28 /* TYTextAttachment.m */,
+				2B48510B1FBD7B230021BB28 /* TYTextStorage.h */,
+				2B48510C1FBD7B230021BB28 /* TYTextAttribute.h */,
+				2B48510D1FBD7B230021BB28 /* TYLayoutManager.m */,
+			);
+			path = TextKit;
+			sourceTree = "<group>";
+		};
 		2B8C4EB11F628C8F00539B07 = {
 			isa = PBXGroup;
 			children = (
@@ -145,7 +172,7 @@
 		2B8C4EBC1F628C8F00539B07 /* TYTextKitDemo */ = {
 			isa = PBXGroup;
 			children = (
-				2B8C4ED41F628CA300539B07 /* TYTextKit */,
+				2B4850FA1FBD7B230021BB28 /* TYText */,
 				2B8C4EC01F628C8F00539B07 /* AppDelegate.h */,
 				2B8C4EC11F628C8F00539B07 /* AppDelegate.m */,
 				2B8C4EC31F628C8F00539B07 /* ViewController.h */,
@@ -182,56 +209,6 @@
 				2B8C4EBE1F628C8F00539B07 /* main.m */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		2B8C4ED41F628CA300539B07 /* TYTextKit */ = {
-			isa = PBXGroup;
-			children = (
-				2B8C4EDA1F628E6800539B07 /* TYTextKit.h */,
-				2B8C4EDC1F62907900539B07 /* TYLabel.h */,
-				2B8C4EDD1F62907900539B07 /* TYLabel.m */,
-				2B49A1311F985932007E1935 /* TYTextView.h */,
-				2B49A1301F985931007E1935 /* TYTextView.m */,
-				2B8C4ED71F628E6800539B07 /* Async */,
-				2B8C4ED81F628E6800539B07 /* TextKit */,
-			);
-			path = TYTextKit;
-			sourceTree = "<group>";
-		};
-		2B8C4ED71F628E6800539B07 /* Async */ = {
-			isa = PBXGroup;
-			children = (
-				2B8C4EE51F66323F00539B07 /* TYAsyncLayer.h */,
-				2B8C4EE61F66323F00539B07 /* TYAsyncLayer.m */,
-				2B2177051F669683005E07E0 /* TYTransaction.h */,
-				2B2177061F669683005E07E0 /* TYTransaction.m */,
-				2B2A483C1F67CF8E00D7E613 /* TYAsyncTransaction.h */,
-				2B2A483D1F67CF8E00D7E613 /* TYAsyncTransaction.m */,
-				2B2A48391F67C65500D7E613 /* TYTransactionGroup.h */,
-				2B2A483A1F67C65500D7E613 /* TYTransactionGroup.m */,
-			);
-			path = Async;
-			sourceTree = "<group>";
-		};
-		2B8C4ED81F628E6800539B07 /* TextKit */ = {
-			isa = PBXGroup;
-			children = (
-				2B426F5A1F79E7DD009E70D9 /* TYTextRender.h */,
-				2B426F5B1F79E7DD009E70D9 /* TYTextRender.m */,
-				2B2A17591F7F8199000F6F4B /* TYTextAttribute.h */,
-				2B2A175A1F7F8199000F6F4B /* TYTextAttribute.m */,
-				2B426F631F7A491A009E70D9 /* TYTextAttachment.h */,
-				2B426F641F7A491A009E70D9 /* TYTextAttachment.m */,
-				2B426F5D1F7A4311009E70D9 /* TYTextParse.h */,
-				2B426F5E1F7A4311009E70D9 /* TYTextParse.m */,
-				2B426F601F7A44C8009E70D9 /* TYTextStorage.h */,
-				2B426F611F7A44C8009E70D9 /* TYTextStorage.m */,
-				B03F0F741F91A08800264F76 /* TYLayoutManager.h */,
-				B03F0F751F91A08800264F76 /* TYLayoutManager.m */,
-				2B1F83221F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.h */,
-				2B1F83231F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m */,
-			);
-			path = TextKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -308,31 +285,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B2A483E1F67CF8E00D7E613 /* TYAsyncTransaction.m in Sources */,
-				2B2A175B1F7F8199000F6F4B /* TYTextAttribute.m in Sources */,
-				2B426F5C1F79E7DD009E70D9 /* TYTextRender.m in Sources */,
 				2B8C4EC51F628C8F00539B07 /* ViewController.m in Sources */,
 				2B426F461F78F062009E70D9 /* TextDemoViewController.m in Sources */,
+				2B4851111FBD7B230021BB28 /* TYTextAttribute.m in Sources */,
 				2B0869F11FAFFB85008062CF /* TextAutolayoutController.m in Sources */,
 				2B426F4C1F78F6ED009E70D9 /* TextListViewController.m in Sources */,
+				2B4851101FBD7B230021BB28 /* TYLabel.m in Sources */,
 				2B426F561F790A3E009E70D9 /* TYFPSMonitor.m in Sources */,
-				2B8C4EDE1F62907900539B07 /* TYLabel.m in Sources */,
+				2B48511A1FBD7B510021BB28 /* TYAsyncLayer.m in Sources */,
 				2B8C4EC21F628C8F00539B07 /* AppDelegate.m in Sources */,
-				2B49A1321F985932007E1935 /* TYTextView.m in Sources */,
+				2B4851121FBD7B230021BB28 /* TYTextStorage.m in Sources */,
 				2B8C4EBF1F628C8F00539B07 /* main.m in Sources */,
-				2B426F5F1F7A4311009E70D9 /* TYTextParse.m in Sources */,
-				2B8C4EE71F66323F00539B07 /* TYAsyncLayer.m in Sources */,
-				2B2177091F669683005E07E0 /* TYTransaction.m in Sources */,
-				2B426F651F7A491A009E70D9 /* TYTextAttachment.m in Sources */,
+				2B4851161FBD7B230021BB28 /* TYTextAttachment.m in Sources */,
 				2B426F491F78F076009E70D9 /* AttributedDemoViewController.m in Sources */,
-				B03F0F761F91A08800264F76 /* TYLayoutManager.m in Sources */,
-				2B1F83241F6BCFAF00F6A496 /* NSAttributedString+TYTextKit.m in Sources */,
-				2B2A483B1F67C65500D7E613 /* TYTransactionGroup.m in Sources */,
+				2B4851151FBD7B230021BB28 /* NSAttributedString+TYText.m in Sources */,
 				2B49A1371F98593B007E1935 /* TextViewDemoController.m in Sources */,
+				2B4851171FBD7B230021BB28 /* TYLayoutManager.m in Sources */,
 				2B49A1221F973B19007E1935 /* ImageTextListViewController.m in Sources */,
+				2B48510F1FBD7B230021BB28 /* TYTextView.m in Sources */,
 				2B426F4F1F78F7AE009E70D9 /* TextViewCell.m in Sources */,
+				2B4851141FBD7B230021BB28 /* TYTextParse.m in Sources */,
+				2B4851131FBD7B230021BB28 /* TYTextRender.m in Sources */,
 				2B426F551F790A3C009E70D9 /* TYFPSLabel.m in Sources */,
-				2B426F621F7A44C8009E70D9 /* TYTextStorage.m in Sources */,
 				2B426F591F790A8C009E70D9 /* TYWeakProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

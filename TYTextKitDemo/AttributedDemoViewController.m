@@ -39,6 +39,7 @@
 
 - (void)addLabel {
     TYLabel *label = [[TYLabel alloc]init];
+    label.clipsToBounds = YES;
     label.delegate = self;
     label.backgroundColor = [UIColor lightGrayColor];
     label.attributedText = [self addAttribuetedString];

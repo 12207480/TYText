@@ -23,6 +23,7 @@
 
 @property (nonatomic, assign) CGRect textRectOnRender;
 @property (nonatomic, assign) NSRange visibleCharacterRangeOnRender;
+@property (nonatomic, assign) NSRange truncatedCharacterRangeOnRender;
 
 @end
 
@@ -293,16 +294,20 @@
     // calculate the offset of the text in the view
     NSRange glyphRange = [_layoutManager glyphRangeForTextContainer:_textContainer];
     NSRange visibleCharacterRange = [_layoutManager characterRangeForGlyphRange:glyphRange actualGlyphRange:NULL];
+    
+    NSRange truncatedGlyphRange = [_layoutManager truncatedGlyphRangeInLineFragmentForGlyphAtIndex:NSMaxRange(visibleCharacterRange)-1];
+    NSRange truncatedCharacterRange = [_layoutManager characterRangeForGlyphRange:truncatedGlyphRange actualGlyphRange:NULL];
+    
     CGRect textRect = [self textRectForGlyphRange:glyphRange atPiont:point];
-    CGPoint positon = textRect.origin;
     _visibleCharacterRangeOnRender = visibleCharacterRange;
+    _truncatedCharacterRangeOnRender = truncatedCharacterRange;
     _textRectOnRender = textRect;
     
     // drawing text
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
-        [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:positon];
+        [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textRect.origin];
         if (isCanceled && isCanceled()) {*stop = YES; return ;};
-        [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:positon];
+        [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textRect.origin];
         if (isCanceled && isCanceled()) {*stop = YES; return ;};
     }];
 }

@@ -126,6 +126,12 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
 @property (nonatomic, assign, readonly) NSRange visibleCharacterRangeOnRender;
 
 /**
+ text truncated range on render
+ @discussion when text rendered display,if text truncated,the range's length > 0
+ */
+@property (nonatomic, assign, readonly) NSRange truncatedCharacterRangeOnRender;
+
+/**
  set text highlight
  */
 - (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range;

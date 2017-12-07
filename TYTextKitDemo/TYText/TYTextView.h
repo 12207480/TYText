@@ -26,9 +26,9 @@
 @property (nonatomic, strong, readonly) TYTextRender *textRender;
 
 // text related propertys
+//super @property (nonatomic, assign) NSTextAlignment textAlignment;
 @property (nonatomic, assign) CGFloat characterSpacing;
 @property (nonatomic, assign) CGFloat lineSpacing;
-//super @property (nonatomic, assign) NSTextAlignment textAlignment;
 @property (nonatomic, assign) NSLineBreakMode lineBreakMode;
 
 /**

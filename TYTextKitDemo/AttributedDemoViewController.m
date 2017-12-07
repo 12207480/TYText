@@ -54,9 +54,9 @@
     text.ty_lineSpacing = 2;
     //text.ty_strokeWidth = -2;
     //text.ty_strokeColor = [UIColor redColor];
-    //text.ty_lineHeightMultiple = 2.0;
-    //        text.ty_maximumLineHeight = 12;
-    //        text.ty_minimumLineHeight = 12;
+    //text.ty_lineHeightMultiple = 1.0;
+    //text.ty_maximumLineHeight = 12;
+    //text.ty_minimumLineHeight = 12;
     
     TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
     textHighlight.color = [UIColor blueColor];
@@ -99,9 +99,9 @@
     NSLog(@"didTappedTextHighlight");
 }
 
-//- (void)label:(TYLabel *)label didLongPressedTextHighlight:(TYTextHighlight *)textHighlight {
-//    NSLog(@"didLongPressedTextHighlight");
-//}
+- (void)label:(TYLabel *)label didLongPressedTextHighlight:(TYTextHighlight *)textHighlight {
+    NSLog(@"didLongPressedTextHighlight");
+}
 
 
 @end

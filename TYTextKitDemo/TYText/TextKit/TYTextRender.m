@@ -211,6 +211,9 @@
 }
 
 - (CGSize)textSizeWithRenderWidth:(CGFloat)renderWidth {
+    if (!_textStorageOnRender) {
+        return CGSizeZero;
+    }
     CGSize size = _textContainer.size;
     _textContainer.size = CGSizeMake(renderWidth, MAXFLOAT);
     CGSize textSize = [self boundingRectForGlyphRange:[self visibleGlyphRange]].size;

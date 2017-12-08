@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class TYLabel;
 @protocol TYLabelDelegate <NSObject>
-
 @optional
 
 /**
@@ -77,7 +76,6 @@ asynchronous display of the view's layer. default YES
  user long press during time will call delegate. default 2.0
  */
 @property (nonatomic, assign) CGFloat longPressDuring;
-
 
 /**
  next runloop,layer redraw on private thread

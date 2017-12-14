@@ -503,8 +503,12 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
                     [attachment removeFromSuperView:self];
                 }else {
                     CGRect rect = {attachment.position,attachment.size};
-                    [attachment addToSuperView:self];
-                    attachment.frame = rect;
+                    if (NSMaxRange(attachment.range) == NSMaxRange(visibleRange) && CGRectGetMaxX(rect) - CGRectGetWidth(self.frame) > 1) {
+                        [attachment removeFromSuperView:self];
+                    }else {
+                        [attachment addToSuperView:self];
+                        attachment.frame = rect;
+                    }
                 }
             }else {
                 [attachment removeFromSuperView:self];

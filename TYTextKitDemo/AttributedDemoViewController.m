@@ -12,6 +12,7 @@
 @interface AttributedDemoViewController ()<TYLabelDelegate>
 
 @property (nonatomic, strong) TYLabel *label;
+@property (nonatomic, strong) TYLabel *label1;
 @property (nonatomic, assign) BOOL layouted;
 
 @end
@@ -23,6 +24,7 @@
     // Do any additional setup after loading the view.
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"change" style:UIBarButtonItemStyleDone target:self action:@selector(changeAction)];
     [self addLabel];
+    [self addLabel1];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -32,6 +34,7 @@
     }
     CGFloat originY = CGRectGetMaxY(self.navigationController.navigationBar.frame);
     _label.frame = CGRectMake(0, originY, CGRectGetWidth(self.view.frame), 200);
+    _label1.frame = CGRectMake(0, CGRectGetMaxY(_label.frame)+80, CGRectGetWidth(self.view.frame), 400);
     if (originY > 0) {
         _layouted = YES;
     }
@@ -39,12 +42,18 @@
 
 - (void)addLabel {
     TYLabel *label = [[TYLabel alloc]init];
-    label.clipsToBounds = YES;
     label.delegate = self;
     label.backgroundColor = [UIColor lightGrayColor];
     label.attributedText = [self addAttribuetedString];
     [self.view addSubview:label];
     _label = label;
+}
+
+- (void)addLabel1 {
+    TYLabel *label = [[TYLabel alloc]init];
+    
+    [self.view addSubview:label];
+    _label1 = label;
 }
 
 - (NSAttributedString *)addAttribuetedString {

@@ -15,6 +15,9 @@
 
 @end
 
+
+#define RGB(r,g,b,a)    [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
+
 @implementation TextAutolayoutController
 
 - (void)viewDidLoad {
@@ -41,37 +44,30 @@
 }
 
 - (NSAttributedString *)addAttribuetedString {
-    NSString *str = @"哈哈不错啊啊啊Async Displayhttp://baidu.com✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐🚋🎊😡🚖🚌💖💗💛💙🏨✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊😡🚖🚌💖💗💛💙🏨";
+    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] init];
+    NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n\t但这个过程会很痛，会很辛苦，有时候还会觉得灰心。\n\t面对着汹涌而来的现实，觉得自己渺小无力。\n\t但这，也是生命的一部分，做好现在你能做的，然后，一切都会好的。\n\t我们都将孤独地长大，不要害怕。";
     
-    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
-    text.ty_lineSpacing = 2;
-    
-    TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
-    textHighlight.color = [UIColor blueColor];
-    textHighlight.backgroundColor = [UIColor redColor];
-    [text addTextHighlightAttribute:textHighlight range:NSMakeRange(1, 20)];
-    
-    TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
-    attachment.image = [UIImage imageNamed:@"avatar"];
-    attachment.size = CGSizeMake(60, 60);
-    //[text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
-    TYTextAttachment *attachment1 = [[TYTextAttachment alloc]init];
-    attachment1 = [[TYTextAttachment alloc]init];
-    attachment1.image = [UIImage imageNamed:@"avatar"];
-    attachment1.size = CGSizeMake(20, 20);
-    attachment1.verticalAlignment = TYAttachmentAlignmentCenter;
-    [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment1]];
-    TYTextAttachment *attachmentView = [[TYTextAttachment alloc]init];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setTitle:@"button" forState:UIControlStateNormal];
-    attachmentView.view = button;
-    attachmentView.view.backgroundColor = [UIColor redColor];
-    attachmentView.size = CGSizeMake(60, 25);
-    attachmentView.verticalAlignment = TYAttachmentAlignmentCenter;
-    [text appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
-    text.ty_font = [UIFont systemFontOfSize:15];
-    text.ty_characterSpacing = 2;
-    return text;
+    NSArray *textArray = [text componentsSeparatedByString:@"\n\t"];
+    NSArray *colorArray = @[RGB(213, 0, 0, 1),RGB(0, 155, 0, 1),RGB(103, 0, 207, 1),RGB(209, 162, 74, 1),RGB(206, 39, 206, 1)];
+    NSInteger index = 0;
+    for (NSString *text in textArray) {
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
+        // 设置当前文本字体
+        attributedString.ty_color = colorArray[index%5];
+        // 设置当前文本颜色
+        attributedString.ty_font = [UIFont systemFontOfSize:15+arc4random()%4];
+        if (index % 2 == 0) {
+            attributedString.ty_underLineStyle = NSUnderlineStyleSingle;
+        }
+        // 追加(添加到最后)属性文本
+        if (index < textArray.count-1) {
+            [attributedString appendAttributedString:[[NSAttributedString alloc]initWithString:@"\n\t"]];
+        }
+        [attString appendAttributedString:attributedString];
+        ++index;
+    }
+    attString.ty_characterSpacing = 2;
+    return attString;
 }
 
 - (void)didReceiveMemoryWarning {

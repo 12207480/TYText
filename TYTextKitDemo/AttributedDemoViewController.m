@@ -48,7 +48,7 @@
 }
 
 - (NSAttributedString *)addAttribuetedString {
-    NSString *str = @"哈哈不错啊啊啊Async Displayhttp://baidu.com✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐🚋🎊😡🚖🚌💖💗💛💙🏨✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊😡🚖🚌💖💗💛💙🏨";
+    NSString *str = @"async display http://www.baidu.com ✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐🚋🎊😡🚖🚌💖💗💛💙🏨✺◟(∗❛ัᴗ❛ั∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊😡🚖🚌💖💗💛💙🏨";
     
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];
     text.ty_lineSpacing = 2;
@@ -57,11 +57,13 @@
     //text.ty_lineHeightMultiple = 1.0;
     //text.ty_maximumLineHeight = 12;
     //text.ty_minimumLineHeight = 12;
-    
+    TYTextAttribute *textAttribute = [[TYTextAttribute alloc]init];
+    textAttribute.color = [UIColor blueColor];
+    [text addTextAttribute:textAttribute range:[str rangeOfString:@"http://www.baidu.com"]];
     TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
-    textHighlight.color = [UIColor blueColor];
+    textHighlight.color = [UIColor orangeColor];
     textHighlight.backgroundColor = [UIColor redColor];
-    [text addTextHighlightAttribute:textHighlight range:NSMakeRange(1, 20)];
+    [text addTextHighlightAttribute:textHighlight range:[str rangeOfString:@"http://www.baidu.com"]];
     
     TYTextAttachment *attachment = [[TYTextAttachment alloc]init];
     attachment.image = [UIImage imageNamed:@"avatar"];

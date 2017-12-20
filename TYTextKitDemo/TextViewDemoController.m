@@ -71,17 +71,6 @@
     
     attString = [[NSMutableAttributedString alloc]initWithString:@"\t蒹葭苍苍，[@]。所谓伊人，在水一方。溯洄从之，道阻且长，溯游从之，宛在水中央。\n\t蒹葭萋萋，白露未晞。[@]，在水之湄。溯洄从之，[@]。溯游从之，宛在水中坻。\n\t[@]，[@]。所谓伊人，在水之涘。溯洄从之，道阻且右。溯游从之，[@]。\n注解:\n\t出自《诗经·国风·秦风》，是一首描写对意中人深深的[@]和求而不得的惆怅的诗。\n"];
     attString.ty_color = RGB(51, 51, 51, 1);
-    range = [attString.string rangeOfString:@"注解:"];
-    [attString ty_addColor:RGB(209, 162, 74, 1) range:range];
-    [attString ty_addFont:[UIFont systemFontOfSize:17] range:range];
-    
-    range = [attString.string rangeOfString:@"《诗经·国风·秦风》"];
-    TYTextAttribute *textAttribute = [[TYTextAttribute alloc]init];
-    textAttribute.color = RGB(209, 162, 74, 1);
-    [attString addTextAttribute:textAttribute range:range];
-    TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
-    textHighlight.color = RGB(206, 39, 206, 1);
-    [attString addTextHighlightAttribute:textHighlight range:range];
     
     NSArray *array = [self matcheInString:attString.string regularExpressionWithPattern:@"\\[@\\]"];
     [array enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSTextCheckingResult *match, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -96,7 +85,18 @@
         attachmentView.verticalAlignment = TYAttachmentAlignmentCenter;
         [attString replaceCharactersInRange:[match range] withAttributedString:[NSAttributedString attributedStringWithAttachment:attachmentView]];
     }];
+    range = [attString.string rangeOfString:@"注解:"];
+    [attString ty_addColor:RGB(209, 162, 74, 1) range:range];
+    [attString ty_addFont:[UIFont systemFontOfSize:17] range:range];
     
+    range = [attString.string rangeOfString:@"《诗经·国风·秦风》"];
+    TYTextAttribute *textAttribute = [[TYTextAttribute alloc]init];
+    textAttribute.color = RGB(209, 162, 74, 1);
+    [attString addTextAttribute:textAttribute range:range];
+    TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
+    textHighlight.color = RGB(206, 39, 206, 1);
+    textHighlight.backgroundColor = [UIColor lightGrayColor];
+    [attString addTextHighlightAttribute:textHighlight range:range];
     [text appendAttributedString:attString];
     text.ty_font = [UIFont systemFontOfSize:16];
     text.ty_lineSpacing = 2;
@@ -143,10 +143,14 @@
 
 - (void)barItemEditAction:(UIBarButtonItem *)item {
     if ([item.title isEqualToString:@"Edit:YES"]) {
+        _textView.delaysContentTouches = NO;
+//        _textView.selectable = NO;
         _textView.editable = NO;
         [_textView resignFirstResponder];
         item.title = @"Edit:NO";
     }else {
+        _textView.delaysContentTouches = YES;
+        _textView.selectable = YES;
         _textView.editable = YES;
         [_textView becomeFirstResponder];
         item.title = @"Edit:YES";

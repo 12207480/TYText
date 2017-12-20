@@ -223,7 +223,7 @@
 
 - (NSInteger)characterIndexForPoint:(CGPoint)point{
     CGRect textRect = _textRectOnRender;
-    if (!CGRectContainsPoint(textRect, point)) {
+    if (!CGRectContainsPoint(textRect, point) && !_editable) {
         return -1;
     }
     CGPoint realPoint = CGPointMake(point.x - textRect.origin.x, point.y - textRect.origin.y);

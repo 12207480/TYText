@@ -8,17 +8,37 @@
 
 #import "TYTextView.h"
 
+typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
+    TYTextViewTouchedStateNone,
+    TYTextViewTouchedStateTapped,
+    TYTextViewTouchedStateLongPressed,
+};
+
+#define kLongPressTimerInterval 0.5
+#define kLongPressTimerMoveDistance 5
+
 @interface TYTextView ()<TYLayoutManagerEditRender> {
     struct {
         unsigned int shouldInsertText : 1;
         unsigned int shouldInsertAttributedText : 1;
         unsigned int processEditingForTextStorage : 1;
+        unsigned int didTappedTextHighlight : 1;
+        unsigned int didLongPressedTextHighlight : 1;
     }_delegateFlags;
 }
 
 @property (nonatomic, strong) TYTextRender *textRender;
 
 @property (nonatomic, strong) NSArray *attachments;
+
+@property (nonatomic, assign) NSRange highlightRange;
+@property (nonatomic, strong) TYTextHighlight *textHighlight;
+
+@property (nonatomic, strong) NSTimer *longPressTimer;
+@property (nonatomic, assign) NSUInteger longPressTimerCount;
+
+@property (nonatomic, assign) TYTextViewTouchedState touchState;
+@property (nonatomic, assign) CGPoint beginTouchPiont;
 
 // override
 - (void)textAtrributedDidChange;
@@ -31,6 +51,7 @@
     if (self = [super initWithFrame:frame textContainer:textRender.textContainer]) {
         self.textRender = textRender;
         self.autocorrectionType = UITextAutocorrectionTypeNo;
+        _longPressDuring = 2.0;
     }
     return self;
 }
@@ -70,6 +91,8 @@
     _delegateFlags.shouldInsertText = [delegate respondsToSelector:@selector(textView:shouldInsertText:)];
     _delegateFlags.shouldInsertAttributedText = [delegate respondsToSelector:@selector(textView:shouldInsertAttributedText:)];
     _delegateFlags.processEditingForTextStorage = [delegate respondsToSelector:@selector(textView:processEditingForTextStorage:edited:range:changeInLength:invalidatedRange:)];
+    _delegateFlags.didTappedTextHighlight = [delegate respondsToSelector:@selector(textView:didTappedTextHighlight:)];
+    _delegateFlags.didLongPressedTextHighlight = [delegate respondsToSelector:@selector(textView:didLongPressedTextHighlight:)];
 }
 
 #pragma mark - public
@@ -144,6 +167,141 @@
 
 - (void)textAtrributedDidChange {
     
+}
+
+- (TYTextHighlight *)textHighlightForPoint:(CGPoint)point effectiveRange:(NSRangePointer)range {
+    NSInteger index = [_textRender characterIndexForPoint:point];
+    if (index < 0) {
+        return nil;
+    }
+    return [_textRender.textStorage textHighlightAtIndex:index effectiveRange:range];
+}
+
+- (void)immediatelyDisplayRedraw {
+    [_textRender setTextHighlight:_textHighlight range:_highlightRange];
+}
+
+#pragma mark - LongPress timer
+
+- (void)startLongPressTimer {
+    [self endLongPressTimer];
+    _longPressTimer = [NSTimer timerWithTimeInterval:kLongPressTimerInterval
+                                              target:self selector:@selector(longPressTimerTick)
+                                            userInfo:nil
+                                             repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:_longPressTimer forMode:NSRunLoopCommonModes];
+}
+
+- (void)endLongPressTimer {
+    if ([_longPressTimer isValid]) {
+        [_longPressTimer invalidate];
+        _longPressTimer = nil;
+    }
+    _longPressTimerCount = 0;
+}
+
+- (void)longPressTimerTick {
+    ++_longPressTimerCount;
+    if (!_textHighlight || _touchState == TYTextViewTouchedStateNone || !_delegateFlags.didLongPressedTextHighlight) {
+        [self endLongPressTimer];
+        return;
+    }
+    if (_longPressTimerCount*kLongPressTimerInterval >= _longPressDuring) {
+        _touchState = TYTextViewTouchedStateLongPressed;
+        [((id<TYTextViewDelegate>)self.delegate) textView:self didLongPressedTextHighlight:_textHighlight];
+        [self endTouch];
+    }
+}
+
+#pragma mark - Touch Event
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    _touchState = TYTextViewTouchedStateNone;
+    _beginTouchPiont = CGPointZero;
+    if (!_textRender || self.isEditable) {
+        [super touchesBegan:touches withEvent:event];
+        return;
+    }
+    UITouch *touch = touches.anyObject;
+    CGPoint point = [touch locationInView:self];
+    NSRange range = NSMakeRange(0, 0);
+    _textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
+    _highlightRange = range;
+    if (!_textHighlight) {
+        [super touchesBegan:touches withEvent:event];
+        return;
+    }
+    _beginTouchPiont = point;
+    _touchState = TYTextViewTouchedStateTapped;
+    if (_delegateFlags.didLongPressedTextHighlight) {
+        [self startLongPressTimer];
+    }
+    [self immediatelyDisplayRedraw];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (!_textRender || !_textHighlight || self.isEditable) {
+        [super touchesMoved:touches withEvent:event];
+        return;
+    }
+    UITouch *touch = touches.anyObject;
+    CGPoint point = [touch locationInView:self];
+    NSRange range = NSMakeRange(0, 0);
+    TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
+    if (textHighlight == _textHighlight) {
+        if (fabs(point.x - _beginTouchPiont.x) > kLongPressTimerMoveDistance || fabs(point.y - _beginTouchPiont.y) > kLongPressTimerMoveDistance) {
+            [self endLongPressTimer];
+        }
+        if (_highlightRange.length == 0) {
+            _highlightRange = range;
+            [self immediatelyDisplayRedraw];
+        }
+        return;
+    }
+    [self endLongPressTimer];
+    if (_highlightRange.length > 0) {
+        _highlightRange = NSMakeRange(0, 0);
+        [self immediatelyDisplayRedraw];
+    }
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (!_textRender || !_textHighlight || self.isEditable) {
+        [self endLongPressTimer];
+        [super touchesEnded:touches withEvent:event];
+        return;
+    }
+    UITouch *touch = touches.anyObject;
+    CGPoint point = [touch locationInView:self];
+    NSRange range = NSMakeRange(0, 0);
+    if (_delegateFlags.didTappedTextHighlight && _touchState == TYTextViewTouchedStateTapped) {
+        TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
+        if (textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange) ) {
+            [((id<TYTextViewDelegate>)self.delegate) textView:self didTappedTextHighlight:_textHighlight];
+        }
+    }
+    [self endTouch];
+}
+
+- (NSDictionary<NSString *,id> *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction {
+    return nil;
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (!_textRender || !_textHighlight || self.isEditable) {
+        [self endLongPressTimer];
+        [super touchesCancelled:touches withEvent:event];
+        return;
+    }
+    [self endTouch];
+}
+
+- (void)endTouch {
+    _textHighlight = nil;
+    _highlightRange = NSMakeRange(0, 0);
+    [self immediatelyDisplayRedraw];
+    _touchState = TYTextViewTouchedStateNone;
+    _beginTouchPiont = CGPointZero;
 }
 
 #pragma mark - TYLayoutManagerEditRender

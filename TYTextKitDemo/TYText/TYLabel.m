@@ -12,10 +12,10 @@
 
 #define TYAssertMainThread() NSAssert(0 != pthread_main_np(), @"This method must be called on the main thread!")
 
-typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
-    TYUserTouchedStateNone,
-    TYUserTouchedStateTapped,
-    TYUserTouchedStateLongPressed,
+typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
+    TYLabelTouchedStateNone,
+    TYLabelTouchedStateTapped,
+    TYLabelTouchedStateLongPressed,
 };
 
 #define kLongPressTimerInterval 0.5
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 @property (nonatomic, strong) NSTimer *longPressTimer;
 @property (nonatomic, assign) NSUInteger longPressTimerCount;
 
-@property (nonatomic, assign) TYUserTouchedState touchState;
+@property (nonatomic, assign) TYLabelTouchedState touchState;
 @property (nonatomic, assign) CGPoint beginTouchPiont;
 
 @end
@@ -342,12 +342,12 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 
 - (void)longPressTimerTick {
     ++_longPressTimerCount;
-    if (!_textHighlight || _touchState == TYUserTouchedStateNone || !_delegateFlags.didLongPressedTextHighlight) {
+    if (!_textHighlight || _touchState == TYLabelTouchedStateNone || !_delegateFlags.didLongPressedTextHighlight) {
         [self endLongPressTimer];
         return;
     }
     if (_longPressTimerCount*kLongPressTimerInterval >= _longPressDuring) {
-        _touchState = TYUserTouchedStateLongPressed;
+        _touchState = TYLabelTouchedStateLongPressed;
         [_delegate label:self didLongPressedTextHighlight:_textHighlight];
         [self endTouch];
     }
@@ -356,7 +356,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
 #pragma mark - Touch Event
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    _touchState = TYUserTouchedStateNone;
+    _touchState = TYLabelTouchedStateNone;
     _beginTouchPiont = CGPointZero;
     if (!_textRenderOnDisplay) {
         [super touchesBegan:touches withEvent:event];
@@ -372,7 +372,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
         return;
     }
     _beginTouchPiont = point;
-    _touchState = TYUserTouchedStateTapped;
+    _touchState = TYLabelTouchedStateTapped;
     if (_delegateFlags.didLongPressedTextHighlight) {
         [self startLongPressTimer];
     }
@@ -414,7 +414,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     UITouch *touch = touches.anyObject;
     CGPoint point = [touch locationInView:self];
     NSRange range = NSMakeRange(0, 0);
-    if (_delegateFlags.didTappedTextHighlight && _touchState == TYUserTouchedStateTapped) {
+    if (_delegateFlags.didTappedTextHighlight && _touchState == TYLabelTouchedStateTapped) {
         TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
         if (textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange) ) {
             [_delegate label:self didTappedTextHighlight:_textHighlight];
@@ -436,7 +436,7 @@ typedef NS_ENUM(NSUInteger, TYUserTouchedState) {
     _textHighlight = nil;
     _highlightRange = NSMakeRange(0, 0);
     [self immediatelyDisplayRedraw];
-    _touchState = TYUserTouchedStateNone;
+    _touchState = TYLabelTouchedStateNone;
     _beginTouchPiont = CGPointZero;
 }
 

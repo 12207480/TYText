@@ -14,10 +14,16 @@
 @optional
 
 - (BOOL)textView:(TYTextView *)textView shouldInsertText:(NSString *)text;
-
 - (BOOL)textView:(TYTextView *)textView shouldInsertAttributedText:(NSAttributedString *)attributedText;
 
-- (BOOL)textView:(TYTextView *)textView processEditingForTextStorage:(NSTextStorage *)textStorage edited:(NSTextStorageEditActions)editMask range:(NSRange)newCharRange changeInLength:(NSInteger)delta invalidatedRange:(NSRange)invalidatedCharRange;
+// editing text
+- (void)textView:(TYTextView *)textView processEditingForTextStorage:(NSTextStorage *)textStorage edited:(NSTextStorageEditActions)editMask range:(NSRange)newCharRange changeInLength:(NSInteger)delta invalidatedRange:(NSRange)invalidatedCharRange;
+
+// when user tapped text highlight
+- (void)textView:(TYTextView *)textView didTappedTextHighlight:(TYTextHighlight *)textHighlight;
+
+// when user long pressed text highlight
+- (void)textView:(TYTextView *)textView didLongPressedTextHighlight:(TYTextHighlight *)textHighlight;
 
 @end
 
@@ -36,6 +42,11 @@
  忽略上面的文本相关属性设置.
  */
 @property (nonatomic, assign) BOOL ignoreAboveTextRelatedPropertys;
+
+/**
+ user long press during time will call delegate. default 2.0
+ */
+@property (nonatomic, assign) CGFloat longPressDuring;
 
 - (instancetype)initWithFrame:(CGRect)frame;
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender;

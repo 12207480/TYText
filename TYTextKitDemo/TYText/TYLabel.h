@@ -16,12 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 /**
- when user tapped text highlight,will call this
+ when user tapped text highlight
  */
 - (void)label:(TYLabel *)label didTappedTextHighlight:(TYTextHighlight *)textHighlight;
 
 /**
- when user long pressed text highlight,will call this
+ when user long pressed text highlight
  */
 - (void)label:(TYLabel *)label didLongPressedTextHighlight:(TYTextHighlight *)textHighlight;
 

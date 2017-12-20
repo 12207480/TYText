@@ -37,6 +37,7 @@
  */
 @property (nonatomic, assign) BOOL ignoreAboveTextRelatedPropertys;
 
+- (instancetype)initWithFrame:(CGRect)frame;
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender;
 
 /**

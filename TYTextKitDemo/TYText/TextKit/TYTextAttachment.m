@@ -20,6 +20,8 @@
 @implementation TYTextAttachment
 @dynamic image;
 
+#pragma mark - Setter
+
 - (void)setSize:(CGSize)size {
     _size = size;
     self.bounds = CGRectMake(0, _baseline, _size.width, _size.height);

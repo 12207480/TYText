@@ -64,6 +64,8 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     return self;
 }
 
+#pragma mark - Configure
+
 - (void)configureLabel {
     _longPressDuring = 2.0;
     _clearContentBeforeAsyncDisplay = YES;
@@ -85,13 +87,7 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     _textAlignment = [[[UIDevice currentDevice] systemVersion] floatValue] >= 9 ?NSTextAlignmentNatural : NSTextAlignmentLeft;
 }
 
-- (void)setDisplaysAsynchronously:(BOOL)displaysAsynchronously {
-    ((TYAsyncLayer *)self.layer).displaysAsynchronously = displaysAsynchronously;
-}
-
-- (BOOL)displaysAsynchronously {
-    return ((TYAsyncLayer *)self.layer).displaysAsynchronously;
-}
+#pragma mark - Display
 
 - (void)setDisplayNeedUpdate {
     TYAssertMainThread();
@@ -131,6 +127,14 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
 }
 
 #pragma mark - Getter && Setter
+
+- (BOOL)displaysAsynchronously {
+    return ((TYAsyncLayer *)self.layer).displaysAsynchronously;
+}
+
+- (void)setDisplaysAsynchronously:(BOOL)displaysAsynchronously {
+    ((TYAsyncLayer *)self.layer).displaysAsynchronously = displaysAsynchronously;
+}
 
 - (void)setText:(NSString *)text {
     TYAssertMainThread();
@@ -284,7 +288,7 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     _delegateFlags.didLongPressedTextHighlight = [delegate respondsToSelector:@selector(label:didLongPressedTextHighlight:)];
 }
 
-#pragma mark - layout size
+#pragma mark - Layout Size
 
 - (CGSize)sizeThatFits:(CGSize)size {
     return [self contentSizeWithWidth:size.width];
@@ -295,6 +299,7 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     return [self contentSizeWithWidth:width>0?width:10000];
 }
 
+// get content size
 - (CGSize)contentSizeWithWidth:(CGFloat)width {
     if (_textRender) {
         if (ABS(_textRender.size.width - width)<0.1 || _textRender.size.height == 0 || _textRender.size.width == 0) {
@@ -515,7 +520,6 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
             }
         }
         _attachments = attachments;
-//        NSAssert(self.subviews.count == attachments.count, @"attachments count incorrect");
     };
     return task;
 }

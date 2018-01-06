@@ -55,14 +55,7 @@
     return self;
 }
 
-- (id)copyWithZone:(NSZone *)zone {
-    TYTextStorage *copy = [[[self class]allocWithZone:zone]init];
-    copy.imp = [_imp mutableCopy];
-    copy.textParse = _textParse;
-    return copy;
-}
-
-#pragma mark - override
+#pragma mark - Override
 
 - (NSString *)string
 {
@@ -97,6 +90,15 @@
     if (_textParse) {
         [_textParse parseAttributedText:_imp editedRange:self.editedRange];
     }
+}
+
+#pragma mark - Copy
+
+- (id)copyWithZone:(NSZone *)zone {
+    TYTextStorage *copy = [[[self class]allocWithZone:zone]init];
+    copy.imp = [_imp mutableCopy];
+    copy.textParse = _textParse;
+    return copy;
 }
 
 - (void)dealloc {

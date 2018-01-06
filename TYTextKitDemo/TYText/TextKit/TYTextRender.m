@@ -80,7 +80,7 @@
     self.lineFragmentPadding = 0;
 }
 
-#pragma mark - getter setter
+#pragma mark - Getter && Setter
 
 - (void)setTextStorage:(NSTextStorage *)textStorage {
     _textStorage = textStorage;
@@ -183,7 +183,7 @@
     return _attachmentViewSet;
 }
 
-#pragma mark - public
+#pragma mark - Public
 
 - (NSRange)visibleGlyphRange {
     return [_layoutManager glyphRangeForTextContainer:_textContainer];

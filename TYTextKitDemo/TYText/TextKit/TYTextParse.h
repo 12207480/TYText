@@ -12,7 +12,6 @@
 @required
 /**
  process parse edited text
- 
  @param editedRange The range of text edited changes,{NSNotFound, 0} when there is no changes
  */
 - (void)parseAttributedText:(nullable NSMutableAttributedString *)attributedText editedRange:(NSRange)editedRange;

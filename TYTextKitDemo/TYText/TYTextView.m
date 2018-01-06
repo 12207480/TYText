@@ -69,7 +69,7 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     return self;
 }
 
-#pragma mark - getter && setter
+#pragma mark - Getter && Setter
 
 - (TYTextRender *)defaultTextRender {
     NSTextStorage *textStorage = [[TYTextStorage alloc]init];
@@ -95,7 +95,7 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     _delegateFlags.didLongPressedTextHighlight = [delegate respondsToSelector:@selector(textView:didLongPressedTextHighlight:)];
 }
 
-#pragma mark - public
+#pragma mark - Public
 
 - (void)insertText:(NSString *)text {
     if (!text) {
@@ -129,7 +129,7 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     self.selectedRange = NSMakeRange(self.selectedRange.location+attributedText.length, 0);
 }
 
-#pragma mark - private
+#pragma mark - Private
 
 - (void)configireTextSorage:(NSTextStorage *)textStorage {
     if (_ignoreAboveTextRelatedPropertys) {
@@ -181,7 +181,7 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     [_textRender setTextHighlight:_textHighlight range:_highlightRange];
 }
 
-#pragma mark - LongPress timer
+#pragma mark - LongPress Timer
 
 - (void)startLongPressTimer {
     [self endLongPressTimer];
@@ -369,7 +369,7 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     _placeHolderLabel = placeHolderLabel;
 }
 
-#pragma mark - getter && setter
+#pragma mark - Getter && Setter
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     BOOL change = self.textAlignment == textAlignment;

@@ -57,7 +57,7 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
 
 /**
  visible text bound
- @discussion render should set size before call this, you can set onlySetRenderSizeWillGetTextBounds YES, will cahce text bounds
+ @discussion render should set size before call this, you can set onlySetRenderSizeWillGetTextBounds YES, will cache text bounds
  */
 @property (nonatomic, assign, readonly) CGRect textBound;
 

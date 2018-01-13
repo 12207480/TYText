@@ -1,3 +1,3 @@
 # TYText
-asynchronous rendering by TextKit.
-(https://github.com/12207480/WeiboDemo)[weibo Demo]
+asynchronous rendering by TextKit.<br>
+[weibo Demo](https://github.com/12207480/WeiboDemo)

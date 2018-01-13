@@ -1,6 +1,6 @@
 # TYText
 text asynchronous rendering by TextKit，for iOS.<br>
-you can see [weibo Demo](https://github.com/12207480/WeiboDemo)
+you can see [weibo Demo](https://github.com/12207480/WeiboDemo).
 
 ## Requirements
 * Xcode 8 or higher
@@ -14,3 +14,7 @@ you can see [weibo Demo](https://github.com/12207480/WeiboDemo)
 
 ##### 2.Weibo Demo
 ![image](https://github.com/12207480/TYText/blob/master/ScreenShot/WeiBoDemo1.gif)
+
+### Contact
+if you find bug，please pull reqeust me <br>
+if you have good suggestion，please pull reqeust me <br>

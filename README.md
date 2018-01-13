@@ -9,8 +9,8 @@ text asynchronous rendering by TextKit，for iOS.<br>
 
 ### ScreenShot
 
-##### TYText Demo
+##### 1.TYText Demo
 ![image](https://github.com/12207480/TYText/blob/master/ScreenShot/TYTextDemo1.gif)
 
-##### Weibo Demo
+##### 2.Weibo Demo
 ![image](https://github.com/12207480/TYText/blob/master/ScreenShot/WeiBoDemo1.gif)

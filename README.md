@@ -1,6 +1,6 @@
 # TYText
 text asynchronous rendering by TextKit，for iOS.<br>
-[weibo Demo](https://github.com/12207480/WeiboDemo)
+you can see [weibo Demo](https://github.com/12207480/WeiboDemo)
 
 ## Requirements
 * Xcode 8 or higher

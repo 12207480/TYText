@@ -11,6 +11,7 @@
 
 @interface TextAutolayoutController ()
 @property (weak, nonatomic) IBOutlet TYLabel *label;
+@property (weak, nonatomic) IBOutlet TYLabel *label1;
 @property (weak, nonatomic) IBOutlet TYLabel *attribuedLabel;
 
 @end
@@ -24,6 +25,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self addLabel];
+    [self addLabel1];
     [self addAttribuedLabel];
 }
 
@@ -33,6 +35,15 @@
     _label.font = [UIFont systemFontOfSize:17];
     //_label.numberOfLines = 2;
     [self.view addSubview:_label];
+}
+
+- (void)addLabel1 {
+    _label1.preferredMaxLayoutWidth = CGRectGetWidth(self.view.frame);
+    _label1.backgroundColor = [UIColor lightGrayColor];
+    _label1.text = @"这种遮罩是动态的，只要输入😄😄";
+    _label1.font = [UIFont systemFontOfSize:17];
+    //_label.numberOfLines = 2;
+    [self.view addSubview:_label1];
 }
 
 - (void)addAttribuedLabel {

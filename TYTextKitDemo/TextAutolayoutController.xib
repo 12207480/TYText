@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14113"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="attribuedLabel" destination="Ajw-Au-KSd" id="hNA-Gy-c8s"/>
                 <outlet property="label" destination="NaZ-JP-NWv" id="qF5-TV-Rli"/>
+                <outlet property="label1" destination="oau-80-xpO" id="PfV-zo-t2l"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -29,9 +30,15 @@
                     <rect key="frame" x="0.0" y="245" width="375" height="128"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oau-80-xpO" customClass="TYLabel">
+                    <rect key="frame" x="0.0" y="409" width="240" height="128"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="oau-80-xpO" firstAttribute="top" secondItem="Ajw-Au-KSd" secondAttribute="bottom" constant="36" id="EWT-dD-OXY"/>
+                <constraint firstItem="oau-80-xpO" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="GCQ-gi-t2a"/>
                 <constraint firstItem="Ajw-Au-KSd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="PcO-hB-4uc"/>
                 <constraint firstAttribute="trailing" secondItem="NaZ-JP-NWv" secondAttribute="trailing" id="QKi-dg-tFR"/>
                 <constraint firstItem="NaZ-JP-NWv" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="90" id="UCh-W9-HJU"/>

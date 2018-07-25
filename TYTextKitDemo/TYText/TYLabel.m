@@ -302,7 +302,7 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
 // get content size
 - (CGSize)contentSizeWithWidth:(CGFloat)width {
     if (_textRender) {
-        if (ABS(_textRender.size.width - width)<0.1 || _textRender.size.height == 0 || _textRender.size.width == 0) {
+        if (ABS(_textRender.size.width - width)>0.01 || _textRender.size.height == 0 || _textRender.size.width == 0) {
             return [_textRender textSizeWithRenderWidth:width];
         }
         return _textRender.size;

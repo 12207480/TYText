@@ -23,8 +23,9 @@
 
 @property (nonatomic, weak) id<TYLayoutManagerEditRender> render;
 
-@property (nonatomic, assign) NSRange highlightRange;
 @property (nonatomic, assign) CGFloat highlightBackgroudRadius;
 @property (nonatomic, assign) UIEdgeInsets highlightBackgroudInset;
+
+- (void)configureHighlightBackgroundRange:(NSRange)range radius:(CGFloat)radius inset:(UIEdgeInsets)inset;
 
 @end

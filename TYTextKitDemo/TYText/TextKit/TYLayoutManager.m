@@ -10,6 +10,7 @@
 
 @interface TYLayoutManager () {
     CGPoint _lastDrawPoint;
+    NSRange _highlightRange;
 }
 
 @end
@@ -32,6 +33,12 @@
 
 - (void)configure {
     _highlightBackgroudRadius = 2;
+}
+
+- (void)configureHighlightBackgroundRange:(NSRange)range radius:(CGFloat)radius inset:(UIEdgeInsets)inset {
+    _highlightRange = range;
+    _highlightBackgroudRadius = radius;
+    _highlightBackgroudInset = inset;
 }
 
 - (void)drawBackgroundForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin {
@@ -109,14 +116,14 @@
 
 - (void)processEditingForTextStorage:(NSTextStorage *)textStorage edited:(NSTextStorageEditActions)editMask range:(NSRange)newCharRange changeInLength:(NSInteger)delta invalidatedRange:(NSRange)invalidatedCharRange {
     [super processEditingForTextStorage:textStorage edited:editMask range:newCharRange changeInLength:delta invalidatedRange:invalidatedCharRange];
-    if (_render) {
+    if ([_render respondsToSelector:@selector(layoutManager:processEditingForTextStorage:edited:range:changeInLength:invalidatedRange:)]) {
         [_render layoutManager:self processEditingForTextStorage:textStorage edited:editMask range:newCharRange changeInLength:delta invalidatedRange:invalidatedCharRange];
     }
 }
 
 - (void)drawGlyphsForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin {
     [super drawGlyphsForGlyphRange:glyphsToShow atPoint:origin];
-    if (_render) {
+    if ([_render respondsToSelector:@selector(layoutManager:drawGlyphsForGlyphRange:atPoint:)]) {
         [_render layoutManager:self drawGlyphsForGlyphRange:glyphsToShow atPoint:origin];
     }
 }

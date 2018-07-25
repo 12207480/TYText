@@ -243,22 +243,21 @@
 #pragma mark - draw text
 
 - (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range {
+    TYLayoutManager *layoutManager = nil;
+    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
+        layoutManager = (TYLayoutManager *)_layoutManager;
+    }
     if (!textHighlight || range.length == 0) {
-        if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
-            TYLayoutManager *layoutManager = (TYLayoutManager *)_layoutManager;
-            layoutManager.highlightRange = NSMakeRange(0, 0);
-            layoutManager.highlightBackgroudInset = _highlightBackgroudInset;
-            layoutManager.highlightBackgroudRadius = _highlightBackgroudRadius;
-            layoutManager.highlightBackgroudRadius = _highlightBackgroudRadius;
+        if (layoutManager) {
+            [layoutManager configureHighlightBackgroundRange: NSMakeRange(0, 0) radius:_highlightBackgroudRadius inset:_highlightBackgroudInset];
         }
         self.textStorageOnRender = _textStorage;
         return;
     }
-    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
-        TYLayoutManager *layoutManager = (TYLayoutManager *)_layoutManager;
-        layoutManager.highlightRange = range;
-        layoutManager.highlightBackgroudInset = UIEdgeInsetsEqualToEdgeInsets(textHighlight.backgroudInset, UIEdgeInsetsZero)?_highlightBackgroudInset : textHighlight.backgroudInset;
-        layoutManager.highlightBackgroudRadius = textHighlight.backgroudRadius > 0 ? textHighlight.backgroudRadius : _highlightBackgroudRadius;
+    if (layoutManager) {
+        UIEdgeInsets highlightBackgroudInset = UIEdgeInsetsEqualToEdgeInsets(textHighlight.backgroudInset, UIEdgeInsetsZero)?_highlightBackgroudInset : textHighlight.backgroudInset;
+        CGFloat highlightBackgroudRadius = textHighlight.backgroudRadius > 0 ? textHighlight.backgroudRadius : _highlightBackgroudRadius;
+        [layoutManager configureHighlightBackgroundRange: range radius:highlightBackgroudRadius inset:highlightBackgroudInset];
     }
     NSTextStorage *highlightStorage = [_textStorage ty_deepCopy];
     [highlightStorage addTextAttribute:textHighlight range:range];

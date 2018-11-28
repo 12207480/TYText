@@ -155,9 +155,13 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     NSRange visibleRange = [_textRender visibleCharacterRange];
     for (TYTextAttachment *attachment in attachments) {
         if (NSLocationInRange(attachment.range.location, visibleRange)) {
-            CGRect rect = {attachment.position,attachment.size};
-            [attachment addToSuperView:self];
-            attachment.frame = rect;
+            if (attachment.range.location != 0 && CGPointEqualToPoint(attachment.position, CGPointZero)) {
+                [attachment removeFromSuperView:self];
+            }else {
+                CGRect rect = {attachment.position,attachment.size};
+                [attachment addToSuperView:self];
+                attachment.frame = rect;
+            }
         }else {
             [attachment removeFromSuperView:self];
         }

@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 # 名称 使用的时候pod search [name]
 s.name = "TYText"
 # 代码库的版本
-s.version = "1.0.0"
+s.version = "1.0.2"
 # 简介
 s.summary = "text asynchronous rendering by TextKit for iOS."
 # 主页

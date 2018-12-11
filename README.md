@@ -3,6 +3,11 @@ text asynchronous rendering by TextKit，for iOS.<br>
 TextKit异步渲染<br>
 you can see [weibo Demo](https://github.com/12207480/WeiboDemo).
 
+## CocoaPods
+```
+pod 'TYText'
+```
+
 ## Requirements
 * Xcode 8 or higher
 * iOS 7.0 or higher

@@ -306,10 +306,11 @@
     _textRectOnRender = textRect;
     
     // drawing text
+    __weak typeof(self) weakSelf = self;
     [_layoutManager enumerateLineFragmentsForGlyphRange:glyphRange usingBlock:^(CGRect rect, CGRect usedRect, NSTextContainer * _Nonnull textContainer, NSRange glyphRange, BOOL * _Nonnull stop) {
-        [_layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textRect.origin];
+        [weakSelf.layoutManager drawBackgroundForGlyphRange:glyphRange atPoint:textRect.origin];
         if (isCanceled && isCanceled()) {*stop = YES; return ;};
-        [_layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textRect.origin];
+        [weakSelf.layoutManager drawGlyphsForGlyphRange:glyphRange atPoint:textRect.origin];
         if (isCanceled && isCanceled()) {*stop = YES; return ;};
     }];
 }

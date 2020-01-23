@@ -42,9 +42,12 @@
 
 - (void)addLabel {
     TYLabel *label = [[TYLabel alloc]init];
+    label.displaysAsynchronously = NO;
     label.delegate = self;
     label.backgroundColor = [UIColor lightGrayColor];
     label.attributedText = [self addAttribuetedString];
+    label.numberOfLines = 2;
+    label.truncationToken = [self truncationToken];
     [self.view addSubview:label];
     _label = label;
 }
@@ -97,6 +100,19 @@
     return text;
 }
 
+- (NSAttributedString *)truncationToken {
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"...全文"];
+    text.ty_font = [UIFont systemFontOfSize:16];
+    [text ty_addColor:[UIColor redColor] range:[text.string rangeOfString:@"全文"]];
+    TYTextHighlight *textHighlight = [[TYTextHighlight alloc]init];
+    textHighlight.color = [UIColor blueColor];
+    textHighlight.tag = 1000;
+    [text addTextHighlightAttribute:textHighlight range:[text.string rangeOfString:@"全文"]];
+    text.ty_characterSpacing = 2;
+    return text;
+}
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -108,6 +124,9 @@
 
 - (void)label:(TYLabel *)label didTappedTextHighlight:(TYTextHighlight *)textHighlight {
     NSLog(@"didTappedTextHighlight");
+    if (textHighlight.tag == 1000) {
+        _label.numberOfLines = 0;
+    }
 }
 
 - (void)label:(TYLabel *)label didLongPressedTextHighlight:(TYTextHighlight *)textHighlight {

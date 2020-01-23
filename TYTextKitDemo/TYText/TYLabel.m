@@ -244,6 +244,15 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     [self invalidateIntrinsicContentSize];
 }
 
+- (void)setTruncationToken:(NSAttributedString *)truncationToken {
+    _truncationToken = truncationToken;
+    if (_ignoreAboveRenderRelatePropertys && _textRender) {
+        return;
+    }
+    [self displayRedrawIfNeed];
+    [self invalidateIntrinsicContentSize];
+}
+
 - (void)setNumberOfLines:(NSInteger)numberOfLines {
     _numberOfLines = numberOfLines;
     if (_ignoreAboveRenderRelatePropertys && _textRender) {
@@ -308,10 +317,12 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
         return _textRender.size;
     }
     BOOL ignoreAboveRenderRelatePropertys = _ignoreAboveRenderRelatePropertys && _textRender;
-    NSTextStorage *textStorage = [_textStorageOnRender ty_deepCopy];
-    TYTextRender *textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
+    TYTextRender *textRender = [[TYTextRender alloc]initWithTextStorage:_textStorageOnRender];
     if (!ignoreAboveRenderRelatePropertys) {
-        [self configureTextRender:textRender verticalAlignment:_verticalAlignment numberOfLines:_numberOfLines lineBreakMode:_lineBreakMode];
+        textRender.verticalAlignment = _verticalAlignment;
+        textRender.maximumNumberOfLines = _numberOfLines;
+        textRender.lineBreakMode = _lineBreakMode;
+        textRender.truncationToken = _truncationToken;
     }
     return [textRender textSizeWithRenderWidth:width];
 }
@@ -323,7 +334,7 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     if (index < 0) {
         return nil;
     }
-    return [_textRenderOnDisplay.textStorage textHighlightAtIndex:index effectiveRange:range];
+    return [_textRenderOnDisplay textHighlightAtIndex:index effectiveRange:range];
 }
 
 #pragma mark - LongPress timer
@@ -458,6 +469,7 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     TYTextVerticalAlignment verticalAlignment = _verticalAlignment;
     NSInteger numberOfLines = _numberOfLines;
     NSLineBreakMode lineBreakMode = _lineBreakMode;
+    NSAttributedString *truncationToken = _truncationToken;
     
     TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
     // will display
@@ -482,10 +494,14 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
             return;
         }
         if (!ignoreAboveRenderRelatePropertys) {
-            [self configureTextRender:textRender verticalAlignment:verticalAlignment numberOfLines:numberOfLines lineBreakMode:lineBreakMode];
+            textRender.verticalAlignment = verticalAlignment;
+            textRender.maximumNumberOfLines = numberOfLines;
+            textRender.lineBreakMode = lineBreakMode;
+            textRender.truncationToken = truncationToken;
         }
         textRender.size = size;
         if (isCancelled()) return;
+        [textRender setTextStorageTruncationToken];
         [textRender setTextHighlight:textHighlight range:highlightRange];
         [textRender drawTextAtPoint:CGPointZero isCanceled:isCancelled];
     };
@@ -522,15 +538,6 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
         _attachments = attachments;
     };
     return task;
-}
-
-- (void)configureTextRender:(TYTextRender *)textRender
-          verticalAlignment:(TYTextVerticalAlignment)verticalAlignment
-              numberOfLines:(NSInteger)numberOfLines
-              lineBreakMode:(NSLineBreakMode)lineBreakMode {
-    textRender.verticalAlignment = verticalAlignment;
-    textRender.maximumNumberOfLines = numberOfLines;
-    textRender.lineBreakMode = lineBreakMode;
 }
 
 - (void)dealloc {

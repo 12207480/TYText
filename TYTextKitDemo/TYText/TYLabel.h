@@ -66,6 +66,7 @@ asynchronous display of the view's layer. default YES
 
 @property (nonatomic, assign) NSLineBreakMode    lineBreakMode;   // default is NSLineBreakByTruncatingTail. used for single and multiple lines of text
 @property (nonatomic, assign) TYTextVerticalAlignment verticalAlignment; // text vertical alignment. default center
+@property(nullable, nonatomic, copy) NSAttributedString *truncationToken;
 // A value of 0 means no limit.default 0
 // if the height of the text reaches the # of lines or the height of the view is less than the # of lines allowed, the text will be truncated using the line break mode.
 @property (nonatomic, assign) NSInteger numberOfLines;

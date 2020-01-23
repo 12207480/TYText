@@ -44,6 +44,7 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
 @property (nonatomic, assign) CGFloat lineFragmentPadding;
 @property (nonatomic, assign) NSLineBreakMode lineBreakMode;
 @property (nonatomic, assign) NSUInteger maximumNumberOfLines;
+@property(nullable, nonatomic, copy) NSAttributedString *truncationToken;
 
 // text highlight. support TYLayoutManager
 @property (nonatomic, assign) CGFloat highlightBackgroudRadius;// default 4.0
@@ -104,6 +105,11 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
 - (NSInteger)characterIndexForPoint:(CGPoint)point;
 
 /**
+ text highlight at index
+*/
+- (TYTextHighlight *)textHighlightAtIndex:(NSUInteger)index effectiveRange:(nullable NSRangePointer)range;
+
+/**
  draw text at point
  */
 - (void)drawTextAtPoint:(CGPoint)point;
@@ -131,6 +137,10 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
  */
 @property (nonatomic, assign, readonly) NSRange truncatedCharacterRangeOnRender;
 
+/**
+set text truncation
+*/
+- (void)setTextStorageTruncationToken;
 /**
  set text highlight
  */

@@ -87,7 +87,7 @@
     if (_onlySetTextStorageWillGetAttachViews && !_editable) {
         self.attachmentViews = textStorage.attachmentViews;
     }
-    self.textStorageOnRender = textStorage;
+    self.textStorageOnRender = _editable ?  textStorage : [textStorage ty_deepCopy];
 }
 
 - (void)setTextStorageOnRender:(NSTextStorage *)textStorageOnRender {
@@ -216,6 +216,7 @@
     }
     CGSize size = _textContainer.size;
     _textContainer.size = CGSizeMake(renderWidth, MAXFLOAT);
+    [self setTextStorageTruncationToken];
     CGSize textSize = [self boundingRectForGlyphRange:[self visibleGlyphRange]].size;
     _textContainer.size = size;
     return CGSizeMake(ceil(textSize.width), ceil(textSize.height));
@@ -232,8 +233,18 @@
     return distanceToPoint < 1 ? index : -1;
 }
 
+- (TYTextHighlight *)textHighlightAtIndex:(NSUInteger)index effectiveRange:(nullable NSRangePointer)range {
+    return [_textStorageOnRender textHighlightAtIndex:index effectiveRange:range];
+}
+
 - (void)drawTextAtPoint:(CGPoint)point {
     [self drawTextAtPoint:point isCanceled:nil];
+}
+
+- (void)dealloc {
+    _textContainer = nil;
+    _layoutManager = nil;
+    _textStorage = nil;
 }
 
 @end
@@ -242,26 +253,57 @@
 
 #pragma mark - draw text
 
-- (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range {
-    TYLayoutManager *layoutManager = nil;
-    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
-        layoutManager = (TYLayoutManager *)_layoutManager;
-    }
-    if (!textHighlight || range.length == 0) {
-        if (layoutManager) {
-            [layoutManager configureHighlightBackgroundRange: NSMakeRange(0, 0) radius:_highlightBackgroudRadius inset:_highlightBackgroudInset];
-        }
-        self.textStorageOnRender = _textStorage;
+- (void)setTextStorageTruncationToken {
+    if (_editable || self.lineBreakMode != NSLineBreakByTruncatingTail || !_truncationToken) {
         return;
     }
-    if (layoutManager) {
+    //计算需要替换的range
+    NSUInteger truncatedLocation;
+    NSInteger glyphIndex = [_layoutManager glyphIndexForCharacterAtIndex:_textStorageOnRender.length - 1];
+    if (glyphIndex < 0) {
+        return;
+    }
+    //判断是否有截断
+    NSRange truncatedGlyphRange = [_layoutManager truncatedGlyphRangeInLineFragmentForGlyphAtIndex:glyphIndex];
+    if (truncatedGlyphRange.location != NSNotFound) {
+        truncatedLocation = truncatedGlyphRange.location;
+    } else {
+        NSRange visiableGlyphRange = [_layoutManager glyphRangeForTextContainer:self.textContainer];
+        if (visiableGlyphRange.length - visiableGlyphRange.location - 1 >= glyphIndex) {
+            //既没有截断，也没有换行，总之能放下，所以直接返回即可
+            return;
+        } else {
+            truncatedLocation = visiableGlyphRange.length - visiableGlyphRange.location - 1;
+        }
+    }
+    NSMutableAttributedString *truncationToken = [_truncationToken copy];
+    CGSize size = [truncationToken boundingRectWithSize:_textContainer.size options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+    CGRect lineRect = [_layoutManager lineFragmentRectForGlyphAtIndex:truncatedLocation effectiveRange:nil];
+    NSUInteger replaceStartGlyphIndex;
+    //如果truncation的长度大于了一整行的长度，那么能显示几个显示几个了，显示不下的...
+    if (lineRect.size.width <= size.width) {
+        //起点从这行开始
+        replaceStartGlyphIndex = [_layoutManager glyphIndexForPoint:lineRect.origin inTextContainer:_textContainer];
+    } else {
+        //起点从能够放下的那个字形开始
+        replaceStartGlyphIndex = [_layoutManager glyphIndexForPoint:CGPointMake(lineRect.origin.x + lineRect.size.width - size.width, lineRect.origin.y) inTextContainer:_textContainer];
+    }
+    NSRange characterRange = [_layoutManager characterRangeForGlyphRange:NSMakeRange(replaceStartGlyphIndex, glyphIndex - replaceStartGlyphIndex + 1) actualGlyphRange:nil];
+    [_textStorageOnRender replaceCharactersInRange:characterRange withAttributedString:truncationToken];
+}
+
+
+- (void)setTextHighlight:(TYTextHighlight *)textHighlight range:(NSRange)range {
+    if (!textHighlight || range.length == 0) {
+        return;
+    }
+    if ([_layoutManager isKindOfClass:[TYLayoutManager class]]) {
+        TYLayoutManager *layoutManager = (TYLayoutManager *)_layoutManager;
         UIEdgeInsets highlightBackgroudInset = UIEdgeInsetsEqualToEdgeInsets(textHighlight.backgroudInset, UIEdgeInsetsZero)?_highlightBackgroudInset : textHighlight.backgroudInset;
         CGFloat highlightBackgroudRadius = textHighlight.backgroudRadius > 0 ? textHighlight.backgroudRadius : _highlightBackgroudRadius;
         [layoutManager configureHighlightBackgroundRange: range radius:highlightBackgroudRadius inset:highlightBackgroudInset];
     }
-    NSTextStorage *highlightStorage = [_textStorage ty_deepCopy];
-    [highlightStorage addTextAttribute:textHighlight range:range];
-    self.textStorageOnRender = highlightStorage;
+    [_textStorageOnRender addTextAttribute:textHighlight range:range];
 }
 
 - (CGRect)textRectForGlyphRange:(NSRange)glyphRange atPiont:(CGPoint)point

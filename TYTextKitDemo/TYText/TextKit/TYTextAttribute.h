@@ -37,6 +37,7 @@ UIKIT_EXTERN NSString *const TYTextHighlightAttributeName;
 @property (nonatomic, strong , readonly) NSString *attributeName;
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *attributes;
 
+@property (nonatomic, assign) NSInteger tag;
 @property (nonatomic, strong, nullable) NSDictionary *userInfo;
 
 @property (nonatomic, strong, nullable) UIColor *color;

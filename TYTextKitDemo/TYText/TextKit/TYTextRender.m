@@ -53,8 +53,15 @@
 }
 
 - (instancetype)initWithTextContainer:(NSTextContainer *)textContainer {
+    if (self = [self initWithTextContainer:textContainer editable:NO]) {
+    }
+    return self;
+}
+
+- (instancetype)initWithTextContainer:(NSTextContainer *)textContainer editable:(BOOL)editable{
     if (self = [super init]) {
         NSParameterAssert(textContainer.layoutManager);
+        _editable = editable;
         _onlySetTextStorageWillGetAttachViews = YES;
         _textContainer = textContainer;
         _layoutManager = textContainer.layoutManager;
@@ -99,6 +106,11 @@
     }
     [textStorageOnRender addLayoutManager:_layoutManager];
     _textStorageOnRender = textStorageOnRender;
+}
+
+- (void)setEditable:(BOOL)editable {
+    _editable = editable;
+    self.textStorageOnRender = _textStorage;
 }
 
 - (void)setSize:(CGSize)size {

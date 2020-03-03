@@ -76,6 +76,8 @@ typedef NS_ENUM(NSUInteger, TYTextVerticalAlignment) {
 - (instancetype)initWithAttributedText:(NSAttributedString *)attributedText;
 - (instancetype)initWithTextStorage:(NSTextStorage *)textStorage;
 - (instancetype)initWithTextContainer:(NSTextContainer *)textContainer;
+// if use textView editable = YES
+- (instancetype)initWithTextContainer:(NSTextContainer *)textContainer editable:(BOOL)editable;
 
 /**
  return text max size if maximumNumberOfLines 0,oherwise maximumNumberOfLines text size

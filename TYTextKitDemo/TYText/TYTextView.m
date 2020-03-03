@@ -72,8 +72,9 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
 #pragma mark - Getter && Setter
 
 - (TYTextRender *)defaultTextRender {
-    NSTextStorage *textStorage = [[TYTextStorage alloc]init];
-    TYTextRender *textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
+    TYTextRender *textRender = [[TYTextRender alloc]init];
+    textRender.editable = YES;
+    textRender.textStorage = [[TYTextStorage alloc]init];
     textRender.lineFragmentPadding = 5.0;
     return textRender;
 }
@@ -82,7 +83,9 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     if ([textRender.layoutManager isKindOfClass:[TYLayoutManager class]]) {
         ((TYLayoutManager *)textRender.layoutManager).render = self;
     }
-    textRender.editable = YES;
+    if (!textRender.editable) {
+        textRender.editable = YES;
+    }
     _textRender = textRender;
 }
 

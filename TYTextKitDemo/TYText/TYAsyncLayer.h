@@ -48,6 +48,7 @@ CGFloat ty_text_screen_scale(void);
 
 @interface TYAsyncLayerDisplayTask : NSObject
 
+@property (nullable, nonatomic, weak) CALayer *layer;
 
 /**
  will display layer on main thread.

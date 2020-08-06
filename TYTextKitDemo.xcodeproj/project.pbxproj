@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D4F220C24DC5350001EBC31 /* TYTaskScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F220B24DC5350001EBC31 /* TYTaskScheduler.m */; };
 		2B0869F11FAFFB85008062CF /* TextAutolayoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0869EF1FAFFB85008062CF /* TextAutolayoutController.m */; };
 		2B0869F21FAFFB85008062CF /* TextAutolayoutController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2B0869F01FAFFB85008062CF /* TextAutolayoutController.xib */; };
 		2B426F461F78F062009E70D9 /* TextDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B426F451F78F062009E70D9 /* TextDemoViewController.m */; };
@@ -38,6 +39,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D4F220A24DC5350001EBC31 /* TYTaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTaskScheduler.h; sourceTree = "<group>"; };
+		0D4F220B24DC5350001EBC31 /* TYTaskScheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTaskScheduler.m; sourceTree = "<group>"; };
 		2B0869EE1FAFFB85008062CF /* TextAutolayoutController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextAutolayoutController.h; sourceTree = "<group>"; };
 		2B0869EF1FAFFB85008062CF /* TextAutolayoutController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextAutolayoutController.m; sourceTree = "<group>"; };
 		2B0869F01FAFFB85008062CF /* TextAutolayoutController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextAutolayoutController.xib; sourceTree = "<group>"; };
@@ -127,6 +130,8 @@
 				2B4850FB1FBD7B230021BB28 /* TYTextView.m */,
 				2B4851191FBD7B510021BB28 /* TYAsyncLayer.h */,
 				2B4851181FBD7B510021BB28 /* TYAsyncLayer.m */,
+				0D4F220A24DC5350001EBC31 /* TYTaskScheduler.h */,
+				0D4F220B24DC5350001EBC31 /* TYTaskScheduler.m */,
 				2B4850FF1FBD7B230021BB28 /* TextKit */,
 			);
 			path = TYText;
@@ -304,6 +309,7 @@
 				2B49A1221F973B19007E1935 /* ImageTextListViewController.m in Sources */,
 				2B48510F1FBD7B230021BB28 /* TYTextView.m in Sources */,
 				2B426F4F1F78F7AE009E70D9 /* TextViewCell.m in Sources */,
+				0D4F220C24DC5350001EBC31 /* TYTaskScheduler.m in Sources */,
 				2B4851141FBD7B230021BB28 /* TYTextParse.m in Sources */,
 				2B4851131FBD7B230021BB28 /* TYTextRender.m in Sources */,
 				2B426F551F790A3C009E70D9 /* TYFPSLabel.m in Sources */,

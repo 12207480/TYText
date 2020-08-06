@@ -50,7 +50,7 @@
     NSMutableArray *itemArray = [NSMutableArray array];
     NSMutableArray *textArray = [NSMutableArray array];
     NSMutableArray *renderArray = [NSMutableArray array];
-    for (int i = 0; i < 200; ++i) {
+    for (int i = 0; i < 2000; ++i) {
         NSString *str = [NSString stringWithFormat:@"%d Async Display Test ✺◟(❛ัᴗ❛∗)◞✺ ✺◟(∗❛ᴗ❛∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫 Async Display Test ✺◟(∗❛ᴗ❛∗)◞✺ ✺◟(∗❛ᴗ❛∗)◞✺ 😀😖😐😣😡🚖🚌🚋🎊💖💗💛💙🏨🏦🏫",i%3 ? i:i*100];
         
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:str];

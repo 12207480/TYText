@@ -9,6 +9,8 @@
 #import "TYAsyncLayer.h"
 #import <stdatomic.h>
 
+#import "TYTaskScheduler.h"
+
 static dispatch_queue_t asyncDisplayQueue() {
     static dispatch_queue_t displayQueue = NULL;
     static dispatch_once_t onceToken;
@@ -122,10 +124,18 @@ CGFloat ty_text_screen_scale(void) {
 }
 
 #pragma mark - private
-
 - (void)displayAsync:(BOOL)asynchronously {
     __strong id<TYAsyncLayerDelegate> delegate = _asyncDelegate;
-    TYAsyncLayerDisplayTask *task = [delegate newAsyncDisplayTask];
+    TYAsyncLayerDisplayTask *ltask = [delegate newAsyncDisplayTask];
+    ltask.layer = self;
+    __weak TYAsyncLayer *weakSelf = self;
+    void (^block)(TYAsyncLayerDisplayTask *task) = ^(TYAsyncLayerDisplayTask *task) {
+        [weakSelf displayAsync:asynchronously task:task];
+    };
+    [[TYTaskScheduler sharedInstance] dispatchTask:ltask block:block];
+}
+
+- (void)displayAsync:(BOOL)asynchronously task:(TYAsyncLayerDisplayTask *)task {
     if (task.willDisplay) {
         task.willDisplay(self);
     }

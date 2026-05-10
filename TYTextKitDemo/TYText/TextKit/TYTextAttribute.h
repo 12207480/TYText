@@ -10,8 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-UIKIT_EXTERN NSString *const TYTextAttributeName;
-UIKIT_EXTERN NSString *const TYTextHighlightAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const TYTextAttributeName;
+UIKIT_EXTERN NSAttributedStringKey const TYTextHighlightAttributeName;
 
 @class TYTextAttribute;
 @class TYTextHighlight;
@@ -34,8 +34,8 @@ UIKIT_EXTERN NSString *const TYTextHighlightAttributeName;
 
 @interface TYTextAttribute : NSObject
 
-@property (nonatomic, strong , readonly) NSString *attributeName;
-@property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *attributes;
+@property (nonatomic, strong, readonly) NSAttributedStringKey attributeName;
+@property (nonatomic, copy, nullable) NSDictionary<NSAttributedStringKey, id> *attributes;
 
 @property (nonatomic, assign) NSInteger tag;
 @property (nonatomic, strong, nullable) NSDictionary *userInfo;
@@ -60,7 +60,7 @@ UIKIT_EXTERN NSString *const TYTextHighlightAttributeName;
 @property (nonatomic, strong, nullable) NSShadow *shadow;
 
 - (instancetype)init;
-- (instancetype)initWithAttributes:(nullable NSDictionary *)attributes;
+- (instancetype)initWithAttributes:(nullable NSDictionary<NSAttributedStringKey, id> *)attributes;
 
 @end
 
@@ -68,7 +68,11 @@ UIKIT_EXTERN NSString *const TYTextHighlightAttributeName;
 
 @property (nonatomic, assign) UIEdgeInsets backgroudInset;
 @property (nonatomic, assign) CGFloat backgroudRadius;
+
+// TextKit 2 下，高亮背景由 TYTextRender 自行绘制，这里只返回文本前景/下划线等可由 layoutManager
+// setRenderingAttributes:forTextRange: 安全覆盖的属性（排除 backgroundColor 等装饰类）。
+- (NSDictionary<NSAttributedStringKey, id> *)renderingAttributes;
+
 @end
 
 NS_ASSUME_NONNULL_END
-

@@ -9,8 +9,8 @@
 #import "TYTextAttribute.h"
 #import "NSAttributedString+TYText.h"
 
-NSAttributedStringKey const TYTextAttributeName = @"TYTextAttribute";
-NSAttributedStringKey const TYTextHighlightAttributeName = @"TYTextHighlightAttribute";
+NSString *const TYTextAttributeName = @"TYTextAttribute";
+NSString *const TYTextHighlightAttributeName = @"TYTextHighlightAttribute";
 
 @implementation NSAttributedString (TYTextAttribute)
 
@@ -27,8 +27,8 @@ NSAttributedStringKey const TYTextHighlightAttributeName = @"TYTextHighlightAttr
 @implementation NSMutableAttributedString (TYTextAttribute)
 
 - (void)addTextAttribute:(TYTextAttribute *)textAttribute range:(NSRange)range {
-    NSDictionary<NSAttributedStringKey, id> *attributes = textAttribute.attributes;
-    [attributes enumerateKeysAndObjectsUsingBlock:^(NSAttributedStringKey key, id value, BOOL *stop) {
+    NSDictionary *attributes = textAttribute.attributes;
+    [attributes enumerateKeysAndObjectsUsingBlock:^(NSString *key, id value, BOOL *stop) {
         [self ty_addAttribute:key value:value range:range];
     }];
     [self ty_addAttribute:textAttribute.attributeName value:textAttribute range:range];
@@ -43,19 +43,21 @@ NSAttributedStringKey const TYTextHighlightAttributeName = @"TYTextHighlightAttr
 @implementation TYTextAttribute
 
 - (instancetype)init {
-    return [self initWithAttributes:nil];
+    if (self = [self initWithAttributes:nil]) {
+    }
+    return self;
 }
 
-- (instancetype)initWithAttributes:(NSDictionary<NSAttributedStringKey, id> *)attributes {
+- (instancetype)initWithAttributes:(NSDictionary *)attributes {
     if (self = [super init]) {
-        _attributes = attributes ? [[NSMutableDictionary alloc] initWithDictionary:attributes] : [NSMutableDictionary dictionary];
+        _attributes = attributes ? [[NSMutableDictionary alloc]initWithDictionary:attributes] : [NSMutableDictionary dictionary];
     }
     return self;
 }
 
 #pragma mark - getter && setter
 
-- (NSAttributedStringKey)attributeName {
+- (NSString *)attributeName {
     return TYTextAttributeName;
 }
 
@@ -66,7 +68,7 @@ NSAttributedStringKey const TYTextHighlightAttributeName = @"TYTextHighlightAttr
     ((NSMutableDictionary *)_attributes)[NSForegroundColorAttributeName] = color;
 }
 
-- (UIFont *)font {
+-(UIFont *)font {
     return _attributes[NSFontAttributeName];
 }
 - (void)setFont:(UIFont *)font {
@@ -133,30 +135,8 @@ NSAttributedStringKey const TYTextHighlightAttributeName = @"TYTextHighlightAttr
 
 @implementation TYTextHighlight
 
-- (NSAttributedStringKey)attributeName {
+- (NSString *)attributeName {
     return TYTextHighlightAttributeName;
-}
-
-- (NSDictionary<NSAttributedStringKey, id> *)renderingAttributes {
-    // setRenderingAttributes:forTextRange: 只覆盖文本渲染属性；背景色会与我们自绘的圆角高亮冲突，这里剔除。
-    NSMutableDictionary<NSAttributedStringKey, id> *result = [NSMutableDictionary dictionary];
-    NSArray<NSAttributedStringKey> *keys = @[
-        NSForegroundColorAttributeName,
-        NSUnderlineStyleAttributeName,
-        NSUnderlineColorAttributeName,
-        NSStrikethroughStyleAttributeName,
-        NSStrikethroughColorAttributeName,
-        NSStrokeWidthAttributeName,
-        NSStrokeColorAttributeName,
-        NSShadowAttributeName,
-    ];
-    for (NSAttributedStringKey key in keys) {
-        id value = self.attributes[key];
-        if (value) {
-            result[key] = value;
-        }
-    }
-    return result;
 }
 
 @end

@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
 #define kLongPressTimerInterval 0.5
 #define kLongPressTimerMoveDistance 5
 
-@interface TYTextView () <NSTextStorageDelegate> {
+@interface TYTextView ()<TYLayoutManagerEditRender> {
     struct {
         unsigned int shouldInsertText : 1;
         unsigned int shouldInsertAttributedText : 1;
@@ -29,88 +29,64 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
 
 @property (nonatomic, strong) TYTextRender *textRender;
 
-@property (nonatomic, strong) NSArray<TYTextAttachment *> *attachments;
+@property (nonatomic, strong) NSArray *attachments;
 
 @property (nonatomic, assign) NSRange highlightRange;
-@property (nonatomic, strong, nullable) TYTextHighlight *textHighlight;
+@property (nonatomic, strong) TYTextHighlight *textHighlight;
 
-@property (nonatomic, strong, nullable) NSTimer *longPressTimer;
+@property (nonatomic, strong) NSTimer *longPressTimer;
 @property (nonatomic, assign) NSUInteger longPressTimerCount;
 
 @property (nonatomic, assign) TYTextViewTouchedState touchState;
 @property (nonatomic, assign) CGPoint beginTouchPiont;
 
-// override point
+// override
 - (void)textAtrributedDidChange;
 
 @end
 
 @implementation TYTextView
 
-#pragma mark - Init
+- (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender {
+    if (self = [super initWithFrame:frame textContainer:textRender.textContainer]) {
+        self.textRender = textRender;
+        self.autocorrectionType = UITextAutocorrectionTypeNo;
+        _longPressDuring = 2.0;
+    }
+    return self;
+}
 
-- (instancetype)init {
-    return [self initWithFrame:CGRectZero textRender:nil];
+- (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer {
+    TYTextRender *textRender = [[TYTextRender alloc]initWithTextContainer:textContainer];
+    if (self = [self initWithFrame:frame textRender:textRender]) {
+    }
+    return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    return [self initWithFrame:frame textRender:nil];
-}
-
-- (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender {
-    NSTextContainer *container = textRender.textContainer ?: [self newTextKit2Container];
-    if (self = [super initWithFrame:frame textContainer:container]) {
-        [self commonInit];
-        if (textRender) {
-            [self installTextRender:textRender];
-        } else {
-            [self installTextRender:[self defaultTextRender]];
-        }
+    if (self = [self initWithFrame:frame textRender:[self defaultTextRender]]) {
     }
     return self;
-}
-
-- (NSTextContainer *)newTextKit2Container {
-    NSTextContentStorage *contentStorage = [[NSTextContentStorage alloc] init];
-    NSTextLayoutManager *layoutManager = [[NSTextLayoutManager alloc] init];
-    [contentStorage addTextLayoutManager:layoutManager];
-    NSTextContainer *container = [[NSTextContainer alloc] init];
-    layoutManager.textContainer = container;
-    return container;
-}
-
-- (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        [self commonInit];
-        [self installTextRender:[self defaultTextRender]];
-    }
-    return self;
-}
-
-- (void)commonInit {
-    self.autocorrectionType = UITextAutocorrectionTypeNo;
-    _longPressDuring = 2.0;
-    _highlightRange = NSMakeRange(0, 0);
-}
-
-- (TYTextRender *)defaultTextRender {
-    TYTextRender *textRender = [[TYTextRender alloc] initWithTextContainer:self.textContainer editable:YES];
-    textRender.lineFragmentPadding = self.textContainer.lineFragmentPadding;
-    return textRender;
-}
-
-- (void)installTextRender:(TYTextRender *)textRender {
-    _textRender = textRender;
-    if (!textRender.editable) {
-        textRender.editable = YES;
-    }
-    self.textStorage.delegate = self;
 }
 
 #pragma mark - Getter && Setter
 
+- (TYTextRender *)defaultTextRender {
+    TYTextRender *textRender = [[TYTextRender alloc]init];
+    textRender.editable = YES;
+    textRender.textStorage = [[TYTextStorage alloc]init];
+    textRender.lineFragmentPadding = 5.0;
+    return textRender;
+}
+
 - (void)setTextRender:(TYTextRender *)textRender {
-    [self installTextRender:textRender];
+    if ([textRender.layoutManager isKindOfClass:[TYLayoutManager class]]) {
+        ((TYLayoutManager *)textRender.layoutManager).render = self;
+    }
+    if (!textRender.editable) {
+        textRender.editable = YES;
+    }
+    _textRender = textRender;
 }
 
 - (void)setDelegate:(id<UITextViewDelegate>)delegate {
@@ -148,18 +124,17 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
         att.ty_font = self.font;
         attributedText = att;
     }
-    NSRange selectedRange = self.selectedRange;
-    if (selectedRange.length > 0) {
-        [self.textStorage replaceCharactersInRange:selectedRange withAttributedString:attributedText];
-    } else {
-        [self.textStorage insertAttributedString:attributedText atIndex:selectedRange.location];
+    if (self.selectedRange.length > 0) {
+        [_textRender.textStorage replaceCharactersInRange:self.selectedRange withAttributedString:attributedText];
+    }else {
+        [_textRender.textStorage insertAttributedString:attributedText atIndex:self.selectedRange.location];
     }
-    self.selectedRange = NSMakeRange(selectedRange.location + attributedText.length, 0);
+    self.selectedRange = NSMakeRange(self.selectedRange.location+attributedText.length, 0);
 }
 
 #pragma mark - Private
 
-- (void)configireTextStorage:(NSTextStorage *)textStorage {
+- (void)configireTextSorage:(NSTextStorage *)textStorage {
     if (_ignoreAboveTextRelatedPropertys) {
         return;
     }
@@ -170,57 +145,35 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
 }
 
 - (void)addAttachmentViews {
-    NSArray<TYTextAttachment *> *attachments = self.textStorage.attachmentViews;
+    NSArray *attachments = _textRender.attachmentViews;
     if (!_attachments && !attachments) {
         return;
     }
-    NSSet<TYTextAttachment *> *attachmentSet = attachments.count > 0 ? [NSSet setWithArray:attachments] : nil;
+    NSSet *attachmentSet = [NSSet setWithArray:attachments];
     for (TYTextAttachment *attachment in _attachments) {
         if (!attachmentSet || ![attachmentSet containsObject:attachment]) {
             [attachment removeFromSuperView:self];
         }
     }
-    NSTextLayoutManager *layoutManager = self.textLayoutManager;
-    NSTextContentManager *contentManager = layoutManager.textContentManager;
-    NSTextContentStorage *contentStorage = [contentManager isKindOfClass:[NSTextContentStorage class]] ? (NSTextContentStorage *)contentManager : nil;
-    if (!layoutManager || !contentStorage) {
-        _attachments = attachments;
-        return;
-    }
-    [layoutManager ensureLayoutForRange:contentStorage.documentRange];
-
+    NSRange visibleRange = [_textRender visibleCharacterRange];
     for (TYTextAttachment *attachment in attachments) {
-        NSUInteger loc = attachment.range.location;
-        if (loc == NSNotFound || loc >= self.textStorage.length) {
+        if (NSLocationInRange(attachment.range.location, visibleRange)) {
+            if (attachment.range.location != 0 && CGPointEqualToPoint(attachment.position, CGPointZero)) {
+                [attachment removeFromSuperView:self];
+            }else {
+                CGRect rect = {attachment.position,attachment.size};
+                [attachment addToSuperView:self];
+                attachment.frame = rect;
+            }
+        }else {
             [attachment removeFromSuperView:self];
-            continue;
         }
-        id<NSTextLocation> location = [contentStorage locationFromLocation:contentStorage.documentRange.location withOffset:(NSInteger)loc];
-        if (!location) {
-            [attachment removeFromSuperView:self];
-            continue;
-        }
-        NSTextLayoutFragment *fragment = [layoutManager textLayoutFragmentForLocation:location];
-        if (!fragment) {
-            [attachment removeFromSuperView:self];
-            continue;
-        }
-        CGRect frame = [fragment frameForTextAttachmentAtLocation:location];
-        if (CGRectIsEmpty(frame)) {
-            [attachment removeFromSuperView:self];
-            continue;
-        }
-        frame.origin.x += fragment.layoutFragmentFrame.origin.x + self.textContainerInset.left;
-        frame.origin.y += fragment.layoutFragmentFrame.origin.y + self.textContainerInset.top;
-        [attachment ty_updatePosition:frame.origin];
-        [attachment addToSuperView:self];
-        [attachment setFrame:frame];
     }
     _attachments = attachments;
 }
 
 - (void)textAtrributedDidChange {
-
+    
 }
 
 - (TYTextHighlight *)textHighlightForPoint:(CGPoint)point effectiveRange:(NSRangePointer)range {
@@ -228,12 +181,11 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     if (index < 0) {
         return nil;
     }
-    return [self.textStorage textHighlightAtIndex:(NSUInteger)index effectiveRange:range];
+    return [_textRender.textStorage textHighlightAtIndex:index effectiveRange:range];
 }
 
 - (void)immediatelyDisplayRedraw {
     [_textRender setTextHighlight:_textHighlight range:_highlightRange];
-    [self setNeedsDisplay];
 }
 
 #pragma mark - LongPress Timer
@@ -261,11 +213,9 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
         [self endLongPressTimer];
         return;
     }
-    if (_longPressTimerCount * kLongPressTimerInterval >= _longPressDuring) {
+    if (_longPressTimerCount*kLongPressTimerInterval >= _longPressDuring) {
         _touchState = TYTextViewTouchedStateLongPressed;
-        TYTextHighlight *highlight = _textHighlight;
-        [self endLongPressTimer];
-        [((id<TYTextViewDelegate>)self.delegate) textView:self didLongPressedTextHighlight:highlight];
+        [((id<TYTextViewDelegate>)self.delegate) textView:self didLongPressedTextHighlight:_textHighlight];
         [self endTouch];
     }
 }
@@ -333,11 +283,15 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     NSRange range = NSMakeRange(0, 0);
     if (_delegateFlags.didTappedTextHighlight && _touchState == TYTextViewTouchedStateTapped) {
         TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
-        if (textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange)) {
+        if (textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange) ) {
             [((id<TYTextViewDelegate>)self.delegate) textView:self didTappedTextHighlight:_textHighlight];
         }
     }
     [self endTouch];
+}
+
+- (NSDictionary<NSString *,id> *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction {
+    return nil;
 }
 
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -357,24 +311,24 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
     _beginTouchPiont = CGPointZero;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
+#pragma mark - TYLayoutManagerEditRender
+
+- (void)layoutManager:(TYLayoutManager *)layoutManager processEditingForTextStorage:(NSTextStorage *)textStorage edited:(NSTextStorageEditActions)editMask range:(NSRange)newCharRange changeInLength:(NSInteger)delta invalidatedRange:(NSRange)invalidatedCharRange {
+    [self configireTextSorage:textStorage];
+    [self textAtrributedDidChange];
+    
+    if (delta < 0 && newCharRange.location == 0 && newCharRange.length == 0) {
+        [self addAttachmentViews];
+    }
+    if (_delegateFlags.processEditingForTextStorage) {
+        [((id<TYTextViewDelegate>)self.delegate) textView:self processEditingForTextStorage:textStorage edited:editMask range:newCharRange changeInLength:delta invalidatedRange:invalidatedCharRange];
+    }
+}
+
+- (void)layoutManager:(TYLayoutManager *)layoutManager drawGlyphsForGlyphRange:(NSRange)glyphsToShow atPoint:(CGPoint)origin {
     [self addAttachmentViews];
 }
 
-#pragma mark - NSTextStorageDelegate
-
-- (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta {
-    [self configireTextStorage:textStorage];
-    [self textAtrributedDidChange];
-
-    NSRange invalidatedRange = NSMakeRange(editedRange.location, MAX(editedRange.length, 0));
-    if (_delegateFlags.processEditingForTextStorage) {
-        [((id<TYTextViewDelegate>)self.delegate) textView:self processEditingForTextStorage:textStorage edited:editedMask range:editedRange changeInLength:delta invalidatedRange:invalidatedRange];
-    }
-    // 文本变更后，下一次 layoutSubviews 会同步附件视图。
-    [self setNeedsLayout];
-}
 
 @end
 
@@ -383,7 +337,9 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
 }
 
 @property (nonatomic, weak) UILabel *placeHolderLabel;
+
 @property (nonatomic, assign) CGFloat textHeight;
+
 @property (nonatomic, assign) CGFloat maxTextHeight;
 
 @end
@@ -393,16 +349,9 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
 - (instancetype)initWithFrame:(CGRect)frame textRender:(TYTextRender *)textRender {
     if (self = [super initWithFrame:frame textRender:textRender]) {
         [self configureGrowingTextView];
+        
         [self addPlaceHolderLabel];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:nil];
-    }
-    return self;
-}
-
-- (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        [self configureGrowingTextView];
-        [self addPlaceHolderLabel];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:nil];
     }
     return self;
@@ -419,7 +368,7 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
 }
 
 - (void)addPlaceHolderLabel {
-    UILabel *placeHolderLabel = [[UILabel alloc] init];
+    UILabel *placeHolderLabel = [[UILabel alloc]init];
     placeHolderLabel.userInteractionEnabled = NO;
     placeHolderLabel.font = self.font ? self.font : [UIFont systemFontOfSize:12];
     placeHolderLabel.textAlignment = NSTextAlignmentLeft;
@@ -457,31 +406,41 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
 }
 
 - (void)textDidChange {
+    // 占位文字是否显示
     self.placeHolderLabel.hidden = self.textStorage.length > 0;
-    if (_fisrtCharacterIgnoreBreak && self.text.length == 1) {
-        if ([self.text isEqualToString:@"\n"]) {
-            self.text = @"";
+        if (_fisrtCharacterIgnoreBreak && self.text.length == 1) {
+            if ([self.text isEqualToString:@"\n"]) {
+                self.text = @"";
+            }
         }
-    }
-
+    
     if (_maxTextLength > 0) {
-        NSTextStorage *current = self.textStorage;
+        // 只有当maxLength字段的值不为无穷大整型也不为0时才计算限制字符数.
+        NSTextStorage *toBeString    = self.textStorage;
         UITextRange *selectedRange = [self markedTextRange];
-        UITextPosition *position = [self positionFromPosition:selectedRange.start offset:0];
-        if (!position && current.length > _maxTextLength) {
-            NSAttributedString *trimmed = [current attributedSubstringFromRange:NSMakeRange(0, _maxTextLength)];
-            [current setAttributedString:trimmed];
+        UITextPosition *position   = [self positionFromPosition:selectedRange.start offset:0];
+        if (!position) {
+            if (toBeString.length > _maxTextLength) {
+                // 截取最大限制字符数
+                NSAttributedString *attStr = [toBeString attributedSubstringFromRange:NSMakeRange(0,_maxTextLength)];
+                self.textRender.textStorage = [[[self.textRender.textStorage class] alloc]initWithAttributedString:attStr];
+                if ([self.textRender.textStorage isKindOfClass:[TYTextStorage class]] && [toBeString isKindOfClass:[TYTextStorage class]]) {
+                    ((TYTextStorage *)self.textRender.textStorage).textParse = ((TYTextStorage *)toBeString).textParse;
+                }
+            }
         }
     }
 
     if ([_growingTextDelegate respondsToSelector:@selector(growingTextViewDidChangeText:)]) {
         [_growingTextDelegate growingTextViewDidChangeText:self];
     }
+    
     if (![_growingTextDelegate respondsToSelector:@selector(growingTextView:didChangeTextHeight:)]) {
         return;
     }
     CGFloat height = ceilf([self sizeThatFits:CGSizeMake(self.bounds.size.width, MAXFLOAT)].height);
-    if (_textHeight != height) {
+    if (_textHeight != height) { // 高度不一样，就改变了高度
+        // 最大高度，可以滚动
         if (_maxTextHeight > 0) {
             self.scrollEnabled = height > _maxTextHeight;
         }
@@ -494,13 +453,14 @@ typedef NS_ENUM(NSUInteger, TYTextViewTouchedState) {
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-
+    
+    // placeHolderLabel
     CGFloat orignX, width;
     CGRect beginRect = [self caretRectForPosition:self.beginningOfDocument];
     if (self.textAlignment != NSTextAlignmentRight) {
-        orignX = _placeHolderEdge.left + self.contentInset.left + self.textRender.lineFragmentPadding;
+        orignX = _placeHolderEdge.left+self.contentInset.left+self.textRender.lineFragmentPadding;
         width = CGRectGetWidth(self.frame) - _placeHolderEdge.right - orignX - self.contentInset.right;
-    } else {
+    }else {
         [_placeHolderLabel sizeToFit];
         orignX = CGRectGetWidth(self.frame) - CGRectGetWidth(_placeHolderLabel.frame) - _placeHolderEdge.left - self.textRender.lineFragmentPadding - self.contentInset.left;
         width = orignX - (CGRectGetWidth(self.frame) - orignX) - _placeHolderEdge.right - self.contentInset.right;

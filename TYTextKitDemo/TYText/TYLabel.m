@@ -31,12 +31,12 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
 @property (nonatomic, strong) NSTextStorage *textStorageOnRender;
 @property (nonatomic, strong) TYTextRender *textRenderOnDisplay;
 
-@property (nonatomic, strong, nullable) NSArray<TYTextAttachment *> *attachments;
+@property (nonatomic, strong) NSArray *attachments;
 
 @property (nonatomic, assign) NSRange highlightRange;
-@property (nonatomic, strong, nullable) TYTextHighlight *textHighlight;
+@property (nonatomic, strong) TYTextHighlight *textHighlight;
 
-@property (nonatomic, strong, nullable) NSTimer *longPressTimer;
+@property (nonatomic, strong) NSTimer *longPressTimer;
 @property (nonatomic, assign) NSUInteger longPressTimerCount;
 
 @property (nonatomic, assign) TYLabelTouchedState touchState;
@@ -74,7 +74,6 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     _numberOfLines = 0;
     _lineBreakMode = NSLineBreakByTruncatingTail;
     _verticalAlignment = TYTextVerticalAlignmentCenter;
-    _highlightRange = NSMakeRange(0, 0);
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.layer.contentsScale = ty_text_screen_scale();
@@ -85,7 +84,7 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     if (_ignoreAboveAtrributedRelatePropertys && !_text) {
         return;
     }
-    _textAlignment = NSTextAlignmentNatural;
+    _textAlignment = [[[UIDevice currentDevice] systemVersion] floatValue] >= 9 ?NSTextAlignmentNatural : NSTextAlignmentLeft;
 }
 
 #pragma mark - Display
@@ -139,8 +138,8 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
 
 - (void)setText:(NSString *)text {
     TYAssertMainThread();
-    _text = [text copy];
-    _textStorageOnRender = text ? [[NSTextStorage alloc] initWithString:text] : nil;
+    _text = text;
+    _textStorageOnRender = [[NSTextStorage alloc]initWithString:text];
     _attributedText = nil;
     _textStorage = nil;
     [self configureTextAttribute];
@@ -150,8 +149,8 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
     TYAssertMainThread();
-    _attributedText = [attributedText copy];
-    _textStorageOnRender = attributedText ? [[NSTextStorage alloc] initWithAttributedString:attributedText] : nil;
+    _attributedText = attributedText;
+    _textStorageOnRender = [[NSTextStorage alloc]initWithAttributedString:attributedText];
     _text = nil;
     [self configureTextAttribute];
     [self setDisplayNeedUpdate];
@@ -163,7 +162,6 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     _textStorage = textStorage;
     _textStorageOnRender = textStorage;
     _text = nil;
-    _attributedText = nil;
     [self configureTextAttribute];
     [self setDisplayNeedUpdate];
     [self invalidateIntrinsicContentSize];
@@ -174,8 +172,6 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     _textRender = textRender;
     _textStorageOnRender = textRender.textStorage;
     _text = nil;
-    _attributedText = nil;
-    _textStorage = nil;
     [self configureTextAttribute];
     [self clearLayerContent];
     [self setDisplayNeedRedraw];
@@ -249,7 +245,7 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
 }
 
 - (void)setTruncationToken:(NSAttributedString *)truncationToken {
-    _truncationToken = [truncationToken copy];
+    _truncationToken = truncationToken;
     if (_ignoreAboveRenderRelatePropertys && _textRender) {
         return;
     }
@@ -309,36 +305,36 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
 
 - (CGSize)intrinsicContentSize {
     CGFloat width = _preferredMaxLayoutWidth > 0 ? _preferredMaxLayoutWidth : CGRectGetWidth(self.frame);
-    return [self contentSizeWithWidth:width > 0 ? width : 10000];
+    return [self contentSizeWithWidth:width>0?width:10000];
 }
 
+// get content size
 - (CGSize)contentSizeWithWidth:(CGFloat)width {
     if (_textRender) {
-        if (ABS(_textRender.size.width - width) > 0.01 || _textRender.size.height == 0 || _textRender.size.width == 0) {
+        if (ABS(_textRender.size.width - width)>0.01 || _textRender.size.height == 0 || _textRender.size.width == 0) {
             return [_textRender textSizeWithRenderWidth:width];
         }
         return _textRender.size;
     }
-    if (!_textStorageOnRender) return CGSizeZero;
     BOOL ignoreAboveRenderRelatePropertys = _ignoreAboveRenderRelatePropertys && _textRender;
-    TYTextRender *measure = [[TYTextRender alloc] initWithTextStorage:_textStorageOnRender];
+    TYTextRender *textRender = [[TYTextRender alloc]initWithTextStorage:_textStorageOnRender];
     if (!ignoreAboveRenderRelatePropertys) {
-        measure.verticalAlignment = _verticalAlignment;
-        measure.maximumNumberOfLines = _numberOfLines;
-        measure.lineBreakMode = _lineBreakMode;
-        measure.truncationToken = _truncationToken;
+        textRender.verticalAlignment = _verticalAlignment;
+        textRender.maximumNumberOfLines = _numberOfLines;
+        textRender.lineBreakMode = _lineBreakMode;
+        textRender.truncationToken = _truncationToken;
     }
-    return [measure textSizeWithRenderWidth:width];
+    return [textRender textSizeWithRenderWidth:width];
 }
 
-#pragma mark - Highlight query
+#pragma mark - Private
 
 - (TYTextHighlight *)textHighlightForPoint:(CGPoint)point effectiveRange:(NSRangePointer)range {
     NSInteger index = [_textRenderOnDisplay characterIndexForPoint:point];
     if (index < 0) {
         return nil;
     }
-    return [_textRenderOnDisplay textHighlightAtIndex:(NSUInteger)index effectiveRange:range];
+    return [_textRenderOnDisplay textHighlightAtIndex:index effectiveRange:range];
 }
 
 #pragma mark - LongPress timer
@@ -366,11 +362,9 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
         [self endLongPressTimer];
         return;
     }
-    if (_longPressTimerCount * kLongPressTimerInterval >= _longPressDuring) {
+    if (_longPressTimerCount*kLongPressTimerInterval >= _longPressDuring) {
         _touchState = TYLabelTouchedStateLongPressed;
-        TYTextHighlight *highlight = _textHighlight;
-        [self endLongPressTimer];
-        [_delegate label:self didLongPressedTextHighlight:highlight];
+        [_delegate label:self didLongPressedTextHighlight:_textHighlight];
         [self endTouch];
     }
 }
@@ -438,7 +432,7 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
     NSRange range = NSMakeRange(0, 0);
     if (_delegateFlags.didTappedTextHighlight && _touchState == TYLabelTouchedStateTapped) {
         TYTextHighlight *textHighlight = [self textHighlightForPoint:point effectiveRange:&range];
-        if (textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange)) {
+        if (textHighlight == _textHighlight && NSEqualRanges(range, _highlightRange) ) {
             [_delegate label:self didTappedTextHighlight:_textHighlight];
         }
     }
@@ -466,22 +460,20 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
 
 - (TYAsyncLayerDisplayTask *)newAsyncDisplayTask {
     __block TYTextRender *textRender = _textRender;
-    NSTextStorage *textStorage = _textStorageOnRender;
+    __block NSTextStorage *textStorage = _textStorageOnRender;
+    NSArray *attachments = _attachments;
+    NSRange highlightRange  = _highlightRange;
     TYTextHighlight *textHighlight = _textHighlight;
-    NSRange highlightRange = _highlightRange;
-    NSArray<TYTextAttachment *> *attachments = _attachments;
+    
     BOOL ignoreAboveRenderRelatePropertys = _ignoreAboveRenderRelatePropertys && textRender;
     TYTextVerticalAlignment verticalAlignment = _verticalAlignment;
     NSInteger numberOfLines = _numberOfLines;
     NSLineBreakMode lineBreakMode = _lineBreakMode;
     NSAttributedString *truncationToken = _truncationToken;
-
-    __weak typeof(self) weakSelf = self;
-    TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc] init];
-
+    
+    TYAsyncLayerDisplayTask *task = [[TYAsyncLayerDisplayTask alloc]init];
+    // will display
     task.willDisplay = ^(CALayer * _Nonnull layer) {
-        __strong typeof(weakSelf) self = weakSelf;
-        if (!self) return;
         if (attachments) {
             NSSet *attachmentSet = textRender.attachmentViewSet;
             for (TYTextAttachment *attachment in attachments) {
@@ -490,15 +482,16 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
                 }
             }
         }
-        self.attachments = nil;
-        self.textRenderOnDisplay = nil;
+        _attachments = nil;
+        _textRenderOnDisplay = nil;
     };
-
     task.displaying = ^(CGContextRef  _Nonnull context, CGSize size, BOOL isAsynchronously, BOOL (^ _Nonnull isCancelled)(void)) {
         if (!textRender) {
-            if (!textStorage) return;
-            textRender = [[TYTextRender alloc] initWithTextStorage:textStorage];
+            textRender = [[TYTextRender alloc]initWithTextStorage:textStorage];
             if (isCancelled()) return;
+        }
+        if (!textStorage) {
+            return;
         }
         if (!ignoreAboveRenderRelatePropertys) {
             textRender.verticalAlignment = verticalAlignment;
@@ -512,76 +505,44 @@ typedef NS_ENUM(NSUInteger, TYLabelTouchedState) {
         [textRender setTextHighlight:textHighlight range:highlightRange];
         [textRender drawTextAtPoint:CGPointZero isCanceled:isCancelled];
     };
-
     task.didDisplay = ^(CALayer * _Nonnull layer, BOOL finished) {
-        __strong typeof(weakSelf) self = weakSelf;
-        if (!self) return;
-        self.textRenderOnDisplay = textRender;
-        NSArray<TYTextAttachment *> *views = textRender.attachmentViews;
-        if (!finished || !views) {
-            if (views) {
-                for (TYTextAttachment *attachment in views) {
+        _textRenderOnDisplay = textRender;
+        NSArray *attachments = textRender.attachmentViews;
+        if (!finished || !attachments) {
+            if (attachments) {
+                for (TYTextAttachment *attachment in attachments) {
                     [attachment removeFromSuperView:self];
                 }
             }
-            return;
+            return ;
         }
-        [self syncAttachmentViews:views forRender:textRender];
-        self.attachments = views;
+        NSRange visibleRange = textRender.visibleCharacterRangeOnRender;
+        NSRange truncatedRange = textRender.truncatedCharacterRangeOnRender;
+        for (TYTextAttachment *attachment in attachments) {
+            if (NSLocationInRange(attachment.range.location, visibleRange) && (truncatedRange.length == 0 || !NSLocationInRange(attachment.range.location, truncatedRange))) {
+                if (textRender.maximumNumberOfLines > 0 && attachment.range.location != 0 && CGPointEqualToPoint(attachment.position, CGPointZero)) {
+                    [attachment removeFromSuperView:self];
+                }else {
+                    CGRect rect = {attachment.position,attachment.size};
+                    if (NSMaxRange(attachment.range) == NSMaxRange(visibleRange) && CGRectGetMaxX(rect) - CGRectGetWidth(self.frame) > 1) {
+                        [attachment removeFromSuperView:self];
+                    }else {
+                        [attachment addToSuperView:self];
+                        attachment.frame = rect;
+                    }
+                }
+            }else {
+                [attachment removeFromSuperView:self];
+            }
+        }
+        _attachments = attachments;
     };
     return task;
 }
 
-- (void)syncAttachmentViews:(NSArray<TYTextAttachment *> *)attachments forRender:(TYTextRender *)render {
-    NSRange visibleRange = render.visibleCharacterRangeOnRender;
-    NSRange truncatedRange = render.truncatedCharacterRangeOnRender;
-    CGFloat verticalOffset = render.textRectOnRender.origin.y;
-
-    NSTextLayoutManager *layoutManager = render.layoutManager;
-    NSTextContentStorage *contentStorage = render.contentStorage;
-    CGRect selfBounds = self.bounds;
-
-    for (TYTextAttachment *attachment in attachments) {
-        NSUInteger attachmentLoc = attachment.range.location;
-        BOOL inVisible = NSLocationInRange(attachmentLoc, visibleRange);
-        BOOL truncated = truncatedRange.length > 0 && NSLocationInRange(attachmentLoc, truncatedRange);
-        if (!inVisible || truncated) {
-            [attachment removeFromSuperView:self];
-            continue;
-        }
-
-        id<NSTextLocation> location = [contentStorage locationFromLocation:contentStorage.documentRange.location withOffset:(NSInteger)attachmentLoc];
-        if (!location) {
-            [attachment removeFromSuperView:self];
-            continue;
-        }
-        NSTextLayoutFragment *fragment = [layoutManager textLayoutFragmentForLocation:location];
-        if (!fragment) {
-            [attachment removeFromSuperView:self];
-            continue;
-        }
-
-        CGRect frame = [fragment frameForTextAttachmentAtLocation:location];
-        if (CGRectIsEmpty(frame)) {
-            [attachment removeFromSuperView:self];
-            continue;
-        }
-        frame.origin.x += fragment.layoutFragmentFrame.origin.x;
-        frame.origin.y += fragment.layoutFragmentFrame.origin.y + verticalOffset;
-        [attachment ty_updatePosition:frame.origin];
-
-        if (CGRectGetMaxX(frame) - CGRectGetWidth(selfBounds) > 1) {
-            [attachment removeFromSuperView:self];
-            continue;
-        }
-
-        [attachment addToSuperView:self];
-        [attachment setFrame:frame];
-    }
-}
-
 - (void)dealloc {
     _textRender = nil;
+//    NSLog(@"TYLabel dealloc!");
 }
 
 @end

@@ -49,13 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
 // attach render positon ,after render will have value
 @property (nonatomic, assign, readonly) CGPoint position;
 
-// TYTextRender 会在异步渲染完成后主线程调用这组方法，更新/挂载/摘除附件视图。
+/**
+ if have view or layer, set the frame
+ */
 - (void)setFrame:(CGRect)frame;
 - (void)addToSuperView:(UIView *)superView;
 - (void)removeFromSuperView:(UIView *)superView;
-// TYTextRender 用来登记 attachment 在 attributed string 中的字符范围和布局帧原点
-- (void)ty_updateRange:(NSRange)range;
-- (void)ty_updatePosition:(CGPoint)position;
 
 @end
 

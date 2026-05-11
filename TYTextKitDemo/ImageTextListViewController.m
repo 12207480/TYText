@@ -9,12 +9,19 @@
 #import "ImageTextListViewController.h"
 #import "TextViewCell.h"
 
+// 三种显示模式：TY 异步渲染 / TY 同步渲染 / 系统 UILabel
+typedef NS_ENUM(NSInteger, ImageTextDisplayMode) {
+    ImageTextDisplayModeTYAsync,
+    ImageTextDisplayModeTYSync,
+    ImageTextDisplayModeUILabel,
+};
+
 @interface ImageTextListViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NSArray *itemArray;
 @property (nonatomic, strong) NSArray *textArray;
 @property (nonatomic, strong) NSArray *renderArray;
-@property (nonatomic, assign) BOOL async;
+@property (nonatomic, assign) ImageTextDisplayMode displayMode;
 
 @end
 
@@ -23,12 +30,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.async = YES;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Async:YES" style:UIBarButtonItemStylePlain target:self action:@selector(changeAsyncAction:)];
-    
+    self.displayMode = ImageTextDisplayModeTYAsync;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:[self titleForMode:self.displayMode] style:UIBarButtonItemStylePlain target:self action:@selector(changeAsyncAction:)];
+
     [self addTableView];
-    
+
     [self loadData];
+}
+
+- (NSString *)titleForMode:(ImageTextDisplayMode)mode {
+    switch (mode) {
+        case ImageTextDisplayModeTYAsync: return @"Async:YES";
+        case ImageTextDisplayModeTYSync:  return @"Async:NO";
+        case ImageTextDisplayModeUILabel: return @"UILabel";
+    }
 }
 
 - (void)addTableView
@@ -130,15 +145,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     TextViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellId" forIndexPath:indexPath];
-    cell.label.displaysAsynchronously = _async;
-    if (_async) {
-        cell.label.hidden = NO;
-        cell.uilabel.hidden = YES;
-        cell.label.textRender = _renderArray[indexPath.row];
-    }else {
-        cell.label.hidden = YES;
-        cell.uilabel.hidden = NO;
-        cell.uilabel.attributedText = _itemArray[indexPath.row];
+    switch (_displayMode) {
+        case ImageTextDisplayModeTYAsync:
+        case ImageTextDisplayModeTYSync:
+            cell.label.displaysAsynchronously = (_displayMode == ImageTextDisplayModeTYAsync);
+            cell.label.hidden = NO;
+            cell.uilabel.hidden = YES;
+            cell.label.textRender = _renderArray[indexPath.row];
+            break;
+        case ImageTextDisplayModeUILabel:
+            cell.label.hidden = YES;
+            cell.uilabel.hidden = NO;
+            cell.uilabel.attributedText = _itemArray[indexPath.row];
+            break;
     }
     return cell;
 }
@@ -149,13 +168,9 @@
 }
 
 - (void)changeAsyncAction:(UIBarButtonItem *)item {
-    if ([item.title isEqualToString:@"Async:YES"]) {
-        item.title = @"Async:NO";
-        self.async = NO;
-    }else {
-        item.title = @"Async:YES";
-        self.async = YES;
-    }
+    self.displayMode = (self.displayMode + 1) % 3;
+    item.title = [self titleForMode:self.displayMode];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
